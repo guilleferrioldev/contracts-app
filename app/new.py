@@ -3,6 +3,7 @@ from tkinter import scrolledtext
 from service import Service, Menu, Frames
 from message import Message, Junta
 from recorver import Recorver
+from objeto import Object
 import sqlite3
 
 class NewButton(ctk.CTkButton):
@@ -33,155 +34,152 @@ class SlidePanel(ctk.CTkFrame):
         
         # Nombre del proveedor
         self.proveedor_label = ctk.CTkLabel(self, text = "Nombre del proveedor", font = font)
-        self.proveedor_label.place(relx = 0.05, rely =0.02)
+        self.proveedor_label.place(relx = 0.05, rely =0.05)
 
         self.proveedor_entry = ctk.CTkEntry(self, width = 500, font = font)
-        self.proveedor_entry.place(relx = 0.2, rely =0.02)
+        self.proveedor_entry.place(relx = 0.2, rely =0.05)
         
         # Fecha del contrato
         self.fecha_label = ctk.CTkLabel(self, text = "Fecha del contrato", font = font)
-        self.fecha_label.place(relx = 0.05, rely = 0.07)
+        self.fecha_label.place(relx = 0.05, rely = 0.10)
 
         self.fecha_day = ctk.CTkOptionMenu(self, values = [str(i) for i in range(1, 32)], width = 55)
-        self.fecha_day.place(relx = 0.2, rely = 0.07)
+        self.fecha_day.place(relx = 0.2, rely = 0.10)
         
         self.fecha_mes = ctk.CTkOptionMenu(self, 
                                     values = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
                                     width = 110)
-        self.fecha_mes.place(relx = 0.25, rely = 0.07)
+        self.fecha_mes.place(relx = 0.25, rely = 0.10)
 
         
         self.fecha_year = ctk.CTkOptionMenu(self, values = [str(i) for i in range(2020, 2024)], width = 70)
-        self.fecha_year.place(relx = 0.345, rely = 0.07)
+        self.fecha_year.place(relx = 0.345, rely = 0.10)
 
         # Fecha de vencimiento
         self.fecha_venc_label = ctk.CTkLabel(self, text = "Fecha del vencimiento", font = font)
-        self.fecha_venc_label.place(relx = 0.55, rely = 0.07)
+        self.fecha_venc_label.place(relx = 0.55, rely = 0.10)
 
         self.fecha_venc_day = ctk.CTkOptionMenu(self, values = [str(i) for i in range(1, 32)], width = 55)
-        self.fecha_venc_day.place(relx = 0.705, rely = 0.07)
+        self.fecha_venc_day.place(relx = 0.705, rely = 0.10)
         
         self.fecha_venc_mes = ctk.CTkOptionMenu(self, 
                                     values = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
                                     width = 110)
-        self.fecha_venc_mes.place(relx = 0.755, rely = 0.07)
+        self.fecha_venc_mes.place(relx = 0.755, rely = 0.10)
 
         
         self.fecha_venc_year = ctk.CTkOptionMenu(self, values = [str(i) for i in range(2020, 2030)], width = 70)
-        self.fecha_venc_year.place(relx = 0.85, rely = 0.07)
+        self.fecha_venc_year.place(relx = 0.85, rely = 0.10)
 
         # Objeto 
         self.objeto_label = ctk.CTkLabel(self, text =  "Objeto", font = font)
-        self.objeto_label.place(relx = 0.05, rely = 0.12)
-        
-        self.values_objeto = ["objeto 1", "objeto 2"]
-        self.objeto_menu = ctk.CTkOptionMenu(self, font = font, values = self.values_objeto)
-        self.objeto_menu.place(relx = 0.2, rely = 0.12, relwidth = 0.115)
-        
-        self.objeto_entry = scrolledtext.ScrolledText(self, font = font, state = "normal")
-        self.objeto_entry.place(relx = 0.32, rely = 0.12, relwidth = 0.12, relheight = 0.14)
+        self.objeto_label.place(relx = 0.05, rely = 0.15)
 
+        self.objeto_frame = Object(self, 1.0, 0.7, "Objeto")
+        self.objeto_button = ctk.CTkButton(self,text = "Objeto",width = 300,  command = self.objeto_frame. animate)
+        self.objeto_button.place(relx = 0.2, rely = 0.15)
+       
         # Direccion 
         self.direccion_label = ctk.CTkLabel(self, text = "Dirección", font = font)
-        self.direccion_label.place(relx = 0.05, rely = 0.27)
+        self.direccion_label.place(relx = 0.05, rely = 0.20)
 
         self.direccion_entry = ctk.CTkEntry(self, width = 300, font = font)
-        self.direccion_entry.place(relx = 0.2, rely = 0.27)
+        self.direccion_entry.place(relx = 0.2, rely = 0.20)
 
         # Codigos
         self.nit_code_label = ctk.CTkLabel(self, text = "Código NIT", font = font)
-        self.nit_code_label.place(relx = 0.05, rely = 0.32)
+        self.nit_code_label.place(relx = 0.05, rely = 0.25)
 
         self.nit_code_entry = ctk.CTkEntry(self, width = 300, font = font)
-        self.nit_code_entry.place(relx = 0.2, rely = 0.32)
+        self.nit_code_entry.place(relx = 0.2, rely = 0.25)
 
         self.reup_code_label = ctk.CTkLabel(self, text = "Código REUP", font = font)
-        self.reup_code_label.place(relx = 0.05, rely = 0.37)
+        self.reup_code_label.place(relx = 0.05, rely = 0.30)
 
         self.reup_code_entry = ctk.CTkEntry(self, width = 300, font = font)
-        self.reup_code_entry.place(relx = 0.2, rely = 0.37)
+        self.reup_code_entry.place(relx = 0.2, rely = 0.30)
         
         self.versat_code_label = ctk.CTkLabel(self, text = "Código VERSAT", font = font)
-        self.versat_code_label.place(relx = 0.05, rely = 0.42)
+        self.versat_code_label.place(relx = 0.05, rely = 0.35)
 
         self.versat_code_entry = ctk.CTkEntry(self, width = 300, font = font)
-        self.versat_code_entry.place(relx = 0.2, rely = 0.42)
+        self.versat_code_entry.place(relx = 0.2, rely = 0.35)
 
         # Banco
         self.banco_label = ctk.CTkLabel(self, text = "Banco/Sucursal", font = font)
-        self.banco_label.place(relx = 0.05, rely = 0.47)
+        self.banco_label.place(relx = 0.05, rely = 0.40)
 
-        self.banco_menu = ctk.CTkOptionMenu(self, font = font, values = ["Metropolitano","BPA", "BANDEC"])
-        self.banco_menu.place(relx = 0.2, rely = 0.47, relwidth = 0.115)
+        self.banco_menu = ctk.CTkOptionMenu(self, values = ["Metropolitano","BPA", "BANDEC"])
+        self.banco_menu.place(relx = 0.2, rely = 0.40, relwidth = 0.115)
         
         self.sucursal_entry = ctk.CTkEntry(self, width = 150, font = font)
-        self.sucursal_entry.place(relx = 0.32, rely = 0.47)
+        self.sucursal_entry.place(relx = 0.32, rely = 0.40)
 
         self.cuenta_label = ctk.CTkLabel(self, text = "Cuenta bancaria", font = font)
-        self.cuenta_label.place(relx = 0.05, rely = 0.52)
+        self.cuenta_label.place(relx = 0.05, rely = 0.45)
 
         self.cuenta_entry = ctk.CTkEntry(self, width = 300, font = font)
-        self.cuenta_entry.place(relx = 0.2, rely = 0.52)
+        self.cuenta_entry.place(relx = 0.2, rely = 0.45)
         
         self.titular_cuenta_label = ctk.CTkLabel(self, text = "Titular de la cuenta", font = font)
-        self.titular_cuenta_label.place(relx = 0.05, rely = 0.57)
+        self.titular_cuenta_label.place(relx = 0.05, rely = 0.50)
 
         self.titular_cuenta_entry = ctk.CTkEntry(self, width = 300, font = font)
-        self.titular_cuenta_entry.place(relx = 0.2, rely = 0.57)
+        self.titular_cuenta_entry.place(relx = 0.2, rely = 0.50)
         
         self.telefono_label = ctk.CTkLabel(self, text = "Teléfono", font = font)
-        self.telefono_label.place(relx = 0.05, rely = 0.62)
+        self.telefono_label.place(relx = 0.05, rely = 0.55)
 
         self.telefono_entry = ctk.CTkEntry(self, width = 300, font = font)
-        self.telefono_entry.place(relx = 0.2, rely = 0.62)
+        self.telefono_entry.place(relx = 0.2, rely = 0.55)
 
         # autorizado
         self.autorizado_label = ctk.CTkLabel(self, text = "Aut.firmar factura", font = font)
-        self.autorizado_label.place(relx = 0.05, rely = 0.67)
-
-        self.autorizado_entry = ctk.CTkEntry(self, width = 300, font = font)
-        self.autorizado_entry.place(relx = 0.2, rely = 0.67)
-
+        self.autorizado_label.place(relx = 0.05, rely = 0.60)
+        
+        self.autorizado_frame = Object(self, 1.0, 0.7, "Aut. firmar factura")
+        self.autorizado_button = ctk.CTkButton(self,text = "Autorizado a firmar factura", width = 300, command = self.autorizado_frame.animate)
+        self.autorizado_button.place(relx = 0.2, rely = 0.60)
 
         # junta
         self.junta_label = ctk.CTkLabel(self, text = "Autorizo de la CCD/JDN", font = font)
-        self.junta_label.place(relx = 0.05, rely = 0.74)
+        self.junta_label.place(relx = 0.05, rely = 0.70)
         
         self.junta_var = ctk.StringVar(value = "off")
         self.junta_button = ctk.CTkCheckBox(self, text = "", command = self.enable,variable = self.junta_var, onvalue="on", offvalue="off") 
-        self.junta_button.place(relx = 0.22, rely = 0.74)
+        self.junta_button.place(relx = 0.22, rely = 0.70)
         
         self.acuerdo_label = ctk.CTkLabel(self, text = "Acuerdo", font = font)
-        self.acuerdo_label.place(relx = 0.272, rely = 0.74)
+        self.acuerdo_label.place(relx = 0.272, rely = 0.70)
         
         self.acuerdo_junta_entry = ctk.CTkEntry(self, font = font, state = "disabled")
-        self.acuerdo_junta_entry.place(relx = 0.33, rely = 0.74)
+        self.acuerdo_junta_entry.place(relx = 0.33, rely = 0.70)
         
         self.monto_label = ctk.CTkLabel(self, text = "Monto autorizado", font = font)
-        self.monto_label.place(relx = 0.05, rely = 0.79)
+        self.monto_label.place(relx = 0.05, rely = 0.75)
         
         self.monto_junta_entry = ctk.CTkEntry(self, font = font,width = 300, state = "disabled")
-        self.monto_junta_entry.place(relx = 0.2, rely = 0.79)
+        self.monto_junta_entry.place(relx = 0.2, rely = 0.75)
 
         self.fecha_junta_label = ctk.CTkLabel(self, text = "Fecha de autorizo", font = font)
-        self.fecha_junta_label.place(relx = 0.05, rely = 0.84)
+        self.fecha_junta_label.place(relx = 0.05, rely = 0.80)
 
         self.fecha_junta_day = ctk.CTkOptionMenu(self, values = [str(i) for i in range(1, 32)], width = 55, state = "disabled")
-        self.fecha_junta_day.place(relx = 0.2, rely = 0.84)
+        self.fecha_junta_day.place(relx = 0.2, rely = 0.80)
         
         self.fecha_junta_mes = ctk.CTkOptionMenu(self, 
                                     values = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
                                     width = 110,
                                     state = "disabled")
-        self.fecha_junta_mes.place(relx = 0.25, rely = 0.84)
+        self.fecha_junta_mes.place(relx = 0.25, rely = 0.80)
 
         
         self.fecha_junta_year = ctk.CTkOptionMenu(self, values = [str(i) for i in range(2020, 2024)], width = 70, state = "disabled")
-        self.fecha_junta_year.place(relx = 0.345, rely = 0.84)
+        self.fecha_junta_year.place(relx = 0.345, rely = 0.80)
         
 
         # servicios 
-        self.service = Service(self, relx = 0.55, rely = 0.15, relwidth = 0.4, relheight = 0.7)
+        self.service = Service(self, relx = 0.55, rely = 0.16, relwidth = 0.4, relheight = 0.7)
 
         self.add_pdf = ctk.CTkButton(self, text = "Añadir pdf")
         self.add_pdf.place(relx = 0.8, rely = 0.87, relwidth = 0.1)
@@ -279,8 +277,6 @@ class SlidePanel(ctk.CTkFrame):
             self.sucursal_entry.delete(0, "end")
             self.cuenta_entry.delete(0, "end")
             self.titular_cuenta_entry.delete(0, "end")
-            self.objeto_entry.delete("1.0", "end")
-            self.autorizado_entry.delete(0, "end")
             self.telefono_entry.delete(0, "end") 
             self.master.master.sort_var.set("Proveedor")
             self.master.master.buscar()
@@ -306,7 +302,6 @@ class SlidePanel(ctk.CTkFrame):
             self.fecha_junta_day.set(1) 
             self.fecha_junta_mes.set("Enero") 
             self.fecha_junta_year.set(2020) 
-            self.autorizado_entry.configure(state = "normal")
             self.acuerdo_junta_entry.configure(state = "disabled")
             self.monto_junta_entry.configure(state = "disabled")
             self.fecha_junta_day.configure(state = "disabled") 
@@ -338,7 +333,6 @@ class SlidePanel(ctk.CTkFrame):
             self.fecha_junta_day.configure(state = "normal") 
             self.fecha_junta_mes.configure(state = "normal") 
             self.fecha_junta_year.configure(state = "normal")
-            self.autorizado_entry.delete(0, "end")
         else:
             self.acuerdo_junta_entry.delete(0, "end")
             self.monto_junta_entry.delete(0,"end")
@@ -356,8 +350,6 @@ class SlidePanel(ctk.CTkFrame):
         fecha_del_contrato = f"{self.fecha_day.get()}/{self.fecha_mes.get()}/{self.fecha_year.get()}"
         fecha_de_vencimiento = f"{self.fecha_venc_day.get()}/{self.fecha_venc_mes.get()}/{self.fecha_venc_year.get()}"
         objeto = ""
-        for i in self.objeto_entry.get("1.0", "end"):
-            objeto += i
         direccion = self.direccion_entry.get()
         codigo_nit = self.nit_code_entry.get()
         codigo_reup = self.reup_code_entry.get()
@@ -367,7 +359,7 @@ class SlidePanel(ctk.CTkFrame):
         titular = self.titular_cuenta_entry.get()
         cuenta = self.cuenta_entry.get()
         telefono = self.telefono_entry.get()
-        autorizado_por = (self.autorizado_entry.get()[0]).upper() + self.autorizado_entry.get()[1:] if len(self.autorizado_entry.get())> 0 else ""
+        autorizado_por = ""
         autorizo_junta = "si" if self.junta_button.get() == "on" else "no"
         acuerdo_junta = self.acuerdo_junta_entry.get() if autorizo_junta == "si" else ""
         monto_junta = self.monto_junta_entry.get() if autorizo_junta == "si" else 0 
