@@ -104,7 +104,7 @@ class Frames(ctk.CTkFrame):
 
         self.cancel_button = ctk.CTkButton(self, text = "Cancelar", command = self.delete)
         self.cancel_button.place(relx = 0.35, rely = 0.82)
-
+        
         self.pack(expand = "True", fill = "x", padx = 5, pady = 5)
 
     def delete(self):
@@ -113,13 +113,7 @@ class Frames(ctk.CTkFrame):
             self.destroy()
         if self.text == "anadir":
             self.destroy()
-
-
-class Menu(ctk.CTkOptionMenu):
-    def __init__(self, master, relx, rely, command ):
-        super().__init__(master = master, 
-                         values = [str(i) for i in range(11)],
-                         width = 70, 
-                         command = command)
         
-        self.place(relx = relx, rely = rely)
+        self.master.master.master.menu.set(str(int(self.master.master.master.menu.get())-1))
+        
+

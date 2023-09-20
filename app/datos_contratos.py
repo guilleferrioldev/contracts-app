@@ -80,7 +80,7 @@ class Datos(ctk.CTkToplevel):
 
         self.servicios_scroll = ScrollFrame(self.frame_servicios)
 
-        Frames(self.servicios_scroll, "anadir")
+        #Frames(self.servicios_scroll, "anadir")
 
         self.importe_label = ctk.CTkLabel(self.frame_servicios, text = f"Importe: 0.00 cup", font = ctk.CTkFont("Helvetica", 15, "bold"))
         self.importe_label.place(relx = 0.53, rely = 0.93)

@@ -1,6 +1,6 @@
 import customtkinter as ctk 
 from tkinter import scrolledtext
-from service import Service, Menu, Frames
+from service import Service, Frames
 from message import Message, Junta
 from recorver import Recorver
 from objeto import Object
@@ -185,7 +185,8 @@ class SlidePanel(ctk.CTkFrame):
         self.add_pdf = ctk.CTkButton(self, text = "Añadir pdf")
         self.add_pdf.place(relx = 0.8, rely = 0.87, relwidth = 0.1)
 
-        self.menu = Menu(self.service, relx = 0.82, rely = 0.05, command = self.options)
+        self.menu = ctk.CTkOptionMenu(self.service, values = [str(i) for i in range(11)], width = 70, command = self.options)
+        self.menu.place(relx = 0.82, rely = 0.05)
 
         #Message box
         self.cancelmessage = Message(self, 1.0,0.7,"Cancelar")
@@ -228,6 +229,7 @@ class SlidePanel(ctk.CTkFrame):
         while i < len(self.service.frames):
             self.service.frames[i].valor_entry.bind("<KeyRelease>", lambda event: self.suma())
             i +=1
+
 
     def suma(self):
         i = 0
