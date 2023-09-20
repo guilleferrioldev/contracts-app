@@ -78,7 +78,8 @@ class SlidePanel(ctk.CTkFrame):
         self.objeto_frame = Object(self, 1.0, 0.7, "Objeto")
         self.objeto_button = ctk.CTkButton(self,text = "Objeto",width = 300,  command = self.objeto_frame. animate)
         self.objeto_button.place(relx = 0.2, rely = 0.15)
-       
+
+               
         # Direccion 
         self.direccion_label = ctk.CTkLabel(self, text = "Dirección", font = font)
         self.direccion_label.place(relx = 0.05, rely = 0.20)
@@ -350,6 +351,11 @@ class SlidePanel(ctk.CTkFrame):
         fecha_del_contrato = f"{self.fecha_day.get()}/{self.fecha_mes.get()}/{self.fecha_year.get()}"
         fecha_de_vencimiento = f"{self.fecha_venc_day.get()}/{self.fecha_venc_mes.get()}/{self.fecha_venc_year.get()}"
         objeto = ""
+        for child in self.objeto_frame.scroll.winfo_children():
+            if child.widgetName == "frame":
+                if child.check_var.get() == "on":
+                    objeto += f"{child.text} ,"
+        objeto = objeto[:-2]
         direccion = self.direccion_entry.get()
         codigo_nit = self.nit_code_entry.get()
         codigo_reup = self.reup_code_entry.get()
@@ -360,6 +366,11 @@ class SlidePanel(ctk.CTkFrame):
         cuenta = self.cuenta_entry.get()
         telefono = self.telefono_entry.get()
         autorizado_por = ""
+        for child in self.autorizado_frame.scroll.winfo_children():
+            if child.widgetName == "frame":
+                if child.check_var.get() == "on":
+                    autorizado_por += f"{child.text} ,"
+        autorizado_por = autorizado_por[:-2]
         autorizo_junta = "si" if self.junta_button.get() == "on" else "no"
         acuerdo_junta = self.acuerdo_junta_entry.get() if autorizo_junta == "si" else ""
         monto_junta = self.monto_junta_entry.get() if autorizo_junta == "si" else 0 

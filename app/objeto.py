@@ -22,7 +22,7 @@ class Object(ctk.CTkFrame):
         self.label = ctk.CTkLabel(self, text = self.text, font = ctk.CTkFont("Helvetica", 25, "bold"))
         self.label.place(relx = 0.05, rely = 0.08)
 
-        self.scroll = Scroll(self)
+        self.scroll = Scroll(self, self.text)
         
         self.search = ctk.CTkEntry(self, placeholder_text = "Buscar", font = self.font)
         self.search.place(relx = 0.49, rely = 0.1, relwidth = 0.37)
@@ -146,10 +146,10 @@ class Object(ctk.CTkFrame):
         
 
 class Scroll(ctk.CTkScrollableFrame):
-    def __init__(self, master):
+    def __init__(self, master, text):
         super().__init__(master = master)
         self.master = master
- 
+        self.text = text
         self.place(relx = 0.05, rely = 0.2, relwidth = 0.9, relheight = 0.6)
 
 
