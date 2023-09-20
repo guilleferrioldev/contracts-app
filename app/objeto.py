@@ -29,7 +29,7 @@ class Object(ctk.CTkFrame):
         self.search.bind("<KeyRelease>", lambda event : self.searching())
         
         self.value = 0
-        self.new_object = ctk.CTkOptionMenu(self, values = [str(i) for i in range(1, 11)], font = self.font, command = self.change_value)
+        self.new_object = ctk.CTkOptionMenu(self, values = [str(i) for i in range( 11)], font = self.font, command = self.change_value)
         self.new_object.place(relx = 0.88, rely = 0.1, relwidth = 0.07)
         self.new_object.set("+")
         
@@ -59,7 +59,8 @@ class Object(ctk.CTkFrame):
     def searching(self):
         for child in self.scroll.winfo_children():
             if child.widgetName == "frame":
-                child.destroy()
+                if child.text != "insert":
+                    child.destroy()
         
         if self.text == "Aut. firmar factura":
             tabla = "Autorizado_Firmar_Factura"
@@ -124,8 +125,8 @@ class Object(ctk.CTkFrame):
 
         conn.commit()
         conn.close()
-
-        i = 0 
+        
+        i = 0
         while i < len(datos):
             Frames(self.scroll, datos[i][0])
             i += 1
@@ -134,20 +135,27 @@ class Object(ctk.CTkFrame):
         self.value = int(choice)
         self.insert(self.value)
 
-    def insert(self, choice):
+    def insert(self, value):
         for child in self.scroll.winfo_children():
             if child.widgetName == "frame":
                 child.destroy()
         
         i = 0
-        while i < choice:
+        while i < value:
             FramesInsert(self.scroll)
             i += 1
         
         self.create_frames()
         self.new_object.set("+")
+    
+    def insert_new(self):
+        for child in self.scroll.winfo_children():
+            if child.widgetName == "frame":
+                if child.text != "insert":
+                    child.destroy()
         
-        
+        self.create_frames()
+        self.new_object.set("+")
 
 class Scroll(ctk.CTkScrollableFrame):
     def __init__(self, master, text):
@@ -244,12 +252,8 @@ class FramesInsert(ctk.CTkFrame):
             conn.commit()
             conn.close()
             
-            for child in self.master.master.scroll.winfo_children():
-                if child.widgetName == "frame":
-                    child.destroy()
-            
             self.master.master.value -= 1
-            self.master.master.insert(self.master.master.value)
+            self.master.master.insert_new()
             self.destroy()
         
         else:
@@ -270,8 +274,8 @@ class FramesInsert(ctk.CTkFrame):
             conn.commit()
             conn.close()
             
-            self.master.master.value -= 1
-            self.master.master.insert(self.master.master.value)
+            self.master.master.value -= 1 
+            self.master.master.insert_new()
             self.destroy()
 
 
