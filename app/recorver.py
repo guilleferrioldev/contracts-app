@@ -222,12 +222,12 @@ class RecorverData(ctk.CTkToplevel):
         self.denegar.place(relx = 0.4, rely = 0.8, relwidth = 0.2)
 
         self.eliminar_button = ctk.CTkButton(self, text = "Eliminar",font = self.font, command = self.message_eliminar.animate)
-        self.eliminar_button.place(relx = 0.65, rely = 0.08)
+        self.eliminar_button.place(relx = 0.8, rely = 0.08)
         
         self.actualizar_frame = Actualizar(self, 1.0, 0.35)
 
         self.actualizar_button = ctk.CTkButton(self, text = "Actualizar", font = self.font, command = self.actualizar_frame.animate)
-        self.actualizar_button.place(relx = 0.8, rely = 0.08)
+        self.actualizar_button.place(relx = 0.65, rely = 0.08)
         
         self.guardar_button = ctk.CTkButton(self.actualizar_frame, text = "Guardar", font = self.font, command = self.actualizar)
         self.guardar_button.place(relx = 0.55, rely = 0.85, relheight = 0.1, relwidth = 0.2)

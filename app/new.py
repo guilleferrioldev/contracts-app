@@ -186,7 +186,6 @@ class SlidePanel(ctk.CTkFrame):
         self.add_pdf.place(relx = 0.8, rely = 0.87, relwidth = 0.1)
 
         self.menu = Menu(self.service, relx = 0.82, rely = 0.05, command = self.options)
-        
 
         #Message box
         self.cancelmessage = Message(self, 1.0,0.7,"Cancelar")
@@ -222,7 +221,7 @@ class SlidePanel(ctk.CTkFrame):
                 child.destroy()
 
         for number in range(int(choice)):
-            frames = Frames(self.service.scroll_frame)
+            frames = Frames(self.service.scroll_frame, "contracts")
             self.service.frames.append(frames)
         
         i = 0

@@ -255,7 +255,7 @@ class Anadir(ctk.CTkFrame):
         self.label = ctk.CTkLabel(self, text = text, font = ctk.CTkFont("Helvetica", 20, "bold"))
         self.label.place(relx = 0.05, rely = 0.05, relwidth = 0.6)
 
-        self.anadir_frame = Frames(self)
+        self.anadir_frame = Frames(self, "anadir")
 
         
         # layout 
@@ -266,7 +266,6 @@ class Anadir(ctk.CTkFrame):
             self.animate_fordward()
         else:
             self.animate_backwards()
-            self.anadir_frame.nombre_servicio_entry.delete(0,"end")       
             self.anadir_frame.desc_servicio_entry.delete(0,"end")      
             self.anadir_frame.factura_entry.delete(0,"end")       
             self.anadir_frame.fecha_serv_day.set(1) 

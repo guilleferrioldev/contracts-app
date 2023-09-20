@@ -27,9 +27,11 @@ class Object(ctk.CTkFrame):
         self.search = ctk.CTkEntry(self, placeholder_text = "Buscar", font = self.font)
         self.search.place(relx = 0.49, rely = 0.1, relwidth = 0.37)
         self.search.bind("<KeyRelease>", lambda event : self.searching())
-
-        self.new_object = ctk.CTkOptionMenu(self, values = [str(i) for i in range(9)], font = self.font, command = self.insert)
+        
+        self.value = 0
+        self.new_object = ctk.CTkOptionMenu(self, values = [str(i) for i in range(1, 11)], font = self.font, command = self.change_value)
         self.new_object.place(relx = 0.88, rely = 0.1, relwidth = 0.07)
+        self.new_object.set("+")
         
         self.create_frames()
 
@@ -81,8 +83,6 @@ class Object(ctk.CTkFrame):
             Frames(self.scroll, datos[i][0])
             i += 1
 
-
-
     def animate(self):
         if self.in_start_pos:
             self.animate_fordward()
@@ -130,6 +130,9 @@ class Object(ctk.CTkFrame):
             Frames(self.scroll, datos[i][0])
             i += 1
         
+    def change_value(self, choice):
+        self.value = int(choice)
+        self.insert(self.value)
 
     def insert(self, choice):
         for child in self.scroll.winfo_children():
@@ -137,11 +140,12 @@ class Object(ctk.CTkFrame):
                 child.destroy()
         
         i = 0
-        while i < int(choice):
+        while i < choice:
             FramesInsert(self.scroll)
             i += 1
         
         self.create_frames()
+        self.new_object.set("+")
         
         
 
@@ -168,13 +172,13 @@ class Frames(ctk.CTkFrame):
         
         self.message = Message(self.master.master, 1.0, 0.7 , "Eliminar")
         
-        self.message_cancel = ctk.CTkButton(self.message, text = "Cancel", command = self.message.animate)
+        self.message_cancel = ctk.CTkButton(self.message, text = "No",font = self.font, command = self.message.animate)
         self.message_cancel.place(relx = 0.2, rely = 0.8, relwidth = 0.25)
         
-        self.message_ok = ctk.CTkButton(self.message, text = "Aceptar", command = self.delete)
+        self.message_ok = ctk.CTkButton(self.message, text = "Si",font = self.font, command = self.delete)
         self.message_ok.place(relx = 0.6, rely = 0.8, relwidth = 0.25)
 
-        self.delete_button = ctk.CTkButton(self, text = "ELiminar", command = self.message.animate)
+        self.delete_button = ctk.CTkButton(self, text = "Eliminar", command = self.message.animate)
         self.delete_button.place(relx = 0.87, rely = 0.25, relwidth = 0.1)
 
         self.pack(expand = True, fill = "x", pady = 5 , padx = 5)
@@ -202,7 +206,7 @@ class Frames(ctk.CTkFrame):
 class FramesInsert(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master = master, 
-                         height = 50,
+                         height = 100,
                          fg_color = "white")
         
         self.master = master
@@ -211,10 +215,13 @@ class FramesInsert(ctk.CTkFrame):
         self.font = ctk.CTkFont("Helvetica", 15)
 
         self.entry = ctk.CTkEntry(self, font = self.font)
-        self.entry.place(relx = 0.03, rely = 0.25, relwidth = 0.8)
+        self.entry.place(relx = 0.03, rely = 0.25, relwidth = 0.945) 
         
-        self.button = ctk.CTkButton(self, text = "Insertar", font = self.font, command = self.insert)
-        self.button.place(relx = 0.84, rely = 0.25, relwidth = 0.15)
+        self.button_insert = ctk.CTkButton(self, text = "Insertar", font = self.font, command = self.insert)
+        self.button_insert.place(relx = 0.6, rely = 0.6, relwidth = 0.15)
+        
+        self.button_cancel = ctk.CTkButton(self, text = "Cancelar", font = self.font, command = lambda: self.destroy())
+        self.button_cancel.place(relx = 0.25, rely = 0.6, relwidth = 0.15)
 
         self.pack(expand = True, fill = "x", pady = 5 , padx = 5)
 
@@ -237,7 +244,12 @@ class FramesInsert(ctk.CTkFrame):
             conn.commit()
             conn.close()
             
-            Frames(self.master.master.scroll, self.entry.get())
+            for child in self.master.master.scroll.winfo_children():
+                if child.widgetName == "frame":
+                    child.destroy()
+            
+            self.master.master.value -= 1
+            self.master.master.insert(self.master.master.value)
             self.destroy()
         
         else:
@@ -258,7 +270,8 @@ class FramesInsert(ctk.CTkFrame):
             conn.commit()
             conn.close()
             
-            Frames(self.master.master.scroll, self.entry.get())
+            self.master.master.value -= 1
+            self.master.master.insert(self.master.master.value)
             self.destroy()
 
 
