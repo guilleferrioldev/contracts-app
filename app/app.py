@@ -190,7 +190,7 @@ class App(ctk.CTk):
                 (proveedor TEXT,
                 nombre_del_servicio TEXT,
                 descripcion TEXT, 
-                no_factura INTERGER,
+                no_factura INTEGER,
                 fecha_servicio TEXT,
                 pagado TEXT,
                 valor INTEGER)
@@ -214,6 +214,19 @@ class App(ctk.CTk):
                 autorizado_por TEXT)
         '''
         conn.execute(table_recorver)
+        
+       
+        tabla_objeto = '''CREATE TABLE IF NOT EXISTS Objetos
+                (objeto TEXT, 
+                marcado INTEGER)
+        '''
+        conn.execute(tabla_objeto)
+        
+        tabla_autorizado = '''CREATE TABLE IF NOT EXISTS Autorizado_Firmar_Factura
+                (autorizado_por TEXT, 
+                marcado INTEGER)
+        '''
+        conn.execute(tabla_autorizado)
 
         conn.commit()
         conn.close()

@@ -314,7 +314,7 @@ class SlidePanel(ctk.CTkFrame):
         if self.pos > self.end_pos:
             self.pos -= 0.006 
             self.place(relx = self.pos, rely = 0.01, relwidth = self.width, relheight = 0.98)
-            self.after(3, self.animate_fordward)
+            self.after(1, self.animate_fordward)
         else:
             self.in_start_pos = False 
 
@@ -322,7 +322,7 @@ class SlidePanel(ctk.CTkFrame):
          if self.pos < self.start_pos:
             self.pos += 0.006 
             self.place(relx = self.pos, rely = 0.01, relwidth = self.width, relheight = 0.98)
-            self.after(3, self.animate_backwards)
+            self.after(1, self.animate_backwards)
          else:
             self.in_start_pos = True
 
