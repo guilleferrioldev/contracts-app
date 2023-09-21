@@ -1,5 +1,6 @@
 import customtkinter as ctk 
 from message import EliminarServicio
+from pdf import PanelPDFViewer
 import sqlite3
 
 class DatosServicios(ctk.CTkFrame):
@@ -58,9 +59,13 @@ class DatosServicios(ctk.CTkFrame):
         
         self.denegar = ctk.CTkButton(self.message, text = "No", font = self.font, command = self.message.animate)
         self.denegar.place(relx = 0.2, rely = 0.65, relwidth = 0.25)
+        
+        self.pdf_factura = PanelPDFViewer(self.master.master.master, 1.0, 0.7, "Solicitud de pago", f"{self.proveedor}")
+        self.factura = ctk.CTkButton(self, text = "Sol. pago", font = self.font,command=  self.pdf_factura.animate)
+        self.factura.place(relx = 0.7, rely = 0.6, relwidth = 0.25, relheight = 0.11)       
 
         self.eliminar = ctk.CTkButton(self, text = "Eliminar", font = self.font, command = self.message.animate)
-        self.eliminar.place(relx = 0.7, rely = 0.8, relwidth = 0.25)
+        self.eliminar.place(relx = 0.7, rely = 0.8, relwidth = 0.25, relheight = 0.11)
         
         self.pack(expand = "True", fill = "x", padx = 5, pady = 5)
 

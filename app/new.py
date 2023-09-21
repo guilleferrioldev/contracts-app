@@ -181,7 +181,7 @@ class SlidePanel(ctk.CTkFrame):
         # servicios 
         self.service = Service(self, relx = 0.55, rely = 0.05, relwidth = 0.4, relheight = 0.76)
 
-        self.add_pdf = ctk.CTkButton(self, text = "Añadir pdf")
+        self.add_pdf = ctk.CTkButton(self, text = "Añadir PDF")
         self.add_pdf.place(relx = 0.85, rely = 0.82, relwidth = 0.1, relheight = 0.043)
 
         self.menu = ctk.CTkOptionMenu(self.service, values = [str(i) for i in range(11)], command = self.validate_menu)

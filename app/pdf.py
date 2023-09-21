@@ -5,6 +5,7 @@ from threading import Thread
 import math
 import io
 import os
+from time import sleep
 
 class CTkPDFViewer(ctk.CTkScrollableFrame):
 
@@ -41,11 +42,12 @@ class CTkPDFViewer(ctk.CTkScrollableFrame):
 
     def start_process(self):
         Thread(target=self.add_pages).start()
-        
+
     def add_pages(self):
         """ add images and labels """
         self.percentage_bar = 0
-        open_pdf = fitz.open(self.file)
+        with open(f"./pdfs/{self.file}.pdf") as file: 
+            open_pdf = fitz.open(file)
         
         for page in open_pdf:
             page_data = page.get_pixmap()
@@ -99,11 +101,13 @@ class CTkPDFViewer(ctk.CTkScrollableFrame):
 
 
 class PanelPDFViewer(ctk.CTkFrame):
-    def __init__(self, master, start_pos, end_pos, text):
+    def __init__(self, master, start_pos, end_pos, text, title):
         super().__init__(master = master,
                          border_width = 3) 
         
         self.text = text
+        self.master = master
+        self.title = title
 
         # general attributtes 
         self.start_pos = start_pos + 0.01
@@ -114,21 +118,31 @@ class PanelPDFViewer(ctk.CTkFrame):
         self.in_start_pos = True
         
         self.label = ctk.CTkLabel(self, text = f"{self.text}", font = ctk.CTkFont("Helvetica", 20, "bold"), anchor = "w")
-        self.label.place(relx = 0.05, rely = 0.035, relwidth = 0.3, relheight = 0.04)
+        self.label.place(relx = 0.05, rely = 0.035, relwidth = 0.6, relheight = 0.04)
 
         self.frame = ctk.CTkFrame(self)
         self.frame.place(relx = 0.02, rely = 0.1, relwidth = 0.96, relheight = 0.8)
-       
-        self.pdf = CTkPDFViewer(self.frame, file = "my_file.pdf")
+        
+        if self.text == "PDF":
+            if os.path.isfile(f"./pdfs/{self.title}.pdf"):
+                self.printer = ctk.CTkButton(self, text = "Imprimir")
+                self.printer.place(relx = 0.7, rely = 0.035, relwidth = 0.2, relheight = 0.04)
+            else:
+                self.anadir_pdf = ctk.CTkButton(self, text = "Añadir PDF")
+                self.anadir_pdf.place(relx = 0.7, rely = 0.035, relwidth = 0.2, relheight = 0.04)
 
-        self.printer = ctk.CTkButton(self, text = "Imprimir")
-        self.printer.place(relx = 0.7, rely = 0.035, relwidth = 0.2, relheight = 0.04)
 
-        self.atras_button = ctk.CTkButton(self, text = "Atrás", command = self.animate)
+        self.atras_button = ctk.CTkButton(self, text = "Atrás", command = self.back)
         self.atras_button.place(relx = 0.4, rely = 0.93, relwidth = 0.2, relheight = 0.04)
 
         # layout 
         self.place(relx = self.start_pos, rely = 0.05, relwidth = 0.5, relheight = 0.9)
+
+    def back(self):
+        for child in self.frame.winfo_children():
+            if child.widgetName == "frame":
+                child.destroy()
+        self.animate()
 
     def animate(self):
         if self.in_start_pos:
@@ -154,11 +168,3 @@ class PanelPDFViewer(ctk.CTkFrame):
          else:
             self.in_start_pos = True
 
-
-
-
-#root = customtkinter.CTk()
-#root.geometry("700x600")
-#pdf_frame = CTkPDFViewer(root, file="my_file.pdf")
-#pdf_frame.pack(fill="both", expand=True, padx=10, pady=10)
-#root.mainloop()

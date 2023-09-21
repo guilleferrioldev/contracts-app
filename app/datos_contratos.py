@@ -2,8 +2,9 @@ import customtkinter as ctk
 from message import Message, Actualizar, UpdateLabel, Anadir
 from datos_servicios import DatosServicios
 from service import Frames
-from pdf import PanelPDFViewer
+from pdf import PanelPDFViewer, CTkPDFViewer
 import sqlite3
+import os
 
 class Datos(ctk.CTkToplevel):
     def __init__(self, master, title):
@@ -111,9 +112,9 @@ class Datos(ctk.CTkToplevel):
         self.cancel_button.place(relx = 0.43, rely = 0.9)
         
         # Pdf button
-        self.pdf = PanelPDFViewer(self, 1.0, 0.7, "PDF")
+        self.pdf_panel = PanelPDFViewer(self, 1.0, 0.7, "PDF", f"{self.titulo}")
 
-        self.ver_pdf = ctk.CTkButton(self, text = "Ver PDF", font = self.font, command = self.pdf.animate)  
+        self.ver_pdf = ctk.CTkButton(self, text = "Ver PDF", font = self.font, command = self.read_pdf)  
         self.ver_pdf.place(relx = 0.63, rely = 0.05, relwidth = 0.1)
         
         # Actualizar frame
@@ -126,7 +127,11 @@ class Datos(ctk.CTkToplevel):
         self.actualizar.place(relx = 0.74, rely = 0.05, relwidth = 0.1)
 
 
-    
+    def read_pdf(self):
+        self.pdf_panel.animate()
+        if os.path.isfile(f"./pdfs/{self.titulo}.pdf"):
+            CTkPDFViewer(self.pdf_panel.frame, file = f"{self.titulo}")
+
     def servicios(self):
         conn = sqlite3.connect("contratos.db") 
         cursor = conn.cursor()
@@ -242,9 +247,11 @@ class Datos(ctk.CTkToplevel):
                 cursor.execute(instruccion)
                 instruccion = f"UPDATE Servicios SET proveedor='{prov}' WHERE  proveedor='{self.titulo}'"
                 cursor.execute(instruccion)
+                if os.path.isfile(f"./pdfs/{self.titulo}.pdf"):
+                    os.rename(f"./pdfs/{self.titulo}.pdf", f"./pdfs/{prov}.pdf")
                 self.titulo = prov
                 self.proveedor.configure(text = f"{prov}")
-
+                
             elif frame.text == "Objeto":           
                 instruccion = f"UPDATE Contratos SET objeto='{frame.entry.get()}' WHERE  proveedor='{self.titulo}'"
                 cursor.execute(instruccion)
