@@ -12,7 +12,7 @@ class Frame(ctk.CTkFrame):
         self.objeto = objeto
 
         self.proveedor_label = ctk.CTkLabel(self, text = f"{self.proveedor}", font = ctk.CTkFont("Helvetica", 30, "bold"), anchor = "w")
-        self.proveedor_label.place(relx = 0.03, rely = 0.2, relwidth = 0.6, relheight = 0.4)
+        self.proveedor_label.place(relx = 0.03, rely = 0.2, relwidth = 0.9, relheight = 0.4)
         
         self.objeto_label = ctk.CTkLabel(self, text = f"{self.objeto}", font = ctk.CTkFont("Helvetica", 15), anchor = "w")
         self.objeto_label.place(relx = 0.03, rely = 0.55, relwidth = 0.6, relheight = 0.2)

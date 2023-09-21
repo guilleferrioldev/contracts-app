@@ -2,6 +2,7 @@ import customtkinter as ctk
 from message import Message, Actualizar, UpdateLabel, Anadir
 from datos_servicios import DatosServicios
 from service import Frames
+from pdf import PanelPDFViewer
 import sqlite3
 
 class Datos(ctk.CTkToplevel):
@@ -33,7 +34,7 @@ class Datos(ctk.CTkToplevel):
        
         # widgets
         self.proveedor = ctk.CTkLabel(self, text = title, font = ctk.CTkFont("Helvetica", 25, "bold"), anchor = "w")
-        self.proveedor.place(relx = 0.05, rely = 0.05, relwidth = 0.5, relheight = 0.043)
+        self.proveedor.place(relx = 0.05, rely = 0.05, relwidth =0.55, relheight = 0.043)
         
         self.objeto = ctk.CTkLabel(self, text = f"Objeto: {datos[0][4]}", font = self.font)
         self.objeto.place(relx = 0.05, rely = 0.12)
@@ -110,7 +111,9 @@ class Datos(ctk.CTkToplevel):
         self.cancel_button.place(relx = 0.43, rely = 0.9)
         
         # Pdf button
-        self.ver_pdf = ctk.CTkButton(self, text = "Ver PDF", font = self.font)  
+        self.pdf = PanelPDFViewer(self, 1.0, 0.7, "PDF")
+
+        self.ver_pdf = ctk.CTkButton(self, text = "Ver PDF", font = self.font, command = self.pdf.animate)  
         self.ver_pdf.place(relx = 0.63, rely = 0.05, relwidth = 0.1)
         
         # Actualizar frame
