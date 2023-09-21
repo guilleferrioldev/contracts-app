@@ -30,13 +30,14 @@ class Scrollable(ctk.CTkScrollableFrame):
         self.place(relx = relx, rely = rely, relwidth = relwidth, relheight = relheight)
 
 class Frames(ctk.CTkFrame):
-    def __init__(self, master, text):
+    def __init__(self, master, text, proveedor= None):
         super().__init__(master = master,
                          height = 230,
                          fg_color = "white")
         
         self.text = text
         self.master = master 
+        self.proveedor = proveedor
         
         self.values = []
         if self.text == "contracts":
@@ -51,8 +52,6 @@ class Frames(ctk.CTkFrame):
             instruction = f"Select"
             conn.commit()
             conn.close()
-
-
 
         self.nombre_servicio_label = ctk.CTkLabel(self, text = "Servicio")
         self.nombre_servicio_label.place(relx = 0.05, rely =0.03)
@@ -82,11 +81,11 @@ class Frames(ctk.CTkFrame):
         self.fecha_serv_mes = ctk.CTkOptionMenu(self, 
                                     values = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
                                     width = 110)
-        self.fecha_serv_mes.place(relx = 0.49, rely = 0.42)
+        self.fecha_serv_mes.place(relx = 0.505, rely = 0.42)
 
         
         self.fecha_serv_year = ctk.CTkOptionMenu(self, values = [str(i) for i in range(2020, 2024)], width = 70)
-        self.fecha_serv_year.place(relx = 0.77, rely = 0.42)
+        self.fecha_serv_year.place(relx = 0.785, rely = 0.42)
 
         self.pagado_label = ctk.CTkLabel(self, text = "Pagado")
         self.pagado_label.place(relx = 0.05, rely =0.55)
@@ -100,20 +99,82 @@ class Frames(ctk.CTkFrame):
 
         self.valor_entry = ctk.CTkEntry(self)
         self.valor_entry.place(relx = 0.35, rely =0.68, relwidth = 0.6)
-
-        self.cancel_button = ctk.CTkButton(self, text = "Cancelar", command = self.delete)
-        self.cancel_button.place(relx = 0.35, rely = 0.82)
         
+        if self.text == "contracts":
+            self.cancel_button = ctk.CTkButton(self, text = "Cancelar", command = self.delete_contracts, hover_color = "red")
+            self.cancel_button.place(relx = 0.35, rely = 0.82)
+        elif self.text == "anadir":
+            self.cancel_button = ctk.CTkButton(self, text = "Cancelar", command = self.delete_service, hover_color = "red")
+            self.cancel_button.place(relx = 0.25, rely = 0.82, relwidth = 0.2, relheight = 0.12)
+            
+            self.anadir_button = ctk.CTkButton(self, text = "Añadir", hover_color = "green", command = self.new_service)
+            self.anadir_button.place(relx = 0.55, rely = 0.82, relwidth = 0.2, relheight = 0.12)
+
         self.pack(expand = "True", fill = "x", padx = 5, pady = 5)
 
-    def delete(self):
-        if self.text == "contracts":
-            self.master.master.frames = [i for i in self.master.master.frames if i != self]
-            self.destroy()
-        if self.text == "anadir":
-            self.destroy()
-        
+    def delete_contracts(self):
+        self.master.master.frames = [i for i in self.master.master.frames if i != self]
+        self.destroy()
         self.master.master.master.menu.set(str(int(self.master.master.master.menu.get())-1))
         self.master.master.master.suma()
+
+    def delete_service(self):
+        self.master.master.master.servicios_menu.set(str(int(self.master.master.master.servicios_menu.get())-1))
+        self.destroy()
         
+    
+    def new_service(self):
+        proveedor = self.proveedor
+        nombre_del_servicio = self.nombre_servicio_entry.get()       
+        descripcion = self.desc_servicio_entry.get()       
+        no_factura = self.factura_entry.get()       
+        fecha_servicio = f"{self.fecha_serv_day.get()}/{self.fecha_serv_mes.get()}/{self.fecha_serv_year.get()}"       
+        pagado = self.pagado_entry.get()       
+        valor = self.valor_entry.get() if len(self.valor_entry.get()) > 0 else 0       
+
+
+        conn = sqlite3.connect("contratos.db") 
+        cursor = conn.cursor()
+        
+        data_insert_query_service = '''INSERT INTO Servicios
+                                    (proveedor,
+                                    nombre_del_servicio,
+                                    descripcion, 
+                                    no_factura,
+                                    fecha_servicio,
+                                    pagado,
+                                    valor )
+                                    VALUES (?,?,?,?,?,?,?)'''
+
+        data_insert_tuple_service = (proveedor,
+                                    nombre_del_servicio,
+                                    descripcion, 
+                                    no_factura,
+                                    fecha_servicio,
+                                    pagado,
+                                    valor)
+ 
+        cursor.execute(data_insert_query_service, data_insert_tuple_service)
+
+        conn.commit()
+        conn.close()
+
+        for child in self.master.master.master.servicios_scroll.winfo_children():
+            if child.widgetName == "frame":
+                if child.text != "anadir":
+                    child.destroy()
+        
+        self.master.master.master.servicios()
+        self.delete_service()
+
+
+
+
+
+
+
+
+
+
+
 

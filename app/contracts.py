@@ -2,7 +2,8 @@ import customtkinter as ctk
 from datos_contratos import Datos
 from message import Message
 import sqlite3
-
+import os
+import shutil
 
 class Contracts(ctk.CTkScrollableFrame):
     def __init__(self, master, row, column, columnspan, padx, pady, sticky):
@@ -145,7 +146,6 @@ class ContractsFrames(ctk.CTkFrame):
                     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         '''
 
-        
         data_insert = []
         i = 0 
         while i < len(datos[0]):
@@ -170,7 +170,11 @@ class ContractsFrames(ctk.CTkFrame):
 
         conn.commit()
         conn.close()
-
+        
+        # Move pdf to other dir
+        if os.path.isfile(f"./pdfs/{self.datos.titulo}.pdf"):
+            shutil.move(f"./pdfs/{self.datos.titulo}.pdf", f"./pdfs_recorver/{self.datos.titulo}.pdf")
+        
         for child in self.master.winfo_children():
             if child.widgetName == "frame":
                 child.destroy()

@@ -1,5 +1,5 @@
 import customtkinter as ctk 
-from message import Message, Actualizar, UpdateLabel, Anadir
+from message import Message, Actualizar, UpdateLabel
 from datos_servicios import DatosServicios
 from service import Frames
 from pdf import PanelPDFViewer, CTkPDFViewer
@@ -82,8 +82,6 @@ class Datos(ctk.CTkToplevel):
 
         self.servicios_scroll = ScrollFrame(self.frame_servicios)
 
-        #Frames(self.servicios_scroll, "anadir")
-
         self.importe_label = ctk.CTkLabel(self.frame_servicios, text = f"Importe: 0.00 cup", font = ctk.CTkFont("Helvetica", 15, "bold"))
         self.importe_label.place(relx = 0.53, rely = 0.93)
 
@@ -93,16 +91,8 @@ class Datos(ctk.CTkToplevel):
         self.servicios()
         
         # Añadir servicios
-        self.anadir = Anadir(self, 1.0, 0.7, "Añadir nuevo servicio")
-
-        self.button_anadir = ctk.CTkButton(self.anadir, text = "Añadir", command = self.new_service, font= ctk.CTkFont("Helvetica", 15))
-        self.button_anadir.place(relx = 0.6, rely = 0.85, relwidth = 0.2)
-
-        self.cancel_anadir = ctk.CTkButton(self.anadir, text = "Cancelar", command = self.anadir.animate, font= ctk.CTkFont("Helvetica", 15))
-        self.cancel_anadir.place(relx = 0.2, rely = 0.85, relwidth = 0.2)
-
-        self.servicios_button = ctk.CTkButton(self.frame_servicios, text = "Añadir", command = self.anadir.animate, font= ctk.CTkFont("Helvetica", 15))
-        self.servicios_button.place(relx = 0.7, rely = 0.05, relwidth = 0.2)
+        self.servicios_menu = ctk.CTkOptionMenu(self.frame_servicios, values = [str(i) for i in range(11)], command = self.add_service)
+        self.servicios_menu.place(relx = 0.82, rely = 0.05, relwidth = 0.13)
         
         self.servicios_label = ctk.CTkLabel(self.frame_servicios, text = "Servicios", font = ctk.CTkFont("Helvetica",20, "bold"))
         self.servicios_label.place(relx = 0.1, rely = 0.05)
@@ -125,7 +115,18 @@ class Datos(ctk.CTkToplevel):
 
         self.actualizar = ctk.CTkButton(self, text = "Actualizar", font = self.font, command = self.actualizar_frame.animate)  
         self.actualizar.place(relx = 0.74, rely = 0.05, relwidth = 0.1)
+    
+    def add_service(self, choice):
+        for child in self.servicios_scroll.winfo_children():
+            if child.widgetName == "frame":
+                child.destroy()
 
+        i = 0 
+        while i < int(choice):
+            self.anadir = Frames(self.servicios_scroll, "anadir", f"{self.titulo}")
+            i +=1
+
+        self.servicios()
 
     def read_pdf(self):
         self.pdf_panel.animate()

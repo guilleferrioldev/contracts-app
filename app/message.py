@@ -237,64 +237,6 @@ class Junta(ctk.CTkFrame):
             self.in_start_pos = True
 
 
-
-
-class Anadir(ctk.CTkFrame):
-    def __init__(self, master, start_pos, end_pos, text):
-        super().__init__(master = master,
-                         border_width = 3) 
-        # general attributtes 
-        self.start_pos = start_pos + 0.01
-        self.end_pos = end_pos 
-        self.width = abs(start_pos - end_pos)
-        
-        # animation logic
-        self.pos = self.start_pos
-        self.in_start_pos = True
-        
-        self.label = ctk.CTkLabel(self, text = text, font = ctk.CTkFont("Helvetica", 20, "bold"))
-        self.label.place(relx = 0.05, rely = 0.05, relwidth = 0.6)
-
-        self.anadir_frame = Frames(self, "anadir")
-
-        
-        # layout 
-        self.place(relx = self.start_pos, rely = 0.3, relwidth = 0.4, relheight = 0.5)
-
-    def animate(self):
-        if self.in_start_pos:
-            self.animate_fordward()
-        else:
-            self.animate_backwards()
-            self.anadir_frame.desc_servicio_entry.delete(0,"end")      
-            self.anadir_frame.factura_entry.delete(0,"end")       
-            self.anadir_frame.fecha_serv_day.set(1) 
-            self.anadir_frame.fecha_serv_mes.set("Enero")
-            self.anadir_frame.fecha_serv_year.set(2020)   
-            self.anadir_frame.pagado_entry.delete(0,"end")       
-            self.anadir_frame.valor_entry.delete(0,"end") 
-
-
-    def animate_fordward(self):
-        if self.pos > self.end_pos:
-            self.pos -= 0.7 
-            self.place(relx = self.pos, rely = 0.3, relwidth = 0.4, relheight = 0.5)
-            self.after(10, self.animate_fordward)
-        else:
-            self.in_start_pos = False 
-
-    def animate_backwards(self):
-         if self.pos < self.start_pos:
-            self.pos += 0.7 
-            self.place(relx = self.pos, rely = 0.3, relwidth = 0.4, relheight = 0.5)
-            self.after(10, self.animate_backwards)
-         else:
-            self.in_start_pos = True
-
-
-
-
-
 class EliminarServicio(ctk.CTkFrame):
     def __init__(self, master, start_pos, end_pos, text):
         super().__init__(master = master,
