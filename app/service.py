@@ -8,7 +8,7 @@ class Service(ctk.CTkFrame):
         self.master = master
         
         self.add_service_label = ctk.CTkLabel(self, text = "Servicios/Pagos", font = ctk.CTkFont(family = "Helvetica", size = 20 ))
-        self.add_service_label.place(relx = 0.05, rely = 0.05)
+        self.add_service_label.place(relx = 0.05, rely = 0.02, relwidth = 0.4, relheight = 0.1)
 
         self.scroll_frame = Scrollable(self, relx = 0.05, rely = 0.13, relwidth = 0.9, relheight = 0.8)        
 
@@ -60,7 +60,7 @@ class Frames(ctk.CTkFrame):
     
         self.nombre_servicio_entry = ctk.CTkOptionMenu(self, values = self.values)
         self.nombre_servicio_entry.place(relx = 0.35, rely =0.03, relwidth = 0.6)
-        self.nombre_servicio_entry.set("Selecciona nombre")
+        self.nombre_servicio_entry.set("Seleccionar objeto")
 
         self.desc_servicio_label = ctk.CTkLabel(self, text = "Descripción")
         self.desc_servicio_label.place(relx = 0.05, rely =0.16)

@@ -32,8 +32,8 @@ class Datos(ctk.CTkToplevel):
         
        
         # widgets
-        self.proveedor = ctk.CTkLabel(self, text = title, font = ctk.CTkFont("Helvetica", 25, "bold"))
-        self.proveedor.place(relx = 0.05, rely = 0.05)
+        self.proveedor = ctk.CTkLabel(self, text = title, font = ctk.CTkFont("Helvetica", 25, "bold"), anchor = "w")
+        self.proveedor.place(relx = 0.05, rely = 0.05, relwidth = 0.5, relheight = 0.043)
         
         self.objeto = ctk.CTkLabel(self, text = f"Objeto: {datos[0][4]}", font = self.font)
         self.objeto.place(relx = 0.05, rely = 0.12)

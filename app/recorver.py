@@ -31,7 +31,7 @@ class Search(ctk.CTkEntry):
 
         self.bind("<KeyRelease>", lambda event: self.buscar())
 
-        self.place(relx = 0.7, rely = 0.08, relwidth = 0.2)
+        self.place(relx = 0.7, rely = 0.08, relwidth = 0.2, relheight = 0.043)
 
     def buscar(self):
         conn = sqlite3.connect("contratos.db")
@@ -79,11 +79,11 @@ class Recorver(ctk.CTkFrame):
         self.create_frames()
         self.search = Search(self)
 
-        self.label = ctk.CTkLabel(self.frame, text = "Recuperar contrato", font = ctk.CTkFont("Helvetica", 25, "bold"))
-        self.label.place(relx = 0.05, rely = 0.05)
+        self.label = ctk.CTkLabel(self.frame, text = "Recuperar contrato", font = ctk.CTkFont("Helvetica", 25, "bold"), anchor = "w")
+        self.label.place(relx = 0.05, rely = 0.05, relwidth = 0.4, relheight = 0.043)
 
         self.atras_button = ctk.CTkButton(self.frame, text = "Atrás", font = self.font, command = self.animate)
-        self.atras_button.place(relx = 0.43, rely = 0.9, relwidth = 0.1)
+        self.atras_button.place(relx = 0.43, rely = 0.9, relwidth = 0.1, relheight = 0.043)
         
 
         # layout 

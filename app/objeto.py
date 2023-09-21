@@ -19,27 +19,27 @@ class Object(ctk.CTkFrame):
 
         self.font = ctk.CTkFont("Helvetica", 15)
 
-        self.label = ctk.CTkLabel(self, text = self.text, font = ctk.CTkFont("Helvetica", 25, "bold"))
-        self.label.place(relx = 0.05, rely = 0.08)
+        self.label = ctk.CTkLabel(self, text = self.text, font = ctk.CTkFont("Helvetica", 25, "bold"), anchor = "w")
+        self.label.place(relx = 0.05, rely = 0.08, relwidth = 0.4, relheight = 0.055)
 
         self.scroll = Scroll(self, self.text)
         
         self.search = ctk.CTkEntry(self, placeholder_text = "Buscar", font = self.font)
-        self.search.place(relx = 0.49, rely = 0.1, relwidth = 0.37)
+        self.search.place(relx = 0.49, rely = 0.1, relwidth = 0.37, relheight = 0.055)
         self.search.bind("<KeyRelease>", lambda event : self.searching())
         
         self.value = 0
         self.new_object = ctk.CTkOptionMenu(self, values = [str(i) for i in range( 11)], font = self.font, command = self.change_value)
-        self.new_object.place(relx = 0.88, rely = 0.1, relwidth = 0.07)
+        self.new_object.place(relx = 0.88, rely = 0.1, relwidth = 0.07, relheight = 0.055)
         self.new_object.set("+")
         
         self.create_frames()
 
         self.cancel_button = ctk.CTkButton(self, text = "Cancelar", font = self.font, command = self.cancel)
-        self.cancel_button.place(relx = 0.25, rely = 0.85)
+        self.cancel_button.place(relx = 0.25, rely = 0.85, relwidth = 0.15, relheight = 0.055)
         
-        self.guardar_button = ctk.CTkButton(self, text = "Guardar", font = self.font, command = self.animate)
-        self.guardar_button.place(relx = 0.55, rely = 0.85)
+        self.guardar_button = ctk.CTkButton(self, text = "Guardar", font = self.font, command = self.save)
+        self.guardar_button.place(relx = 0.55, rely = 0.85, relwidth = 0.15, relheight = 0.055)
 
         # layout 
         self.place(relx = self.start_pos, rely = 0.1, relwidth = 0.7, relheight = 0.8)
@@ -52,8 +52,16 @@ class Object(ctk.CTkFrame):
                 else:
                     child.destroy()
 
-                self.new_object.set("0")
+                self.new_object.set("+")
         
+        self.animate()
+
+    def save(self):
+        for child in self.scroll.winfo_children():
+            if child.widgetName == "frame":
+                if child.text == "insert":
+                    child.destroy()
+
         self.animate()
             
     def searching(self):

@@ -82,7 +82,7 @@ class App(ctk.CTk):
         self.denegar.place(relx = 0.4, rely = 0.8, relwidth = 0.2)
 
         self.guardar_button = ctk.CTkButton(self.slide, text = "Guardar",font = font, command = self.savemessage.animate)
-        self.guardar_button.place(relx = 0.42, rely = 0.94) 
+        self.guardar_button.place(relx = 0.42, rely = 0.94, relwidth=0.11, relheight = 0.043) 
         
         self.option_type = ctk.CTkSegmentedButton(self.main_frame, values=["Contractos","Calendario", "Estadísticas"], command = self.switch_frame)
         self.option_type.set("Contractos")
