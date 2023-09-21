@@ -3,7 +3,6 @@ from datos_contratos import Datos
 from message import Message
 import sqlite3
 import os
-import shutil
 
 class Contracts(ctk.CTkScrollableFrame):
     def __init__(self, master, row, column, columnspan, padx, pady, sticky):
@@ -173,7 +172,7 @@ class ContractsFrames(ctk.CTkFrame):
         
         # Move pdf to other dir
         if os.path.isfile(f"./pdfs/{self.datos.titulo}.pdf"):
-            shutil.move(f"./pdfs/{self.datos.titulo}.pdf", f"./pdfs_recorver/{self.datos.titulo}.pdf")
+            os.remove(f"./pdfs/{self.datos.titulo}.pdf")
         
         for child in self.master.winfo_children():
             if child.widgetName == "frame":

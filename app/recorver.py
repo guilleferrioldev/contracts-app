@@ -1,8 +1,6 @@
 import customtkinter as ctk 
 import sqlite3
 from message import Actualizar, Message
-import os 
-import shutil
 
 class Frame(ctk.CTkFrame):
     def __init__(self, master, proveedor, objeto):
@@ -294,10 +292,6 @@ class RecorverData(ctk.CTkToplevel):
         conn.commit()
         conn.close()
         
-        # Move pdf to other dir
-        if os.path.isfile(f"./pdfs_recorver/{self.titulo}.pdf"):
-            shutil.move(f"./pdfs_recorver/{self.titulo}.pdf", f"./pdfs/{self.titulo}.pdf")
-
         for child in self.master.master.winfo_children():
             if child.widgetName == "frame":
                 child.destroy()
