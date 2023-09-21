@@ -11,10 +11,9 @@ class Service(ctk.CTkFrame):
         self.add_service_label.place(relx = 0.05, rely = 0.02, relwidth = 0.4, relheight = 0.1)
 
         self.scroll_frame = Scrollable(self, relx = 0.05, rely = 0.13, relwidth = 0.9, relheight = 0.8)        
-
-        
+ 
         self.importe_label = ctk.CTkLabel(self, font = ctk.CTkFont(family = "Helvetica", size =15))
-        self.importe_label.place(relx = 0.55, rely = 0.935)
+        self.importe_label.place(relx = 0.56, rely = 0.935)
 
         self.frames = []
         
@@ -115,5 +114,6 @@ class Frames(ctk.CTkFrame):
             self.destroy()
         
         self.master.master.master.menu.set(str(int(self.master.master.master.menu.get())-1))
+        self.master.master.master.suma()
         
 
