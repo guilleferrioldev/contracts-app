@@ -1,7 +1,6 @@
 import customtkinter as ctk
 from contracts import Contracts
 from calendario import Calendario
-from dashboard import Dashboard
 from new import NewButton, SlidePanel
 from sorting import Sort
 from message import Message
@@ -84,7 +83,7 @@ class App(ctk.CTk):
         self.guardar_button = ctk.CTkButton(self.slide, text = "Guardar",font = font, command = self.savemessage.animate)
         self.guardar_button.place(relx = 0.42, rely = 0.94, relwidth=0.11, relheight = 0.043) 
         
-        self.option_type = ctk.CTkSegmentedButton(self.main_frame, values=["Contractos","Calendario", "Estadísticas"], command = self.switch_frame)
+        self.option_type = ctk.CTkSegmentedButton(self.main_frame, values=["Contractos","Calendario"], command = self.switch_frame)
         self.option_type.set("Contractos")
         self.option_type.grid(row=1, column=0, columnspan=3, padx=10, pady=10, sticky="ew")
          
@@ -126,15 +125,6 @@ class App(ctk.CTk):
         
         elif self.option_type.get() == "Calendario":
             Calendario(master = self.main_frame, 
-                    row=2, 
-                    column=0, 
-                    columnspan=3,
-                    padx=10, 
-                    pady=(0,10),
-                    sticky="nsew")
-
-        else:
-            Dashboard(master = self.main_frame, 
                     row=2, 
                     column=0, 
                     columnspan=3,
