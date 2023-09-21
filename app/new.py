@@ -1,10 +1,14 @@
 import customtkinter as ctk 
+from tkinter import filedialog
 from tkinter import scrolledtext
 from service import Service, Frames
 from message import Message, Junta
 from recorver import Recorver
 from objeto import Object
 import sqlite3
+import sys
+from pathlib import Path
+import shutil
 
 class NewButton(ctk.CTkButton):
     def __init__(self, master, text, width,row, column, padx, pady, sticky, command):
@@ -181,11 +185,13 @@ class SlidePanel(ctk.CTkFrame):
         # servicios 
         self.service = Service(self, relx = 0.55, rely = 0.05, relwidth = 0.4, relheight = 0.76)
 
-        self.add_pdf = ctk.CTkButton(self, text = "Añadir PDF")
+        self.add_pdf = ctk.CTkButton(self, text = "Añadir PDF", command = self.copy_pdf)
         self.add_pdf.place(relx = 0.85, rely = 0.82, relwidth = 0.1, relheight = 0.043)
 
         self.menu = ctk.CTkOptionMenu(self.service, values = [str(i) for i in range(11)], command = self.validate_menu)
         self.menu.place(relx = 0.82, rely = 0.05,relwidth = 0.12, relheight = 0.06)
+        
+        self.path_adding_pdf = 0
 
         #Message box
         self.cancelmessage = Message(self, 1.0,0.7,"Cancelar")
@@ -207,6 +213,13 @@ class SlidePanel(ctk.CTkFrame):
         # layout 
         self.place(relx = self.end_pos, rely = 0.01, relwidth = self.width, relheight = 0.98)
         
+    def copy_pdf(self):
+        filename = filedialog.askopenfilename(title = "Copiar pdf", initialdir = "~")
+        if filename:
+            self.path = Path(filename)
+            self.path_adding_pdf = 1
+
+
     def cancel(self):
         self.cancelmessage.animate()
         self.animate()
@@ -476,9 +489,12 @@ class SlidePanel(ctk.CTkFrame):
                                         valor)
  
             cursor.execute(data_insert_query_service, data_insert_tuple_service)
-
+        
         conn.commit()
         conn.close()
+
+        if self.path_adding_pdf:
+            shutil.copy(self.path, f"./pdfs/{proveedor}.pdf")
 
         self.animate()
 
