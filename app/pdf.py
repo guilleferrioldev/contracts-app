@@ -1,4 +1,7 @@
 import customtkinter as ctk
+from tkinter import filedialog
+from pathlib import Path
+import shutil
 from PIL import Image
 import fitz
 from threading import Thread
@@ -127,9 +130,12 @@ class PanelPDFViewer(ctk.CTkFrame):
             if os.path.isfile(f"./pdfs/{self.title}.pdf"):
                 self.printer = ctk.CTkButton(self, text = "Imprimir")
                 self.printer.place(relx = 0.7, rely = 0.035, relwidth = 0.2, relheight = 0.04)
+                
+                self.add_pdf = ctk.CTkButton(self, text = "Cambiar PDF", command = self.change_pdf)
+                self.add_pdf.place(relx = 0.45, rely = 0.035, relwidth = 0.2, relheight = 0.04)
             else:
-                self.anadir_pdf = ctk.CTkButton(self, text = "Añadir PDF")
-                self.anadir_pdf.place(relx = 0.7, rely = 0.035, relwidth = 0.2, relheight = 0.04)
+                self.add_pdf = ctk.CTkButton(self, text = "Añadir PDF", command = self.copy_pdf)
+                self.add_pdf.place(relx = 0.7, rely = 0.035, relwidth = 0.2, relheight = 0.04)
 
 
         self.atras_button = ctk.CTkButton(self, text = "Atrás", command = self.back)
@@ -143,6 +149,26 @@ class PanelPDFViewer(ctk.CTkFrame):
             if child.widgetName == "frame":
                 child.destroy()
         self.animate()
+
+    def copy_pdf(self):
+        filename = filedialog.askopenfilename(title = "Copiar pdf", initialdir = "~")
+        if filename:
+            self.path = Path(filename)
+            shutil.copy(self.path, f"./pdfs/{self.title}.pdf")
+            if os.path.isfile(f"./pdfs/{self.title}.pdf"):
+                CTkPDFViewer(self.frame, file = f"{self.title}")
+
+    def change_pdf(self):
+        filename = filedialog.askopenfilename(title = "Cambiar pdf", initialdir = "~")
+        if filename:
+            self.path = Path(filename)
+            if os.path.isfile(f"./pdfs/{self.title}.pdf"):
+                os.remove(f"./pdfs/{self.title}.pdf")
+                for child in self.frame.winfo_children():
+                    if child.widgetName == "frame":
+                        child.destroy()
+            shutil.copy(self.path, f"./pdfs/{self.title}.pdf")
+            CTkPDFViewer(self.frame, file = f"{self.title}")
 
     def animate(self):
         if self.in_start_pos:

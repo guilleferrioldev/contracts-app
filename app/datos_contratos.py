@@ -132,7 +132,7 @@ class Datos(ctk.CTkToplevel):
         self.pdf_panel.animate()
         if os.path.isfile(f"./pdfs/{self.titulo}.pdf"):
             CTkPDFViewer(self.pdf_panel.frame, file = f"{self.titulo}")
-
+    
     def servicios(self):
         conn = sqlite3.connect("contratos.db") 
         cursor = conn.cursor()
