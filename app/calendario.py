@@ -31,7 +31,6 @@ class Calendario(ctk.CTkFrame):
         if self.dateframe.text != self.calendar.get_date():
             self.dateframe.destroy()
             self.dateframe = DateFrame(self, 1.0, 0.7, f"{self.calendar.get_date()}")
-            self.dateframe.animate()
             
             date = self.calendar.get_date().split("-")
             
@@ -90,15 +89,15 @@ class Calendario(ctk.CTkFrame):
 
             conn.commit()
             conn.close()
-            
+
+            if datos != []:
+                self.dateframe.animate()
+
             i = 0 
             while i < len(datos):
                 InfoFrame(self.dateframe.scroll_frame, datos[i][0])
                 i += 1
                 
-        else:   
-            self.dateframe.animate()
-
 
     def grad_date(self):
         conn = sqlite3.connect("contratos.db")
