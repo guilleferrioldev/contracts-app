@@ -350,7 +350,7 @@ class SlidePanel(ctk.CTkFrame):
 
     def animate_fordward(self):
         if self.pos > self.end_pos:
-            self.pos -= 0.006 
+            self.pos -= 0.08 
             self.place(relx = self.pos, rely = 0.01, relwidth = self.width, relheight = 0.98)
             self.after(1, self.animate_fordward)
         else:
@@ -358,8 +358,8 @@ class SlidePanel(ctk.CTkFrame):
 
     def animate_backwards(self):
          if self.pos < self.start_pos:
-            self.pos += 0.006 
-            self.place(relx = self.pos, rely = 0.01, relwidth = self.width, relheight = 0.98)
+            self.pos += 0.08 
+            self.place(relx = 0.01, rely = 0.01, relwidth = self.width, relheight = 0.98)
             self.after(1, self.animate_backwards)
          else:
             self.in_start_pos = True
@@ -379,8 +379,6 @@ class SlidePanel(ctk.CTkFrame):
             self.fecha_junta_day.configure(state = "disabled") 
             self.fecha_junta_mes.configure(state = "disabled") 
             self.fecha_junta_year.configure(state = "disabled") 
-            
-
 
     def insert_database(self):
         # Contract data
