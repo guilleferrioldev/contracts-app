@@ -29,6 +29,7 @@ class SlidePanel(ctk.CTkFrame):
         self.end_pos = end_pos 
         self.width = abs(start_pos - end_pos)
         
+
         # animation logic
         self.pos = self.end_pos
         self.in_start_pos = False
@@ -495,28 +496,6 @@ class SlidePanel(ctk.CTkFrame):
 
         if self.path_adding_pdf:
             shutil.copy(self.path, f"./pdfs/{proveedor}.pdf")
-
+        
         self.animate()
-
-
-
-
         
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -127,9 +127,10 @@ class Datos(ctk.CTkToplevel):
         self.denegar = ctk.CTkButton(self.deletemessage, text = "No", font = self.font, command = self.deletemessage.animate)
         self.denegar.place(relx = 0.4, rely = 0.8, relwidth = 0.2)
 
+
         self.eliminar = ctk.CTkButton(self, text = "Eliminar", font = self.font, command = self.deletemessage.animate)  
         self.eliminar.place(relx = 0.85, rely = 0.05, relwidth = 0.1)
-
+        
     def eliminar(self):
         conn = sqlite3.connect("contratos.db")
         cursor = conn.cursor()
@@ -192,7 +193,7 @@ class Datos(ctk.CTkToplevel):
             self.master.master.create_frames()
         else:
             self.master.master.master.master.master.master.insert_frames()
-        
+            self.master.master.master.master.master.master.master.master.switch_frame("Calendario")   
         self.destroy()
 
     def add_service(self, choice):
@@ -274,6 +275,7 @@ class Datos(ctk.CTkToplevel):
             self.master.master.master.master.master.master.sort.set("Proveedor")
         else:
             self.master.master.master.master.master.master.insert_frames()
+            self.master.master.master.master.master.master.master.master.switch_frame("Calendario")   
 
 
     def new_service(self):
