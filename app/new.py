@@ -5,7 +5,6 @@ from service import Service, Frames
 from message import Message, Junta
 from recorver import Recorver
 from objeto import Object
-from area import Area
 import sqlite3
 import sys
 from pathlib import Path
@@ -316,6 +315,12 @@ class SlidePanel(ctk.CTkFrame):
             self.telefono_entry.delete(0, "end") 
             self.master.master.sort_var.set("Proveedor")
             self.master.master.buscar()
+            for child in self.area_frame.scroll.winfo_children():
+                if child.widgetName == "frame":
+                    if child.text != "insert":
+                        child.check_var.set("off")
+                    else:
+                        child.destroy()
             for child in self.objeto_frame.scroll.winfo_children():
                 if child.widgetName == "frame":
                     if child.text != "insert":
@@ -400,6 +405,12 @@ class SlidePanel(ctk.CTkFrame):
                 if child.check_var.get() == "on":
                     objeto += f"{child.text} ,"
         objeto = objeto[:-2]
+        area = ""
+        for child in self.area_frame.scroll.winfo_children():
+            if child.widgetName == "frame":
+                if child.check_var.get() == "on":
+                    area += f"{child.text} ,"
+        area = area[:-2]
         direccion = self.direccion_entry.get()
         codigo_nit = self.nit_code_entry.get()
         codigo_reup = self.reup_code_entry.get()
@@ -425,6 +436,7 @@ class SlidePanel(ctk.CTkFrame):
          
         data_insert_query = ''' INSERT INTO Contratos 
                     (proveedor,
+                    area,
                     fecha_del_contrato, 
                     fecha_de_vencimiento,
                     objeto, direccion,
@@ -437,10 +449,10 @@ class SlidePanel(ctk.CTkFrame):
                     titular,
                     telefono,
                     autorizado_por) 
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         '''
 
-        data_insert_tuple = (proveedor, fecha_del_contrato, fecha_de_vencimiento,
+        data_insert_tuple = (proveedor, area, fecha_del_contrato, fecha_de_vencimiento,
                              objeto, direccion, codigo_nit, codigo_reup, 
                              codigo_versat, banco, sucursal,
                              cuenta,titular, telefono, autorizado_por)

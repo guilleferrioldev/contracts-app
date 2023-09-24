@@ -167,7 +167,8 @@ class App(ctk.CTk):
         
         table_create_query = ''' CREATE TABLE IF NOT EXISTS Contratos
                 (id_contrato INTEGER PRIMARY KEY AUTOINCREMENT,
-                proveedor TEXT, 
+                proveedor TEXT,
+                area TEXT,
                 fecha_del_contrato TEXT,
                 fecha_de_vencimiento TEXT,
                 objeto TEXT,
