@@ -35,15 +35,8 @@ class App(ctk.CTk):
         font = ctk.CTkFont("Helvetica", 15)
 
         # layout
-        self.search = ctk.CTkEntry(master = self.main_frame, placeholder_text = "Buscar", width = 250)
-        self.search.grid(row = 0,
-                      column = 1,
-                      padx = 150,
-                      pady = 10, 
-                      sticky = "e")
+        self.create_search()
         
-        self.search.bind("<KeyRelease>", lambda e: self.buscar())
-       
         # Sort Option Menu
         self.sort_var = ctk.StringVar(value = "Proveedor")
         self.values = ["Proveedor","Fecha contrato", "Fecha vencimiento","Objeto", "Importe total", "Servicios", "Aut.firm factura"]
@@ -108,6 +101,15 @@ class App(ctk.CTk):
         self.slide.insert_database()
         self.savemessage.animate()
         self.buscar()
+ 
+    def create_search(self):
+        self.search = ctk.CTkEntry(master = self.main_frame, placeholder_text = "Buscar", width = 250)
+        self.search.grid(row = 0,
+                      column = 1,
+                      padx = 150,
+                      pady = 10, 
+                      sticky = "e")
+        self.search.bind("<KeyRelease>", lambda e: self.buscar())
 
 
 
@@ -130,9 +132,9 @@ class App(ctk.CTk):
                                     pady=(0,10),
                                     sticky="nsew")
             
-            self.search.configure(state = "normal") 
+            self.search.configure(state = "normal")
             self.sort.configure(state = "normal")
-
+    
 
         elif type_ == "Calendario":
             self.calendar = Calendario(master = self.main_frame, 
@@ -143,7 +145,8 @@ class App(ctk.CTk):
                             pady=(0,10),
                             sticky="nsew")
             
-            self.search.delete(0, "end")
+            self.search.destroy()
+            self.create_search()
             self.search.configure(state = "disabled") 
             self.sort.set("Proveedor")
             self.sort.configure(state = "disabled")
