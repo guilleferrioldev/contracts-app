@@ -236,6 +236,12 @@ class App(ctk.CTk):
                 marcado INTEGER)
         '''
         conn.execute(tabla_autorizado)
+        
+        tabla_autorizado = '''CREATE TABLE IF NOT EXISTS Area_que_Tramita
+                (autorizado_por TEXT, 
+                correo TEXT)
+        '''
+        conn.execute(tabla_autorizado)
 
         conn.commit()
         conn.close()

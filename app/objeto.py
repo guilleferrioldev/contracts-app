@@ -36,10 +36,10 @@ class Object(ctk.CTkFrame):
         self.create_frames()
 
         self.cancel_button = ctk.CTkButton(self, text = "Cancelar", font = self.font, command = self.cancel)
-        self.cancel_button.place(relx = 0.25, rely = 0.85, relwidth = 0.15, relheight = 0.055)
+        self.cancel_button.place(relx = 0.25, rely = 0.85,relwidth = 0.15, relheight = 0.055)
         
         self.guardar_button = ctk.CTkButton(self, text = "Guardar", font = self.font, command = self.save)
-        self.guardar_button.place(relx = 0.55, rely = 0.85, relwidth = 0.15, relheight = 0.055)
+        self.guardar_button.place(relx = 0.55, rely = 0.85,relwidth = 0.15, relheight = 0.055)
 
         # layout 
         self.place(relx = self.start_pos, rely = 0.1, relwidth = 0.7, relheight = 0.8)
