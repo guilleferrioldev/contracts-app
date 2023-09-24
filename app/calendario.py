@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from tkcalendar import Calendar
+from datos_contratos import Datos
 import datetime
 import sqlite3
 
@@ -22,16 +23,20 @@ class Calendario(ctk.CTkFrame):
         self.calendar.calevent_create(self.date, "Hoy", tags="Today")
         self.calendar.tag_config("Today", background = ctk.ThemeManager.theme["CTkButton"]["fg_color"][1])
         
-
         self.calendar.bind("<<CalendarSelected>>", lambda event :  self.show_date())
 
         self.grid(row = row, column = column, columnspan = columnspan,padx = padx, pady = pady, sticky = sticky)
     
     def show_date(self):
-        if self.dateframe.text != self.calendar.get_date():
-            self.dateframe.destroy()
-            self.dateframe = DateFrame(self, 1.0, 0.7, f"{self.calendar.get_date()}")
+        self.dateframe.destroy()
+        self.dateframe = DateFrame(self, 1.0, 0.7, f"{self.calendar.get_date()}")
             
+        datos = self.insert_frames()
+                       
+        if datos != []:
+            self.dateframe.animate()
+
+    def insert_frames(self):
             date = self.calendar.get_date().split("-")
             
             if date[0] == "01":
@@ -83,21 +88,24 @@ class Calendario(ctk.CTkFrame):
             conn = sqlite3.connect("contratos.db")
             cursor = conn.cursor()
 
-            instruccion = f"SELECT proveedor, fecha_de_vencimiento FROM Contratos WHERE fecha_de_vencimiento = '{date}'"
+            instruccion = f"SELECT proveedor, fecha_de_vencimiento FROM Contratos WHERE fecha_de_vencimiento = '{date}' ORDER BY proveedor"
             cursor.execute(instruccion)
             datos = cursor.fetchall()
 
             conn.commit()
             conn.close()
-
-            if datos != []:
-                self.dateframe.animate()
+            
+            for child in self.dateframe.scroll_frame.winfo_children():
+                if child.widgetName == "frame":
+                    child.destroy()
 
             i = 0 
             while i < len(datos):
                 InfoFrame(self.dateframe.scroll_frame, datos[i][0])
                 i += 1
-                
+
+            return datos
+
 
     def grad_date(self):
         conn = sqlite3.connect("contratos.db")
@@ -224,6 +232,11 @@ class InfoFrame(ctk.CTkFrame):
         self.text = text
         
         self.proveedor = ctk.CTkLabel(self, text = self.text, font = ctk.CTkFont("Helvetica", 15), anchor = "w")
-        self.proveedor.place(relx = 0.05, rely = 0.3, relwidth = 0.8, relheight = 0.4)
+        self.proveedor.place(relx = 0.05, rely = 0.3, relwidth = 0.8, relheight = 0.4) 
+
+        self.bind("<Button>", lambda event: Datos(self, self.text, "calendar"))
+        self.proveedor.bind("<Button>", lambda event: Datos(self, self.text, "calendar"))
 
         self.pack(expand= True, fill = "x", padx = 5, pady = 5)
+
+

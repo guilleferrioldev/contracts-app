@@ -7,7 +7,7 @@ import sqlite3
 import os
 
 class Datos(ctk.CTkToplevel):
-    def __init__(self, master, title):
+    def __init__(self, master, title, parent = "contracts"):
         super().__init__(master = master)
         
         self.master = master
@@ -20,6 +20,7 @@ class Datos(ctk.CTkToplevel):
         self.resizable(True, True)
         self.font = ctk.CTkFont("Helvetica", 15)
         self.titulo = title
+        self.parent = parent
         
         # database
         conn = sqlite3.connect("contratos.db") 
@@ -116,6 +117,84 @@ class Datos(ctk.CTkToplevel):
         self.actualizar = ctk.CTkButton(self, text = "Actualizar", font = self.font, command = self.actualizar_frame.animate)  
         self.actualizar.place(relx = 0.74, rely = 0.05, relwidth = 0.1)
     
+        # Delete message
+        self.font = ctk.CTkFont("Helvetica", 15)
+        self.deletemessage = Message(self, 1.0,0.7,"Eliminar")
+        
+        self.aceptar = ctk.CTkButton(self.deletemessage, text = "Si", font = self.font, command = self.eliminar)
+        self.aceptar.place(relx = 0.7, rely = 0.8, relwidth = 0.2)
+        
+        self.denegar = ctk.CTkButton(self.deletemessage, text = "No", font = self.font, command = self.deletemessage.animate)
+        self.denegar.place(relx = 0.4, rely = 0.8, relwidth = 0.2)
+
+        self.eliminar = ctk.CTkButton(self, text = "Eliminar", font = self.font, command = self.deletemessage.animate)  
+        self.eliminar.place(relx = 0.85, rely = 0.05, relwidth = 0.1)
+
+    def eliminar(self):
+        conn = sqlite3.connect("contratos.db")
+        cursor = conn.cursor()
+        instruccion = f"Select * FROM Contratos WHERE proveedor = '{self.titulo}'"
+        cursor.execute(instruccion)
+        datos = cursor.fetchall()
+        
+        
+        data_insert_query = ''' INSERT INTO Recuperar_Contratos 
+                    (proveedor,
+                    fecha_del_contrato, 
+                    fecha_de_vencimiento,
+                    objeto, direccion,
+                    codigo_nit, 
+                    codigo_reup, 
+                    codigo_versat,
+                    banco, 
+                    sucursal,
+                    cuenta,
+                    titular,
+                    telefono,
+                    autorizado_por) 
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        '''
+
+        data_insert = []
+        i = 0 
+        while i < len(datos[0]):
+            if i != 0 and i != 2 and i != 3:
+                data_insert.append(datos[0][i])
+            else: 
+                data_insert.append("")
+            i += 1
+        
+        data_insert_tuple = tuple(data_insert[1:])
+        
+        cursor.execute(data_insert_query, data_insert_tuple)
+    
+        instruccion = f"Delete FROM Contratos WHERE proveedor = '{self.titulo}'"
+        cursor.execute(instruccion)
+        
+        instruccion = f"DELETE FROM Servicios WHERE proveedor = '{self.titulo}'"
+        cursor.execute(instruccion)
+
+        instruccion = f"DELETE FROM Autorizo_Junta WHERE proveedor = '{self.titulo}'"
+        cursor.execute(instruccion)
+
+        conn.commit()
+        conn.close()
+        
+        # Move pdf to other dir
+        if os.path.isfile(f"./pdfs/{self.titulo}.pdf"):
+            os.remove(f"./pdfs/{self.titulo}.pdf")
+        
+        if self.parent == "contracts":
+            for child in self.master.master.winfo_children():
+                if child.widgetName == "frame":
+                    child.destroy()
+        
+            self.master.master.create_frames()
+        else:
+            self.master.master.master.master.master.master.insert_frames()
+        
+        self.destroy()
+
     def add_service(self, choice):
         for child in self.servicios_scroll.winfo_children():
             if child.widgetName == "frame":
@@ -189,10 +268,13 @@ class Datos(ctk.CTkToplevel):
         for child in self.master.master.winfo_children():
             if child.widgetName == "frame":
                 child.destroy()
-        
-        self.master.master.create_frames()
-        self.master.master.master.master.master.master.sort.set("Proveedor")
- 
+
+        if self.parent == "contracts":
+            self.master.master.create_frames()
+            self.master.master.master.master.master.master.sort.set("Proveedor")
+        else:
+            self.master.master.master.master.master.master.insert_frames()
+
 
     def new_service(self):
         proveedor = self.titulo
