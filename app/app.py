@@ -129,8 +129,11 @@ class App(ctk.CTk):
                                     padx=10, 
                                     pady=(0,10),
                                     sticky="nsew")
+            
+            self.search.configure(state = "normal") 
+            self.sort.configure(state = "normal")
 
-        
+
         elif type_ == "Calendario":
             self.calendar = Calendario(master = self.main_frame, 
                             row=2, 
@@ -139,6 +142,11 @@ class App(ctk.CTk):
                             padx=10, 
                             pady=(0,10),
                             sticky="nsew")
+            
+            self.search.delete(0, "end")
+            self.search.configure(state = "disabled") 
+            self.sort.set("Proveedor")
+            self.sort.configure(state = "disabled")
     
     def buscar(self):
         for child in self.contracts.winfo_children():

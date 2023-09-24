@@ -7,7 +7,8 @@ class Sort(ctk.CTkOptionMenu):
                          width = width,
                          values = values,
                          variable = variable,
-                         command = command)
+                         command = command,
+                         state = "normal")
 
         self.set(values[0])
         self.grid(row = row, column = column, pady = pady, sticky = sticky)
