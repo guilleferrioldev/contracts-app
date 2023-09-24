@@ -5,6 +5,7 @@ from service import Service, Frames
 from message import Message, Junta
 from recorver import Recorver
 from objeto import Object
+from area import Area
 import sqlite3
 import sys
 from pathlib import Path
@@ -48,8 +49,8 @@ class SlidePanel(ctk.CTkFrame):
         self.area_label = ctk.CTkLabel(self, text = "Área que tramita", font = font)
         self.area_label.place(relx = 0.05, rely = 0.10,  relheight = 0.043)
         
-        #self.area_frame = Object(self, 1.0, 0.7, "Área que tramita")
-        self.area_button = ctk.CTkButton(self,text = "Área que tramita")
+        self.area_frame = Object(self, 1.0, 0.7, "Área que tramita")
+        self.area_button = ctk.CTkButton(self,text = "Área que tramita", command = self.area_frame.animate)
         self.area_button.place(relx = 0.2, rely = 0.10, relwidth = 0.28, relheight = 0.043)
 
         # Fecha del contrato

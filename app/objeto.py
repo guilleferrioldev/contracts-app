@@ -73,9 +73,12 @@ class Object(ctk.CTkFrame):
         if self.text == "Aut. firmar factura":
             tabla = "Autorizado_Firmar_Factura"
             row = "autorizado_por"
-        else:
+        elif self.text == "Objeto":
             tabla = "Objetos"
             row = "objeto"
+        elif self.text == "Área que tramita":
+            tabla = "Area_que_Tramita"
+            row = "area"
 
         conn  = sqlite3.connect("contratos.db")
         cursor = conn.cursor()
@@ -120,9 +123,12 @@ class Object(ctk.CTkFrame):
         if self.text == "Aut. firmar factura":
             tabla = "Autorizado_Firmar_Factura"
             order = "autorizado_por"
-        else:
+        elif self.text == "Objeto":
             tabla = "Objetos"
             order = "objeto"
+        else:
+            tabla = "Area_que_Tramita"
+            order = "area"
 
         conn  = sqlite3.connect("contratos.db")
         cursor = conn.cursor()
@@ -141,8 +147,11 @@ class Object(ctk.CTkFrame):
         
     def change_value(self, choice):
         self.value = int(choice)
-        self.insert(self.value)
-
+        if self.text != "Área que tramita":
+            self.insert(self.value)
+        else:
+            self.insert_area(self.value)    
+        
     def insert(self, value):
         for child in self.scroll.winfo_children():
             if child.widgetName == "frame":
@@ -155,7 +164,20 @@ class Object(ctk.CTkFrame):
         
         self.create_frames()
         self.new_object.set("+")
-    
+   
+    def insert_area(self, value):
+        for child in self.scroll.winfo_children():
+            if child.widgetName == "frame":
+                child.destroy()
+        
+        i = 0
+        while i < value:
+            FramesArea(self.scroll)
+            i += 1
+        
+        self.create_frames()
+        self.new_object.set("+")
+ 
     def insert_new(self):
         for child in self.scroll.winfo_children():
             if child.widgetName == "frame":
@@ -203,10 +225,13 @@ class Frames(ctk.CTkFrame):
         if self.master.master.text == "Aut. firmar factura":
             tabla = "Autorizado_Firmar_Factura"
             row = "autorizado_por"
-        else:
+        elif self.master.master.text == "Objeto":    
             tabla = "Objetos"
             row = "objeto"
-
+        elif self.master.master.text == "Área que tramita":
+            tabla = "Area_que_Tramita"
+            row = "area"
+        
         conn  = sqlite3.connect("contratos.db")
         cursor = conn.cursor()
             
@@ -264,7 +289,7 @@ class FramesInsert(ctk.CTkFrame):
             self.master.master.insert_new()
             self.destroy()
         
-        else:
+        elif self.master.master.text == "Objeto":
             conn  = sqlite3.connect("contratos.db")
             cursor = conn.cursor()
 
@@ -287,7 +312,58 @@ class FramesInsert(ctk.CTkFrame):
             self.destroy()
 
 
+class FramesArea(ctk.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master = master, 
+                         height = 120,
+                         fg_color = "white")
+        
+        self.master = master
+        self.text = "insert"
 
+        self.font = ctk.CTkFont("Helvetica", 15)
+        
+        self.area = ctk.CTkLabel(self, font = self.font, text = "Área", anchor = "w")
+        self.area.place(relx = 0.05, rely = 0.15, relwidth = 0.1) 
+
+        self.area_entry = ctk.CTkEntry(self, font = self.font)
+        self.area_entry.place(relx = 0.15, rely = 0.15, relwidth = 0.75) 
+        
+        self.email = ctk.CTkLabel(self, font = self.font, text = "Email", anchor = "w")
+        self.email.place(relx = 0.05, rely = 0.4, relwidth = 0.1) 
+        
+        self.email_entry = ctk.CTkEntry(self, font = self.font)
+        self.email_entry.place(relx = 0.15, rely = 0.4, relwidth = 0.75) 
+
+        self.button_insert = ctk.CTkButton(self, text = "Insertar", font = self.font, command = self.insert)
+        self.button_insert.place(relx = 0.6, rely = 0.7, relwidth = 0.15)
+        
+        self.button_cancel = ctk.CTkButton(self, text = "Cancelar", font = self.font, command = lambda: self.destroy())
+        self.button_cancel.place(relx = 0.25, rely = 0.7, relwidth = 0.15)
+
+        self.pack(expand = True, fill = "x", pady = 5 , padx = 5)
+
+    def insert(self):
+        conn  = sqlite3.connect("contratos.db")
+        cursor = conn.cursor()
+
+        data_insert_query = f'''INSERT INTO Area_que_Tramita
+                (area,
+                email) VALUES (?,?)
+            '''
+
+        data_insert_tuple = (
+                self.area_entry.get(),
+                self.email_entry.get()
+                )
+
+        cursor.execute(data_insert_query, data_insert_tuple)
+        conn.commit()
+        conn.close()
+            
+        self.master.master.value -= 1
+        self.master.master.insert_new()
+        self.destroy()
 
 
 

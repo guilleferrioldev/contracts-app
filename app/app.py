@@ -237,11 +237,11 @@ class App(ctk.CTk):
         '''
         conn.execute(tabla_autorizado)
         
-        tabla_autorizado = '''CREATE TABLE IF NOT EXISTS Area_que_Tramita
-                (autorizado_por TEXT, 
-                correo TEXT)
+        tabla_area = '''CREATE TABLE IF NOT EXISTS Area_que_Tramita
+                (area TEXT, 
+                email TEXT)
         '''
-        conn.execute(tabla_autorizado)
+        conn.execute(tabla_area)
 
         conn.commit()
         conn.close()
