@@ -1,4 +1,4 @@
-import customtkinter as ctk 
+import customtkinter as ctk
 import sqlite3
 
 class Service(ctk.CTkFrame):
@@ -155,8 +155,18 @@ class Frames(ctk.CTkFrame):
         else:    
             show_importe = str(importe)[0:2] + " " + str(importe)[2:5] + " " + str(importe)[5:]
        
+        if self.master.master.master.datos_junta == []:
+            if importe < 1000000:
+                self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
+            else:
+                print("No se puede")
+        else:
+            if importe < int(self.master.master.master.datos_junta[0][2]):
+                self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
+            else:
+                print("No se puede")
+                
 
-        self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
 
     def delete_contracts(self):
         self.master.master.frames = [i for i in self.master.master.frames if i != self]

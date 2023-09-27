@@ -48,9 +48,12 @@ class Message(ctk.CTkFrame):
 
 
 class Actualizar(ctk.CTkFrame):
-    def __init__(self, master, start_pos, end_pos):
+    def __init__(self, master, start_pos, end_pos, text = "datos"):
         super().__init__(master = master,
                          border_width = 3) 
+        
+        self.text = text
+
         # general attributtes 
         self.start_pos = start_pos + 0.01
         self.end_pos = end_pos 
@@ -62,8 +65,11 @@ class Actualizar(ctk.CTkFrame):
         # font
         self.font = ctk.CTkFont("Helvetica", 15)
         self.frames = []
-
+        
         self.values = ["Proveedor","Área", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular", "Aut.firmar factura"]
+        if self.text == "datos":
+            if self.master.datos_junta != []:
+                self.values += ["Acuerdo","Monto acordado","Fecha del acuerdo"]
         self.options_menu = ctk.CTkOptionMenu(self, font = self.font, values = self.values, command = self.options)
         self.options_menu.place(relx = 0.3, rely = 0.1, relwidth = 0.4)
         
@@ -85,6 +91,9 @@ class Actualizar(ctk.CTkFrame):
                     child.destroy()
             self.frames = []
             self.values = ["Proveedor","Área", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular", "Aut.firmar factura"]
+            if self.text =="datos":    
+                if self.master.datos_junta != []:
+                    self.values += ["Acuerdo","Monto acordado","Fecha del acuerdo"]
             self.options_menu.configure(values = self.values)
             self.options_menu.set(self.values[0])
 
@@ -94,7 +103,7 @@ class Actualizar(ctk.CTkFrame):
 
     def options(self, choice):
         self.values = [i for i in self.values if i != choice]
-        if choice == "Fecha del contrato" or choice == "Fecha de vencimiento":
+        if choice == "Fecha del contrato" or choice == "Fecha de vencimiento" or choice == "Fecha del acuerdo":
             frame = UpdateFechaLabel(self.scroll_frames, text = choice)
             self.frames.append(frame)
         else:

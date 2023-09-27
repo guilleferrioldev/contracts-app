@@ -227,7 +227,7 @@ class RecorverData(ctk.CTkToplevel):
         self.eliminar_button = ctk.CTkButton(self, text = "Eliminar",font = self.font, command = self.message_eliminar.animate, hover_color = "red")
         self.eliminar_button.place(relx = 0.8, rely = 0.05)
         
-        self.actualizar_frame = Actualizar(self, 1.0, 0.35)
+        self.actualizar_frame = Actualizar(self, 1.0, 0.35, "recuperar")
 
         self.actualizar_button = ctk.CTkButton(self, text = "Actualizar", font = self.font, command = self.actualizar_frame.animate)
         self.actualizar_button.place(relx = 0.65, rely = 0.05)

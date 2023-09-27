@@ -481,6 +481,21 @@ class Datos(ctk.CTkToplevel):
                 instruccion = f"UPDATE Contratos SET autorizado_por='{frame.entry.get()}' WHERE  proveedor='{self.titulo}'"
                 cursor.execute(instruccion)
                 self.autorizado.configure(text = f"Aut.firmar factura: {frame.entry.get()}")
+            
+            elif frame.text == "Acuerdo":           
+                instruccion = f"UPDATE Autorizo_Junta SET acuerdo_junta='{frame.entry.get()}' WHERE  proveedor='{self.titulo}'"
+                cursor.execute(instruccion)
+                self.acuerdo.configure(text = f"Acuerdo: {frame.entry.get()}")
+            
+            elif frame.text == "Monto acordado":           
+                instruccion = f"UPDATE Autorizo_Junta SET monto_junta='{frame.entry.get()}' WHERE  proveedor='{self.titulo}'"
+                cursor.execute(instruccion)
+                self.monto.configure(text = f"Monto acordado: {frame.entry.get()} CUP")
+            
+            elif frame.text == "Fecha del acuerdo":           
+                instruccion = f"UPDATE Autorizo_Junta SET fecha_de_autorizo ='{frame.day.get()}/{frame.month.get()}/{frame.year.get()}' WHERE  proveedor='{self.titulo}'"
+                cursor.execute(instruccion)
+                self.fecha_junta.configure(text = f"Fecha del acuerdo: {frame.day.get()}/{frame.month.get()}/{frame.year.get()}")
 
         conn.commit()
         conn.close()
