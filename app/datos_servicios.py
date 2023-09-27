@@ -55,17 +55,17 @@ class DatosServicios(ctk.CTkFrame):
         
         self.message = EliminarServicio(self, 1.0, 0.7, "Eliminar")
 
-        self.aceptar = ctk.CTkButton(self.message, text = "Si", font = self.font, command = self.delete)
+        self.aceptar = ctk.CTkButton(self.message, text = "Si", font = self.font, command = self.delete, hover_color = "red")
         self.aceptar.place(relx = 0.58, rely = 0.65, relwidth = 0.25)
         
-        self.denegar = ctk.CTkButton(self.message, text = "No", font = self.font, command = self.message.animate)
+        self.denegar = ctk.CTkButton(self.message, text = "No", font = self.font, command = self.message.animate, hover_color = "green")
         self.denegar.place(relx = 0.2, rely = 0.65, relwidth = 0.25)
         
         #self.pdf_factura = PanelPDFViewer(self.master.master.master, 1.0, 0.7, "Solicitud de pago", f"{self.proveedor}")
         #self.factura = ctk.CTkButton(self, text = "Sol. pago", font = self.font,command=  self.pdf_factura.animate)
         #self.factura.place(relx = 0.7, rely = 0.6, relwidth = 0.25, relheight = 0.11)       
 
-        self.eliminar = ctk.CTkButton(self, text = "Eliminar", font = self.font, command = self.message.animate)
+        self.eliminar = ctk.CTkButton(self, text = "Eliminar", font = self.font, command = self.message.animate, hover_color = "red")
         self.eliminar.place(relx = 0.7, rely = 0.8, relwidth = 0.25, relheight = 0.11)
         
         self.pack(expand = "True", fill = "x", padx = 5, pady = 5)

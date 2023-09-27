@@ -82,7 +82,7 @@ class Recorver(ctk.CTkFrame):
         self.label = ctk.CTkLabel(self.frame, text = "Recuperar contrato", font = ctk.CTkFont("Helvetica", 25, "bold"), anchor = "w")
         self.label.place(relx = 0.05, rely = 0.05, relwidth = 0.4, relheight = 0.043)
 
-        self.atras_button = ctk.CTkButton(self.frame, text = "Atrás", font = self.font, command = self.animate)
+        self.atras_button = ctk.CTkButton(self.frame, text = "Atrás", font = self.font,hover_color = "red",command = self.animate)
         self.atras_button.place(relx = 0.43, rely = 0.9, relwidth = 0.1, relheight = 0.043)
         
 
@@ -153,83 +153,86 @@ class RecorverData(ctk.CTkToplevel):
         
         conn.commit()
         conn.close()
-        
+
         # widgets
         self.font = ctk.CTkFont("Helvetica", 15)
 
         self.proveedor = ctk.CTkLabel(self, text = title, font = ctk.CTkFont("Helvetica", 25, "bold"))
         self.proveedor.place(relx = 0.05, rely = 0.05)
-        
-        self.objeto = ctk.CTkLabel(self, text = f"Objeto: {datos[0][3]}", font = self.font)
-        self.objeto.place(relx = 0.05, rely = 0.12)
+
+        self.area = ctk.CTkLabel(self, text = f"Área: {datos[0][1]}", font = self.font)
+        self.area.place(relx = 0.05, rely = 0.10)
+
+        self.objeto = ctk.CTkLabel(self, text = f"Objeto: {datos[0][4]}", font = self.font)
+        self.objeto.place(relx = 0.05, rely = 0.15)
         
         self.fecha = ctk.CTkLabel(self, text = f"Fecha del contrato: No existe", font = self.font)
-        self.fecha.place(relx = 0.05, rely = 0.18)
+        self.fecha.place(relx = 0.05, rely = 0.23)
 
         self.fecha_vencimiento = ctk.CTkLabel(self, text = f"Fecha de vencimiento: No existe", font = self.font)
-        self.fecha_vencimiento.place(relx = 0.05, rely = 0.23)
+        self.fecha_vencimiento.place(relx = 0.05, rely = 0.28)
 
-        self.direccion = ctk.CTkLabel(self, text = f"Dirección: {datos[0][4]}", font = self.font)
-        self.direccion.place(relx = 0.05, rely = 0.28)
+        self.direccion = ctk.CTkLabel(self, text = f"Dirección: {datos[0][5]}", font = self.font)
+        self.direccion.place(relx = 0.05, rely = 0.33)
 
-        self.codigo_nit = ctk.CTkLabel(self, text = f"Código NIT: {datos[0][5]}", font = self.font)
-        self.codigo_nit.place(relx = 0.05, rely = 0.33)
+        self.codigo_nit = ctk.CTkLabel(self, text = f"Código NIT: {datos[0][6]}", font = self.font)
+        self.codigo_nit.place(relx = 0.05, rely = 0.38)
         
-        self.codigo_reup = ctk.CTkLabel(self, text = f"Código REUP: {datos[0][6]}", font = self.font)
-        self.codigo_reup.place(relx = 0.05, rely = 0.38)
+        self.codigo_reup = ctk.CTkLabel(self, text = f"Código REUP: {datos[0][7]}", font = self.font)
+        self.codigo_reup.place(relx = 0.05, rely = 0.43)
 
-        self.codigo_versat = ctk.CTkLabel(self, text = f"Código VERSAT: {datos[0][7]}", font = self.font)
-        self.codigo_versat.place(relx = 0.05, rely = 0.43)
+        self.codigo_versat = ctk.CTkLabel(self, text = f"Código VERSAT: {datos[0][8]}", font = self.font)
+        self.codigo_versat.place(relx = 0.05, rely = 0.48)
 
-        self.banco = ctk.CTkLabel(self, text = f"Banco: {datos[0][8]}", font = self.font)
-        self.banco.place(relx = 0.05, rely = 0.48)
+        self.banco = ctk.CTkLabel(self, text = f"Banco: {datos[0][9]}", font = self.font)
+        self.banco.place(relx = 0.05, rely = 0.53)
 
-        self.sucursal = ctk.CTkLabel(self, text = f"Sucursal bancaria: {datos[0][9]}", font = self.font)
-        self.sucursal.place(relx = 0.05, rely = 0.53)
+        self.sucursal = ctk.CTkLabel(self, text = f"Sucursal bancaria: {datos[0][10]}", font = self.font)
+        self.sucursal.place(relx = 0.05, rely = 0.58)
         
-        self.cuenta = ctk.CTkLabel(self, text = f"Cuenta bancaria: {datos[0][10]}", font = self.font)
-        self.cuenta.place(relx = 0.05, rely = 0.58)
+        self.cuenta = ctk.CTkLabel(self, text = f"Cuenta bancaria: {datos[0][11]}", font = self.font)
+        self.cuenta.place(relx = 0.05, rely = 0.63)
         
-        self.titular = ctk.CTkLabel(self, text = f"Titular de la cuenta: {datos[0][11]}", font = self.font)
-        self.titular.place(relx = 0.05, rely = 0.63)
+        self.titular = ctk.CTkLabel(self, text = f"Titular de la cuenta: {datos[0][12]}", font = self.font)
+        self.titular.place(relx = 0.05, rely = 0.68)
         
-        self.telefono = ctk.CTkLabel(self, text = f"Teléfono del titular: {datos[0][12]}", font = self.font)
-        self.telefono.place(relx = 0.05, rely = 0.68)
+        self.telefono = ctk.CTkLabel(self, text = f"Teléfono del titular: {datos[0][13]}", font = self.font)
+        self.telefono.place(relx = 0.05, rely = 0.73)
 
-        self.autorizado = ctk.CTkLabel(self, text = f"Aut.firmar factura: {datos[0][13]}", font = self.font)
-        self.autorizado.place(relx = 0.05, rely = 0.73)
+        self.autorizado = ctk.CTkLabel(self, text = f"Aut.firmar factura: {datos[0][14]}", font = self.font)
+        self.autorizado.place(relx = 0.05, rely = 0.78)
 
-        self.atras_button = ctk.CTkButton(self, text = "Atrás",font = self.font, command =  self.atras)
+        self.atras_button = ctk.CTkButton(self, text = "Atrás",font = self.font, command =  self.atras, hover_color= "red")
         self.atras_button.place(relx = 0.3, rely = 0.9)
         
         self.message_recuperar = Message(self, 1.0, 0.7, "Recuperar")
 
-        self.aceptar = ctk.CTkButton(self.message_recuperar, text = "Si", font = self.font, command = self.recuperar)
+        self.aceptar = ctk.CTkButton(self.message_recuperar, text = "Si", font = self.font, command = self.recuperar, hover_color= "green")
         self.aceptar.place(relx = 0.7, rely = 0.8, relwidth = 0.2)
     
-        self.denegar = ctk.CTkButton(self.message_recuperar, text = "No", font = self.font, command = self.message_recuperar.animate)
+        self.denegar = ctk.CTkButton(self.message_recuperar, text = "No", font = self.font, command = self.message_recuperar.animate, hover_color = "red")
         self.denegar.place(relx = 0.4, rely = 0.8, relwidth = 0.2)
 
-        self.recuperar_button = ctk.CTkButton(self, text = "Recuperar",font = self.font, command = self.message_recuperar.animate)
+        self.recuperar_button = ctk.CTkButton(self, text = "Recuperar",font = self.font, command = self.message_recuperar.animate, hover_color = "green")
         self.recuperar_button.place(relx = 0.55, rely = 0.9)
         
         self.message_eliminar = Message(self, 1.0, 0.7, "Eliminar")
 
-        self.aceptar = ctk.CTkButton(self.message_eliminar, text = "Si", font = self.font, command = self.eliminar)
+        self.aceptar = ctk.CTkButton(self.message_eliminar, text = "Si", font = self.font, command = self.eliminar, hover_color= "red")
         self.aceptar.place(relx = 0.7, rely = 0.8, relwidth = 0.2)
     
-        self.denegar = ctk.CTkButton(self.message_eliminar, text = "No", font = self.font, command = self.message_eliminar.animate)
+        self.denegar = ctk.CTkButton(self.message_eliminar, text = "No", font = self.font, command = self.message_eliminar.animate, hover_color= "green")
         self.denegar.place(relx = 0.4, rely = 0.8, relwidth = 0.2)
 
-        self.eliminar_button = ctk.CTkButton(self, text = "Eliminar",font = self.font, command = self.message_eliminar.animate)
-        self.eliminar_button.place(relx = 0.8, rely = 0.08)
+        self.eliminar_button = ctk.CTkButton(self, text = "Eliminar",font = self.font, command = self.message_eliminar.animate, hover_color = "red")
+        self.eliminar_button.place(relx = 0.8, rely = 0.05)
         
         self.actualizar_frame = Actualizar(self, 1.0, 0.35)
 
         self.actualizar_button = ctk.CTkButton(self, text = "Actualizar", font = self.font, command = self.actualizar_frame.animate)
-        self.actualizar_button.place(relx = 0.65, rely = 0.08)
+        self.actualizar_button.place(relx = 0.65, rely = 0.05)
         
-        self.guardar_button = ctk.CTkButton(self.actualizar_frame, text = "Guardar", font = self.font, command = self.actualizar)
+        self.guardar_button = ctk.CTkButton(self.actualizar_frame, text = "Guardar", font = self.font, command = self.actualizar, hover_color= "green")
         self.guardar_button.place(relx = 0.55, rely = 0.85, relheight = 0.1, relwidth = 0.2)
     
 
@@ -268,6 +271,7 @@ class RecorverData(ctk.CTkToplevel):
 
         data_insert_query = ''' INSERT INTO Contratos 
                     (proveedor,
+                    area,
                     fecha_del_contrato, 
                     fecha_de_vencimiento,
                     objeto, direccion,
@@ -280,7 +284,7 @@ class RecorverData(ctk.CTkToplevel):
                     titular,
                     telefono,
                     autorizado_por) 
-                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         '''
 
         data_insert_tuple = datos[0]
@@ -312,6 +316,11 @@ class RecorverData(ctk.CTkToplevel):
                 cursor.execute(instruccion)
                 self.titulo = prov
                 self.proveedor.configure(text = f"{prov}")
+            
+            elif frame.text == "Área":           
+                instruccion = f"UPDATE Recuperar_Contratos SET area='{frame.entry.get()}' WHERE  proveedor='{self.titulo}'"
+                cursor.execute(instruccion)
+                self.area.configure(text = f"Área: {frame.entry.get()}")
 
             elif frame.text == "Objeto":           
                 instruccion = f"UPDATE Recuperar_Contratos SET objeto='{frame.entry.get()}' WHERE  proveedor='{self.titulo}'"

@@ -141,7 +141,7 @@ class PanelPDFViewer(ctk.CTkFrame):
                 self.there_is_no_pdf.place(relx = 0.35, rely = 0.43)
 
 
-        self.atras_button = ctk.CTkButton(self, text = "Atrás", command = self.back)
+        self.atras_button = ctk.CTkButton(self, text = "Atrás", command = self.back, hover_color = "red")
         self.atras_button.place(relx = 0.4, rely = 0.93, relwidth = 0.2, relheight = 0.04)
 
         # layout 

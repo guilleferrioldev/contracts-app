@@ -81,7 +81,7 @@ class ContractsFrames(ctk.CTkFrame):
         super().__init__(master = master,
                          height = 200,
                          fg_color = "white")
-        
+
         self.master = master
         self.proveedor = ContractsProveedor(self, text = proveedor)
         self.service = ContractsService(self, text = f"Servicios {servicio}")

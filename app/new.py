@@ -192,31 +192,31 @@ class SlidePanel(ctk.CTkFrame):
         
 
         # servicios 
-        self.service = Service(self, relx = 0.55, rely = 0.05, relwidth = 0.4, relheight = 0.76)
+        self.service = Service(self, relx = 0.55, rely = 0.05, relwidth = 0.4, relheight = 0.79)
 
         self.add_pdf = ctk.CTkButton(self, text = "Añadir PDF", command = self.copy_pdf)
-        self.add_pdf.place(relx = 0.85, rely = 0.82, relwidth = 0.1, relheight = 0.043)
+        self.add_pdf.place(relx = 0.85, rely = 0.85, relwidth = 0.1, relheight = 0.043)
 
         self.menu = ctk.CTkOptionMenu(self.service, values = [str(i) for i in range(11)], command = self.validate_menu)
-        self.menu.place(relx = 0.82, rely = 0.05,relwidth = 0.12, relheight = 0.06)
+        self.menu.place(relx = 0.82, rely = 0.05,relwidth = 0.12, relheight = 0.05)
         
         self.path_adding_pdf = 0
 
         #Message box
         self.cancelmessage = Message(self, 1.0,0.7,"Cancelar")
         
-        self.aceptar = ctk.CTkButton(self.cancelmessage, text = "Si", font = font, command = self.cancel)
+        self.aceptar = ctk.CTkButton(self.cancelmessage, text = "Si", font = font, command = self.cancel, hover_color = "red")
         self.aceptar.place(relx = 0.7, rely = 0.8, relwidth = 0.2, relheight = 0.1)
         
-        self.denegar = ctk.CTkButton(self.cancelmessage, text = "No", font = font, command = self.cancelmessage.animate)
+        self.denegar = ctk.CTkButton(self.cancelmessage, text = "No", font = font, command = self.cancelmessage.animate, hover_color = "green")
         self.denegar.place(relx = 0.4, rely = 0.8, relwidth = 0.2, relheight = 0.1)
         
 
         # Setting buttons
-        self.cancel_button = ctk.CTkButton(self, text = "Cancelar", font = font, command = self.cancelmessage.animate)
+        self.cancel_button = ctk.CTkButton(self, text = "Cancelar", font = font, command = self.cancelmessage.animate, hover_color = "red")
         self.cancel_button.place(relx = 0.25, rely = 0.94, relwidth = 0.11, relheight = 0.043)
 
-        self.recuperar_button = ctk.CTkButton(self, text = "Recuperar",font = font, command = lambda : Recorver(self, 1.0,0.7).animate())
+        self.recuperar_button = ctk.CTkButton(self, text = "Recuperar",font = font,hover_color = "orange", command = lambda : Recorver(self, 1.0,0.7).animate())
         self.recuperar_button.place(relx = 0.59, rely = 0.94,relwidth = 0.11, relheight = 0.043)
 
         # layout 

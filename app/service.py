@@ -49,10 +49,22 @@ class Frames(ctk.CTkFrame):
             conn = sqlite3.connect("contratos.db")
             cursor = conn.cursor()
 
-            instruction = f"Select"
+            instruction = f"Select objeto FROM Contratos WHERE proveedor = '{self.proveedor}'"
+            cursor.execute(instruction)
+            datos = cursor.fetchall()
+            
+            splitting = datos[0][0].split(",")
+            
+            objects = [i.strip() for i in splitting]
+
+            i = 0 
+            while i < len(objects):
+                self.values.append(objects[i])
+                i += 1
+
             conn.commit()
             conn.close()
-
+        
         self.nombre_servicio_label = ctk.CTkLabel(self, text = "Servicio")
         self.nombre_servicio_label.place(relx = 0.05, rely =0.03)
     
@@ -93,17 +105,19 @@ class Frames(ctk.CTkFrame):
         self.pagado_entry = ctk.CTkEntry(self)
         self.pagado_entry.place(relx = 0.35, rely =0.55, relwidth = 0.6)
         
-
         self.valor_label = ctk.CTkLabel(self, text = "Valor")
         self.valor_label.place(relx = 0.05, rely =0.68)
 
         self.valor_entry = ctk.CTkEntry(self)
         self.valor_entry.place(relx = 0.35, rely =0.68, relwidth = 0.6)
-        
+
+
         if self.text == "contracts":
             self.cancel_button = ctk.CTkButton(self, text = "Cancelar", command = self.delete_contracts, hover_color = "red")
             self.cancel_button.place(relx = 0.35, rely = 0.82)
         elif self.text == "anadir":
+            self.valor_entry.bind("<KeyRelease>", lambda event: self.change_importe())
+            
             self.cancel_button = ctk.CTkButton(self, text = "Cancelar", command = self.delete_service, hover_color = "red")
             self.cancel_button.place(relx = 0.25, rely = 0.82, relwidth = 0.2, relheight = 0.12)
             
@@ -111,6 +125,38 @@ class Frames(ctk.CTkFrame):
             self.anadir_button.place(relx = 0.55, rely = 0.82, relwidth = 0.2, relheight = 0.12)
 
         self.pack(expand = "True", fill = "x", padx = 5, pady = 5)
+
+    def change_importe(self):
+        values = []
+        importe = 0
+        for child in self.master.winfo_children():
+            if child.widgetName == "frame":
+                if child.text == "anadir":
+                    if child.valor_entry.get() == "":
+                        values.append(0)
+                    else:
+                        values.append(int(child.valor_entry.get()))
+                elif child.text == "datos_servicios":
+                   importe += child.importe 
+        
+        for i in values:
+            importe += i
+        
+        if len(str(importe)) < 4:
+            show_importe = importe
+        elif len(str(importe)) == 4:
+            show_importe = str(importe)[0] + " " + str(importe)[1:] 
+        elif len(str(importe)) == 5:
+            show_importe = str(importe)[0:2] + " " + str(importe)[2:] 
+        elif len(str(importe)) == 6:
+            show_importe = str(importe)[0:3] + " " + str(importe)[3:] 
+        elif len(str(importe)) == 7:
+            show_importe = str(importe)[0] + " " + str(importe)[1:4] + " " + str(importe)[4:]
+        else:    
+            show_importe = str(importe)[0:2] + " " + str(importe)[2:5] + " " + str(importe)[5:]
+       
+
+        self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
 
     def delete_contracts(self):
         self.master.master.frames = [i for i in self.master.master.frames if i != self]

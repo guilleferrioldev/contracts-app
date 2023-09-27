@@ -64,14 +64,14 @@ class Actualizar(ctk.CTkFrame):
         self.font = ctk.CTkFont("Helvetica", 15)
         self.frames = []
 
-        self.values = ["Proveedor", "Objeto", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular", "Aut.firmar factura"]
+        self.values = ["Proveedor","Área", "Objeto", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular", "Aut.firmar factura"]
         self.options_menu = ctk.CTkOptionMenu(self, font = self.font, values = self.values, command = self.options)
         self.options_menu.place(relx = 0.3, rely = 0.1, relwidth = 0.4)
         
         self.scroll_frames = ctk.CTkScrollableFrame(self)
         self.scroll_frames.place(relx = 0.05, rely = 0.2, relwidth = 0.9)
         
-        self.cancel_button = ctk.CTkButton(self, text = "Cancelar", font = self.font, command = self.animate)
+        self.cancel_button = ctk.CTkButton(self, text = "Cancelar",font = self.font, command = self.animate, hover_color= "red")
         self.cancel_button.place(relx = 0.25, rely = 0.85, relheight = 0.1, relwidth = 0.2)
 
         
@@ -85,7 +85,7 @@ class Actualizar(ctk.CTkFrame):
                 if child.widgetName == "frame":
                     child.destroy()
             self.frames = []
-            self.values = ["Proveedor", "Objeto", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular", "Aut.firmar factura"]
+            self.values = ["Proveedor","Área", "Objeto", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular", "Aut.firmar factura"]
             self.options_menu.configure(values = self.values)
             self.options_menu.set(self.values[0])
 
@@ -123,8 +123,8 @@ class Actualizar(ctk.CTkFrame):
 class UpdateLabel(ctk.CTkFrame):
     def __init__(self, master, text):
         super().__init__(master = master, 
-                         fg_color = ctk.ThemeManager.theme["CTkButton"]["fg_color"],
-                         height = 70)
+                         fg_color = "white",
+                         height = 100)
         self.text = text
         self.font = ctk.CTkFont("Helvetica", 15)
 
@@ -132,36 +132,48 @@ class UpdateLabel(ctk.CTkFrame):
         self.label.place(relx = 0.05, rely = 0.05)
         
         self.entry = ctk.CTkEntry(self, font = self.font)
-        self.entry.place(relx = 0.04, rely = 0.4, relwidth = 0.91)
+        self.entry.place(relx = 0.04, rely = 0.3, relwidth = 0.91)
+        
+        self.button = ctk.CTkButton(self, font = self.font, text = "cancelar",command = self.cancel, hover_color = "red")
+        self.button.place(relx = 0.375, rely = 0.65, relwidth = 0.25)
 
         self.pack(fill = "x", expand = True, pady = 0.5, padx = 0.5)
 
+    def cancel(self):
+        self.master.master.master.master.frames = [i for i in self.master.master.master.master.frames if i != self]
+        self.master.master.master.master.values.append(self.text)
+        self.destroy()
 
 class UpdateFechaLabel(ctk.CTkFrame):
     def __init__(self, master, text):
         super().__init__(master = master, 
-                         fg_color = ctk.ThemeManager.theme["CTkButton"]["fg_color"],
-                         height = 70)
+                         fg_color = "white",
+                         height = 100)
         self.text = text
         self.font = ctk.CTkFont("Helvetica", 15)
 
         self.label = ctk.CTkLabel(self, text = self.text, anchor = "w", font = self.font)
         self.label.place(relx = 0.05, rely = 0.05)
         
-        self.day = ctk.CTkComboBox(self, values = [str(i) for i in range(1, 32)], width = 55)
-        self.day.place(relx = 0.05, rely = 0.4)
+        self.day = ctk.CTkOptionMenu(self, values = [str(i) for i in range(1, 32)], width = 55)
+        self.day.place(relx = 0.05, rely = 0.3)
         
-        self.month = ctk.CTkComboBox(self, 
+        self.month = ctk.CTkOptionMenu(self, 
                                     values = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
                                     width = 110)
-        self.month.place(relx = 0.19, rely = 0.4)
+        self.month.place(relx = 0.19, rely = 0.3)
 
-        self.year = ctk.CTkComboBox(self, values = [str(i) for i in range(2020, 2024)], width = 70)
-        self.year.place(relx = 0.47, rely = 0.4)
+        self.year = ctk.CTkOptionMenu(self, values = [str(i) for i in range(2020, 2024)], width = 70)
+        self.year.place(relx = 0.47, rely = 0.3)    
+
+        self.button = ctk.CTkButton(self, font = self.font, text = "cancelar",command = self.cancel, hover_color= "red")
+        self.button.place(relx = 0.375, rely = 0.65, relwidth = 0.25)
 
         self.pack(fill = "x", expand = True, pady = 0.5, padx = 0.5)
 
-
+    def cancel(self):
+        self.master.master.master.master.frames = [i for i in self.master.master.master.master.frames if i != self]
+        self.destroy()
 
 class Junta(ctk.CTkFrame):
     def __init__(self, master, start_pos, end_pos, monto):
