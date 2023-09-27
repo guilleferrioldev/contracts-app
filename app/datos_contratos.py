@@ -29,16 +29,16 @@ class Datos(ctk.CTkToplevel):
                
         instruccion = f"SELECT * FROM Contratos WHERE proveedor = '{self.titulo}'"
         cursor.execute(instruccion)
-        datos = cursor.fetchall()
+        self.datos = cursor.fetchall()
 
         conn.commit()
         conn.close()
-        
+
         # widgets
         self.proveedor = ctk.CTkLabel(self, text = title, font = ctk.CTkFont("Helvetica", 25, "bold"), anchor = "w")
         self.proveedor.place(relx = 0.03, rely = 0.05, relwidth =0.55, relheight = 0.043)
         
-        self.area = ctk.CTkLabel(self, text = f"Área: {datos[0][2]}", font = self.font)
+        self.area = ctk.CTkLabel(self, text = f"Área: {self.datos[0][2]}", font = self.font)
         self.area.place(relx = 0.03, rely = 0.10)
         
         self.scroll = ctk.CTkScrollableFrame(self)
@@ -47,50 +47,52 @@ class Datos(ctk.CTkToplevel):
         self.frame_objeto = ctk.CTkFrame(self.scroll, height = 300, fg_color = "white")
         self.frame_objeto.pack(fill = "x", expand = True, padx = 5, pady = 5)
 
-        self.objeto = ctk.CTkLabel(self.frame_objeto, text = f"Objetos: {datos[0][5]}", font = self.font)
+        self.objeto = ctk.CTkLabel(self.frame_objeto, text = "Objetos", font = self.font)
         self.objeto.place(relx = 0.05, rely = 0.04) 
 
-        self.objeto_show_frame = Object(self, 1.0, 0.7, "Objeto")
-        self.objeto_button = ctk.CTkButton(self.frame_objeto, text = "+", font = self.font, command = self.objeto_show_frame.animate)
-        self.objeto_button.place(relx = 0.85, rely = 0.04, relwidth = 0.1, relheight = 0.08)
+        #self.objeto_show_frame = Object(self, 1.0, 0.7, "Objeto")
+        #self.objeto_button = ctk.CTkButton(self.frame_objeto, text = "+", font = self.font, command = self.objeto_show_frame.animate)
+        #self.objeto_button.place(relx = 0.85, rely = 0.04, relwidth = 0.1, relheight = 0.08)
 
         self.objeto_scroll = ctk.CTkScrollableFrame(self.frame_objeto)
         self.objeto_scroll.place(relx = 0.05, rely = 0.15, relwidth = 0.9, relheight =  0.75)
         
+        self.create_objects()
+        
         self.frame_datos = ctk.CTkFrame(self.scroll, height = 500, fg_color = "white")
         self.frame_datos.pack(fill = "x", expand = True, padx = 5, pady = 5)
         
-        self.fecha = ctk.CTkLabel(self.frame_datos, text = f"Fecha del contrato: {datos[0][3]}", font = self.font)
+        self.fecha = ctk.CTkLabel(self.frame_datos, text = f"Fecha del contrato: {self.datos[0][3]}", font = self.font)
         self.fecha.place(relx = 0.05, rely = 0.03)
 
-        self.fecha_vencimiento = ctk.CTkLabel(self.frame_datos, text = f"Fecha de vencimiento: {datos[0][4]}", font = self.font)
+        self.fecha_vencimiento = ctk.CTkLabel(self.frame_datos, text = f"Fecha de vencimiento: {self.datos[0][4]}", font = self.font)
         self.fecha_vencimiento.place(relx = 0.05, rely = 0.09)
 
-        self.direccion = ctk.CTkLabel(self.frame_datos, text = f"Dirección: {datos[0][6]}", font = self.font)
+        self.direccion = ctk.CTkLabel(self.frame_datos, text = f"Dirección: {self.datos[0][6]}", font = self.font)
         self.direccion.place(relx = 0.05, rely = 0.15)
 
-        self.codigo_nit = ctk.CTkLabel(self.frame_datos, text = f"Código NIT: {datos[0][7]}", font = self.font)
+        self.codigo_nit = ctk.CTkLabel(self.frame_datos, text = f"Código NIT: {self.datos[0][7]}", font = self.font)
         self.codigo_nit.place(relx = 0.05, rely = 0.21)
         
-        self.codigo_reup = ctk.CTkLabel(self.frame_datos, text = f"Código REUP: {datos[0][8]}", font = self.font)
+        self.codigo_reup = ctk.CTkLabel(self.frame_datos, text = f"Código REUP: {self.datos[0][8]}", font = self.font)
         self.codigo_reup.place(relx = 0.05, rely = 0.27)
 
-        self.codigo_versat = ctk.CTkLabel(self.frame_datos, text = f"Código VERSAT: {datos[0][9]}", font = self.font)
+        self.codigo_versat = ctk.CTkLabel(self.frame_datos, text = f"Código VERSAT: {self.datos[0][9]}", font = self.font)
         self.codigo_versat.place(relx = 0.05, rely = 0.33)
 
-        self.banco = ctk.CTkLabel(self.frame_datos, text = f"Banco: {datos[0][10]}", font = self.font)
+        self.banco = ctk.CTkLabel(self.frame_datos, text = f"Banco: {self.datos[0][10]}", font = self.font)
         self.banco.place(relx = 0.05, rely = 0.39)
 
-        self.sucursal = ctk.CTkLabel(self.frame_datos, text = f"Sucursal bancaria: {datos[0][11]}", font = self.font)
+        self.sucursal = ctk.CTkLabel(self.frame_datos, text = f"Sucursal bancaria: {self.datos[0][11]}", font = self.font)
         self.sucursal.place(relx = 0.05, rely = 0.45)
         
-        self.cuenta = ctk.CTkLabel(self.frame_datos, text = f"Cuenta bancaria: {datos[0][12]}", font = self.font)
+        self.cuenta = ctk.CTkLabel(self.frame_datos, text = f"Cuenta bancaria: {self.datos[0][12]}", font = self.font)
         self.cuenta.place(relx = 0.05, rely = 0.51)
         
-        self.titular = ctk.CTkLabel(self.frame_datos, text = f"Titular de la cuenta: {datos[0][13]}", font = self.font)
+        self.titular = ctk.CTkLabel(self.frame_datos, text = f"Titular de la cuenta: {self.datos[0][13]}", font = self.font)
         self.titular.place(relx = 0.05, rely = 0.57)
         
-        self.telefono = ctk.CTkLabel(self.frame_datos, text = f"Teléfono del titular: {datos[0][14]}", font = self.font)
+        self.telefono = ctk.CTkLabel(self.frame_datos, text = f"Teléfono del titular: {self.datos[0][14]}", font = self.font)
         self.telefono.place(relx = 0.05, rely = 0.63)
         
         self.autorizo_junta = ctk.CTkLabel(self.frame_datos, text = f"Autorizo de la CCD/JDN: No", font = self.font)
@@ -108,18 +110,17 @@ class Datos(ctk.CTkToplevel):
         self.frame_autorizado = ctk.CTkFrame(self.scroll, height = 300, fg_color = "white")
         self.frame_autorizado.pack(fill = "x", expand = True, padx = 5, pady = 5)
 
-        self.autorizado = ctk.CTkLabel(self.frame_autorizado, text = f"Aut.firmar factura:{datos[0][15]}", font = self.font)
+        self.autorizado = ctk.CTkLabel(self.frame_autorizado, text = "Aut.firmar factura", font = self.font)
         self.autorizado.place(relx = 0.05, rely = 0.04)
-        
 
-        self.autorizado_show_frame = Object(self, 1.0, 0.7, "Aut.firmar factura", "datos")
-        self.autorizado_button = ctk.CTkButton(self.frame_autorizado, text = "+", font = self.font, command = self.autorizado_show_frame.animate)
-        self.autorizado_button.place(relx = 0.85, rely = 0.04, relwidth = 0.1, relheight = 0.08)
+        #self.autorizado_show_frame = Object(self, 1.0, 0.7, "Aut.firmar factura", "datos")
+        #self.autorizado_button = ctk.CTkButton(self.frame_autorizado, text = "+", font = self.font, command = self.autorizado_show_frame.animate)
+        #self.autorizado_button.place(relx = 0.85, rely = 0.04, relwidth = 0.1, relheight = 0.08)
 
         self.autorizado_scroll = ctk.CTkScrollableFrame(self.frame_autorizado)
         self.autorizado_scroll.place(relx = 0.05, rely = 0.15, relwidth = 0.9, relheight =  0.75)
-
-
+        
+        self.create_autorizados()
 
         # servicios 
         self.frame_servicios = FrameServicios(self)
@@ -173,7 +174,22 @@ class Datos(ctk.CTkToplevel):
 
         self.eliminar = ctk.CTkButton(self, text = "Eliminar", font = self.font, command = self.deletemessage.animate, hover_color = "red")  
         self.eliminar.place(relx = 0.85, rely = 0.05, relwidth = 0.1)
-        
+    
+    def create_objects(self):
+        splitting = self.datos[0][5].split(",")
+        data = [i.strip() for i in splitting]
+        if data != [""]:
+            for i in data:
+                self.object_in = FrameObjetos(self.objeto_scroll, i)
+
+    def create_autorizados(self):
+        splitting = self.datos[0][15].split(",")
+        data = [i.strip() for i in splitting]
+        if data != [""]:
+            for i in data:
+                self.autorizado_in = FrameObjetos(self.autorizado_scroll, i)
+
+
     def eliminar(self):
         conn = sqlite3.connect("contratos.db")
         cursor = conn.cursor()
@@ -463,6 +479,39 @@ class ScrollFrame(ctk.CTkScrollableFrame):
         self.master = master
 
         self.place(relx = 0.05, rely = 0.13, relwidth = 0.9, relheight = 0.8)
+
+class FrameObjetos(ctk.CTkFrame):
+    def __init__(self, master, text):
+        super().__init__(master = master,
+                         height = 50, 
+                         fg_color = "white")
+        
+        self.text = text
+        self.font = ctk.CTkFont("Helvetica", 15)
+        
+        self.label = ctk.CTkLabel(self, text = self.text, anchor = "w", font = self.font)
+        self.label.place(relx = 0.03, rely = 0.3, relheight =0.4, relwidth = 0.92)
+        
+        self.pack(expand = True, fill = "x", padx = 5, pady = 5)
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

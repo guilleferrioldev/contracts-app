@@ -17,7 +17,7 @@ class Contracts(ctk.CTkScrollableFrame):
         conn = sqlite3.connect("contratos.db") 
         cursor = conn.cursor()
                
-        instruccion = "SELECT proveedor, fecha_del_contrato, fecha_de_vencimiento, objeto, autorizado_por,(SELECT sum(valor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS valor, (SELECT count(proveedor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS count FROM Contratos ORDER BY proveedor"
+        instruccion = "SELECT proveedor,area, fecha_del_contrato, fecha_de_vencimiento, objeto, autorizado_por,(SELECT sum(valor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS valor, (SELECT count(proveedor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS count FROM Contratos ORDER BY proveedor"
         cursor.execute(instruccion)
         datos = cursor.fetchall()
 
@@ -28,18 +28,20 @@ class Contracts(ctk.CTkScrollableFrame):
         while i < len(datos):
             ContractsFrames(self, 
                         proveedor = datos[i][0],
+                        area = datos[i][1],
                         servicio = datos[i][-1],
-                        objeto = datos[i][3],
-                        autorizado = datos[i][4],
-                        importe = datos[i][5],
-                        fecha = datos[i][1],
-                        vencimiento = datos[i][2])
+                        objeto = datos[i][4],
+                        autorizado = datos[i][5],
+                        importe = datos[i][-2],
+                        fecha = datos[i][2],
+                        vencimiento = datos[i][3])
             i +=1
-
                 
     def readOrdered(self, searching, field):
         if field == "Proveedor":
             field = "proveedor"
+        elif field == "Área":
+            field = "area"
         elif field == "Fecha contrato":
             field = "fecha_del_contrato"
         elif field == "Fecha vencimiento":
@@ -56,7 +58,7 @@ class Contracts(ctk.CTkScrollableFrame):
         conn = sqlite3.connect("contratos.db")
         cursor = conn.cursor()
         
-        instruccion = f"SELECT proveedor, fecha_del_contrato, fecha_de_vencimiento, objeto, autorizado_por, (SELECT sum(valor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS valor, (SELECT count(proveedor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS count FROM Contratos WHERE proveedor like '%{searching}%' ORDER BY {field}"
+        instruccion = f"SELECT proveedor, area, fecha_del_contrato, fecha_de_vencimiento, objeto, autorizado_por, (SELECT sum(valor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS valor, (SELECT count(proveedor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS count FROM Contratos WHERE proveedor like '%{searching}%' ORDER BY {field}"
         cursor.execute(instruccion)
         datos = cursor.fetchall()
 
@@ -67,25 +69,27 @@ class Contracts(ctk.CTkScrollableFrame):
         while i < len(datos):
             ContractsFrames(self, 
                         proveedor = datos[i][0],
+                        area = datos[i][1],
                         servicio = datos[i][-1],
-                        objeto = datos[i][3],
-                        autorizado = datos[i][4],
-                        importe = datos[i][5],
-                        fecha = datos[i][1],
-                        vencimiento = datos[i][2])
+                        objeto = datos[i][4],
+                        autorizado = datos[i][5],
+                        importe = datos[i][-2],
+                        fecha = datos[i][2],
+                        vencimiento = datos[i][3])
             i +=1
 
                    
 class ContractsFrames(ctk.CTkFrame):
-    def __init__(self, master, proveedor, servicio, objeto, autorizado, importe, fecha, vencimiento):
+    def __init__(self, master, proveedor, area, servicio, objeto, autorizado, importe, fecha, vencimiento):
         super().__init__(master = master,
                          height = 200,
                          fg_color = "white")
 
         self.master = master
         self.proveedor = ContractsProveedor(self, text = proveedor)
+        self.area = ContractsArea(self, text = f"Área: {area}")
         self.service = ContractsService(self, text = f"Servicios {servicio}")
-        self.objeto = ContractsObjeto(self, text = objeto)
+        self.objeto = ContractsObjeto(self, text = f"Objetos: {objeto}")
         self.autorizado = ContractsAutorizado(self, text = f"Aut.firmar factura: {autorizado}")
         self.importe = ContractsImporte(self, importe = importe)
         self.fecha = ContractsFecha(self, text = f"Desde {fecha}")
@@ -95,6 +99,7 @@ class ContractsFrames(ctk.CTkFrame):
         # events
         self.bind("<Button>", lambda event: self.evento())
         self.proveedor.bind("<Button>", lambda event: self.evento())
+        self.area.bind("<Button>", lambda event: self.evento())
         self.service.bind("<Button>", lambda event: self.evento())
         self.objeto.bind("<Button>", lambda event: self.evento())
         self.autorizado.bind("<Button>", lambda event: self.evento())
@@ -115,7 +120,7 @@ class ContractsProveedor(ctk.CTkLabel):
                          anchor = "w")
         
         self.text = text
-        self.place(relx = 0.03, rely = 0.2,relwidth = 0.85, relheight= 0.4)
+        self.place(relx = 0.03, rely = 0.1,relwidth = 0.85, relheight= 0.4)
 
 
 class ContractsObjeto(ctk.CTkLabel):
@@ -130,8 +135,19 @@ class ContractsObjeto(ctk.CTkLabel):
                          font = ctk.CTkFont("Helvetica", 15),
                          anchor = "w")
 
-        self.place(relx = 0.03, rely = 0.55, relwidth = 0.6, relheight= 0.2)
-    
+        self.place(relx = 0.03, rely = 0.45, relwidth = 0.6, relheight= 0.15)
+
+
+class ContractsArea(ctk.CTkLabel):
+    def __init__(self, master, text):        
+        super().__init__(master = master,
+                         text = text, 
+                         font = ctk.CTkFont("Helvetica", 15),
+                         anchor = "w")
+        
+        self.text = text
+        self.place(relx = 0.03, rely = 0.69, relwidth = 0.6, relheight= 0.2)
+  
 
 class ContractsAutorizado(ctk.CTkLabel):
     def __init__(self, master, text):
@@ -141,7 +157,7 @@ class ContractsAutorizado(ctk.CTkLabel):
                          anchor = "w")
 
         self.text = text
-        self.place(relx = 0.03, rely = 0.7, relwidth = 0.6, relheight= 0.2)
+        self.place(relx = 0.03, rely = 0.58, relwidth = 0.6, relheight= 0.15)
 
 
 class ContractsService(ctk.CTkLabel):

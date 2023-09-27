@@ -39,7 +39,7 @@ class App(ctk.CTk):
         
         # Sort Option Menu
         self.sort_var = ctk.StringVar(value = "Proveedor")
-        self.values = ["Proveedor","Fecha contrato", "Fecha vencimiento","Objeto", "Importe total", "Servicios", "Aut.firm factura"]
+        self.values = ["Proveedor","Área","Fecha contrato", "Fecha vencimiento","Objeto", "Importe total", "Servicios", "Aut.firm factura"]
         self.sort = Sort(master = self.main_frame, 
                     width = 140,
                     values = self.values,
