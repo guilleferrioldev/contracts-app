@@ -31,6 +31,10 @@ class Datos(ctk.CTkToplevel):
         cursor.execute(instruccion)
         self.datos = cursor.fetchall()
 
+        instruccion = f"SELECT * FROM Autorizo_Junta WHERE proveedor = '{self.titulo}'"
+        cursor.execute(instruccion)
+        self.datos_junta = cursor.fetchall()
+
         conn.commit()
         conn.close()
 
@@ -106,6 +110,8 @@ class Datos(ctk.CTkToplevel):
         
         self.fecha_junta= ctk.CTkLabel(self.frame_datos, text = f"Fecha del acuerdo: -", font = self.font)
         self.fecha_junta.place(relx = 0.05, rely = 0.9)
+
+        self.junta()        
 
         self.frame_autorizado = ctk.CTkFrame(self.scroll, height = 300, fg_color = "white")
         self.frame_autorizado.pack(fill = "x", expand = True, padx = 5, pady = 5)
@@ -188,7 +194,27 @@ class Datos(ctk.CTkToplevel):
         if data != [""]:
             for i in data:
                 self.autorizado_in = FrameObjetos(self.autorizado_scroll, i)
+    
+    def junta(self):
+        if self.datos_junta != []:
+            importe = self.datos_junta[0][2]
+            if len(str(importe)) < 4:
+                monto = importe
+            elif len(str(importe)) == 4:
+                monto = str(importe)[0] + " " + str(importe)[1:] 
+            elif len(str(importe)) == 5:
+                monto = str(importe)[0:2] + " " + str(importe)[2:] 
+            elif len(str(importe)) == 6:
+                monto = str(importe)[0:3] + " " + str(importe)[3:] 
+            elif len(str(importe)) == 7:
+                monto = str(importe)[0] + " " + str(importe)[1:4] + " " + str(importe)[4:]
+            else:    
+                monto = str(importe)[0:2] + " " + str(importe)[2:5] + " " + str(importe)[5:]
 
+            self.autorizo_junta.configure(text = "Autorizo de la CCD/JDN: Si")
+            self.acuerdo.configure(text = f"Acuerdo: {self.datos_junta[0][1]}")
+            self.monto.configure(text = f"Monto acordado: {monto} CUP")
+            self.fecha_junta.configure(text = f"Fecha del acuerdo {self.datos_junta[0][3]}")
 
     def eliminar(self):
         conn = sqlite3.connect("contratos.db")

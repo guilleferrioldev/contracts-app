@@ -131,11 +131,11 @@ class ContractsObjeto(ctk.CTkLabel):
             self.text = text
         
         super().__init__(master = master, 
-                         text = self.text, 
+                         text = self.text,
                          font = ctk.CTkFont("Helvetica", 15),
                          anchor = "w")
 
-        self.place(relx = 0.03, rely = 0.45, relwidth = 0.6, relheight= 0.15)
+        self.place(relx = 0.03, rely = 0.45, relwidth = 0.7, relheight= 0.15)
 
 
 class ContractsArea(ctk.CTkLabel):
@@ -146,7 +146,7 @@ class ContractsArea(ctk.CTkLabel):
                          anchor = "w")
         
         self.text = text
-        self.place(relx = 0.03, rely = 0.69, relwidth = 0.6, relheight= 0.2)
+        self.place(relx = 0.03, rely = 0.72, relwidth = 0.7, relheight= 0.15)
   
 
 class ContractsAutorizado(ctk.CTkLabel):
@@ -157,7 +157,7 @@ class ContractsAutorizado(ctk.CTkLabel):
                          anchor = "w")
 
         self.text = text
-        self.place(relx = 0.03, rely = 0.58, relwidth = 0.6, relheight= 0.15)
+        self.place(relx = 0.03, rely = 0.58, relwidth = 0.7, relheight= 0.15)
 
 
 class ContractsService(ctk.CTkLabel):

@@ -188,7 +188,6 @@ class App(ctk.CTk):
         
         tabla_junta = """ CREATE TABLE IF NOT EXISTS Autorizo_Junta
                     (proveedor TEXT,
-                    autorizo_junta TEXT,
                     acuerdo_junta TEXT,
                     monto_junta INTEGER,
                     fecha_de_autorizo TEXT)

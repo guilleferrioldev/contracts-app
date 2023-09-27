@@ -463,15 +463,13 @@ class SlidePanel(ctk.CTkFrame):
         # Junta table           
         data_insert_query_junta = ''' INSERT INTO Autorizo_Junta 
                             (proveedor,
-                            autorizo_junta,
                             acuerdo_junta,
                             monto_junta,
                             fecha_de_autorizo)
-                            VALUES (?,?,?,?,?)
+                            VALUES (?,?,?,?)
         '''
 
         data_insert_tuple_junta = (proveedor,
-                            autorizo_junta,
                             acuerdo_junta,
                             monto_junta,
                             fecha_de_autorizo)
