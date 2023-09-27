@@ -3,7 +3,7 @@ from message import Message
 import sqlite3
 
 class Object(ctk.CTkFrame):
-    def __init__(self, master, start_pos, end_pos, text):
+    def __init__(self, master, start_pos, end_pos, text, frame = "new"):
         super().__init__(master = master, 
                          border_width = 3)
 
@@ -16,6 +16,7 @@ class Object(ctk.CTkFrame):
         self.in_start_pos = True
         
         self.text = text 
+        self.frame = frame
 
         self.font = ctk.CTkFont("Helvetica", 15)
 
@@ -35,10 +36,10 @@ class Object(ctk.CTkFrame):
         
         self.create_frames()
 
-        self.cancel_button = ctk.CTkButton(self, text = "Cancelar", font = self.font, command = self.cancel)
+        self.cancel_button = ctk.CTkButton(self, text = "Cancelar", font = self.font, command = self.cancel, hover_color = "red")
         self.cancel_button.place(relx = 0.25, rely = 0.85,relwidth = 0.15, relheight = 0.055)
         
-        self.guardar_button = ctk.CTkButton(self, text = "Guardar", font = self.font, command = self.save)
+        self.guardar_button = ctk.CTkButton(self, text = "Guardar", font = self.font, command = self.save, hover_color = "green")
         self.guardar_button.place(relx = 0.55, rely = 0.85,relwidth = 0.15, relheight = 0.055)
 
         # layout 
@@ -210,13 +211,13 @@ class Frames(ctk.CTkFrame):
         
         self.message = Message(self.master.master, 1.0, 0.7 , "Eliminar")
         
-        self.message_cancel = ctk.CTkButton(self.message, text = "No",font = self.font, command = self.message.animate)
+        self.message_cancel = ctk.CTkButton(self.message, text = "No",font = self.font, command = self.message.animate, hover_color = "green")
         self.message_cancel.place(relx = 0.2, rely = 0.8, relwidth = 0.25)
         
-        self.message_ok = ctk.CTkButton(self.message, text = "Si",font = self.font, command = self.delete)
+        self.message_ok = ctk.CTkButton(self.message, text = "Si",font = self.font, command = self.delete, hover_color = "red")
         self.message_ok.place(relx = 0.6, rely = 0.8, relwidth = 0.25)
 
-        self.delete_button = ctk.CTkButton(self, text = "Eliminar", command = self.message.animate)
+        self.delete_button = ctk.CTkButton(self, text = "Eliminar", command = self.message.animate, hover_color = "red")
         self.delete_button.place(relx = 0.87, rely = 0.25, relwidth = 0.1)
 
         self.pack(expand = True, fill = "x", pady = 5 , padx = 5)
@@ -258,10 +259,10 @@ class FramesInsert(ctk.CTkFrame):
         self.entry = ctk.CTkEntry(self, font = self.font)
         self.entry.place(relx = 0.03, rely = 0.25, relwidth = 0.945) 
         
-        self.button_insert = ctk.CTkButton(self, text = "Insertar", font = self.font, command = self.insert)
+        self.button_insert = ctk.CTkButton(self, text = "Insertar", font = self.font, command = self.insert, hover_color = "green")
         self.button_insert.place(relx = 0.6, rely = 0.6, relwidth = 0.15)
         
-        self.button_cancel = ctk.CTkButton(self, text = "Cancelar", font = self.font, command = lambda: self.destroy())
+        self.button_cancel = ctk.CTkButton(self, text = "Cancelar", font = self.font, command = lambda: self.destroy(), hover_color ="red")
         self.button_cancel.place(relx = 0.25, rely = 0.6, relwidth = 0.15)
 
         self.pack(expand = True, fill = "x", pady = 5 , padx = 5)

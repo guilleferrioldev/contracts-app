@@ -48,9 +48,10 @@ class Datos(ctk.CTkToplevel):
         self.frame_objeto.pack(fill = "x", expand = True, padx = 5, pady = 5)
 
         self.objeto = ctk.CTkLabel(self.frame_objeto, text = f"Objetos: {datos[0][5]}", font = self.font)
-        self.objeto.place(relx = 0.05, rely = 0.04)
-        
-        self.objeto_button = ctk.CTkButton(self.frame_objeto, text = "+", font = self.font)
+        self.objeto.place(relx = 0.05, rely = 0.04) 
+
+        self.objeto_show_frame = Object(self, 1.0, 0.7, "Objeto")
+        self.objeto_button = ctk.CTkButton(self.frame_objeto, text = "+", font = self.font, command = self.objeto_show_frame.animate)
         self.objeto_button.place(relx = 0.85, rely = 0.04, relwidth = 0.1, relheight = 0.08)
 
         self.objeto_scroll = ctk.CTkScrollableFrame(self.frame_objeto)
@@ -103,7 +104,6 @@ class Datos(ctk.CTkToplevel):
         
         self.fecha_junta= ctk.CTkLabel(self.frame_datos, text = f"Fecha del acuerdo: -", font = self.font)
         self.fecha_junta.place(relx = 0.05, rely = 0.9)
-        
 
         self.frame_autorizado = ctk.CTkFrame(self.scroll, height = 300, fg_color = "white")
         self.frame_autorizado.pack(fill = "x", expand = True, padx = 5, pady = 5)
@@ -111,7 +111,9 @@ class Datos(ctk.CTkToplevel):
         self.autorizado = ctk.CTkLabel(self.frame_autorizado, text = f"Aut.firmar factura:{datos[0][15]}", font = self.font)
         self.autorizado.place(relx = 0.05, rely = 0.04)
         
-        self.autorizado_button = ctk.CTkButton(self.frame_autorizado, text = "+", font = self.font)
+
+        self.autorizado_show_frame = Object(self, 1.0, 0.7, "Aut.firmar factura", "datos")
+        self.autorizado_button = ctk.CTkButton(self.frame_autorizado, text = "+", font = self.font, command = self.autorizado_show_frame.animate)
         self.autorizado_button.place(relx = 0.85, rely = 0.04, relwidth = 0.1, relheight = 0.08)
 
         self.autorizado_scroll = ctk.CTkScrollableFrame(self.frame_autorizado)
