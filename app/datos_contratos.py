@@ -3,6 +3,7 @@ from message import Message, Actualizar, UpdateLabel
 from datos_servicios import DatosServicios
 from service import Frames
 from pdf import PanelPDFViewer, CTkPDFViewer
+from objeto import Object
 import sqlite3
 import os
 
@@ -29,55 +30,93 @@ class Datos(ctk.CTkToplevel):
         instruccion = f"SELECT * FROM Contratos WHERE proveedor = '{self.titulo}'"
         cursor.execute(instruccion)
         datos = cursor.fetchall()
-        
+
         conn.commit()
         conn.close()
         
         # widgets
         self.proveedor = ctk.CTkLabel(self, text = title, font = ctk.CTkFont("Helvetica", 25, "bold"), anchor = "w")
-        self.proveedor.place(relx = 0.05, rely = 0.05, relwidth =0.55, relheight = 0.043)
+        self.proveedor.place(relx = 0.03, rely = 0.05, relwidth =0.55, relheight = 0.043)
         
         self.area = ctk.CTkLabel(self, text = f"Área: {datos[0][2]}", font = self.font)
-        self.area.place(relx = 0.05, rely = 0.10)
- 
-        self.objeto = ctk.CTkLabel(self, text = f"Objeto: {datos[0][5]}", font = self.font)
-        self.objeto.place(relx = 0.05, rely = 0.15)
-       
-        self.fecha = ctk.CTkLabel(self, text = f"Fecha del contrato: {datos[0][3]}", font = self.font)
-        self.fecha.place(relx = 0.05, rely = 0.23)
-
-        self.fecha_vencimiento = ctk.CTkLabel(self, text = f"Fecha de vencimiento: {datos[0][4]}", font = self.font)
-        self.fecha_vencimiento.place(relx = 0.05, rely = 0.28)
-
-        self.direccion = ctk.CTkLabel(self, text = f"Dirección: {datos[0][6]}", font = self.font)
-        self.direccion.place(relx = 0.05, rely = 0.33)
-
-        self.codigo_nit = ctk.CTkLabel(self, text = f"Código NIT: {datos[0][7]}", font = self.font)
-        self.codigo_nit.place(relx = 0.05, rely = 0.38)
+        self.area.place(relx = 0.03, rely = 0.10)
         
-        self.codigo_reup = ctk.CTkLabel(self, text = f"Código REUP: {datos[0][8]}", font = self.font)
-        self.codigo_reup.place(relx = 0.05, rely = 0.43)
+        self.scroll = ctk.CTkScrollableFrame(self)
+        self.scroll.place(relx = 0.03, rely = 0.15, relheight = 0.72, relwidth = 0.51)
 
-        self.codigo_versat = ctk.CTkLabel(self, text = f"Código VERSAT: {datos[0][9]}", font = self.font)
-        self.codigo_versat.place(relx = 0.05, rely = 0.48)
+        self.frame_objeto = ctk.CTkFrame(self.scroll, height = 300, fg_color = "white")
+        self.frame_objeto.pack(fill = "x", expand = True, padx = 5, pady = 5)
 
-        self.banco = ctk.CTkLabel(self, text = f"Banco: {datos[0][10]}", font = self.font)
-        self.banco.place(relx = 0.05, rely = 0.53)
-
-        self.sucursal = ctk.CTkLabel(self, text = f"Sucursal bancaria: {datos[0][11]}", font = self.font)
-        self.sucursal.place(relx = 0.05, rely = 0.58)
+        self.objeto = ctk.CTkLabel(self.frame_objeto, text = f"Objetos: {datos[0][5]}", font = self.font)
+        self.objeto.place(relx = 0.05, rely = 0.04)
         
-        self.cuenta = ctk.CTkLabel(self, text = f"Cuenta bancaria: {datos[0][12]}", font = self.font)
-        self.cuenta.place(relx = 0.05, rely = 0.63)
-        
-        self.titular = ctk.CTkLabel(self, text = f"Titular de la cuenta: {datos[0][13]}", font = self.font)
-        self.titular.place(relx = 0.05, rely = 0.68)
-        
-        self.telefono = ctk.CTkLabel(self, text = f"Teléfono del titular: {datos[0][14]}", font = self.font)
-        self.telefono.place(relx = 0.05, rely = 0.73)
+        self.objeto_button = ctk.CTkButton(self.frame_objeto, text = "+", font = self.font)
+        self.objeto_button.place(relx = 0.85, rely = 0.04, relwidth = 0.1, relheight = 0.08)
 
-        self.autorizado = ctk.CTkLabel(self, text = f"Aut.firmar factura: {datos[0][15]}", font = self.font)
-        self.autorizado.place(relx = 0.05, rely = 0.78)
+        self.objeto_scroll = ctk.CTkScrollableFrame(self.frame_objeto)
+        self.objeto_scroll.place(relx = 0.05, rely = 0.15, relwidth = 0.9, relheight =  0.75)
+        
+        self.frame_datos = ctk.CTkFrame(self.scroll, height = 500, fg_color = "white")
+        self.frame_datos.pack(fill = "x", expand = True, padx = 5, pady = 5)
+        
+        self.fecha = ctk.CTkLabel(self.frame_datos, text = f"Fecha del contrato: {datos[0][3]}", font = self.font)
+        self.fecha.place(relx = 0.05, rely = 0.03)
+
+        self.fecha_vencimiento = ctk.CTkLabel(self.frame_datos, text = f"Fecha de vencimiento: {datos[0][4]}", font = self.font)
+        self.fecha_vencimiento.place(relx = 0.05, rely = 0.09)
+
+        self.direccion = ctk.CTkLabel(self.frame_datos, text = f"Dirección: {datos[0][6]}", font = self.font)
+        self.direccion.place(relx = 0.05, rely = 0.15)
+
+        self.codigo_nit = ctk.CTkLabel(self.frame_datos, text = f"Código NIT: {datos[0][7]}", font = self.font)
+        self.codigo_nit.place(relx = 0.05, rely = 0.21)
+        
+        self.codigo_reup = ctk.CTkLabel(self.frame_datos, text = f"Código REUP: {datos[0][8]}", font = self.font)
+        self.codigo_reup.place(relx = 0.05, rely = 0.27)
+
+        self.codigo_versat = ctk.CTkLabel(self.frame_datos, text = f"Código VERSAT: {datos[0][9]}", font = self.font)
+        self.codigo_versat.place(relx = 0.05, rely = 0.33)
+
+        self.banco = ctk.CTkLabel(self.frame_datos, text = f"Banco: {datos[0][10]}", font = self.font)
+        self.banco.place(relx = 0.05, rely = 0.39)
+
+        self.sucursal = ctk.CTkLabel(self.frame_datos, text = f"Sucursal bancaria: {datos[0][11]}", font = self.font)
+        self.sucursal.place(relx = 0.05, rely = 0.45)
+        
+        self.cuenta = ctk.CTkLabel(self.frame_datos, text = f"Cuenta bancaria: {datos[0][12]}", font = self.font)
+        self.cuenta.place(relx = 0.05, rely = 0.51)
+        
+        self.titular = ctk.CTkLabel(self.frame_datos, text = f"Titular de la cuenta: {datos[0][13]}", font = self.font)
+        self.titular.place(relx = 0.05, rely = 0.57)
+        
+        self.telefono = ctk.CTkLabel(self.frame_datos, text = f"Teléfono del titular: {datos[0][14]}", font = self.font)
+        self.telefono.place(relx = 0.05, rely = 0.63)
+        
+        self.autorizo_junta = ctk.CTkLabel(self.frame_datos, text = f"Autorizo de la CCD/JDN: No", font = self.font)
+        self.autorizo_junta.place(relx = 0.05, rely = 0.72)
+        
+        self.acuerdo = ctk.CTkLabel(self.frame_datos, text = f"Acuerdo: -", font = self.font)
+        self.acuerdo.place(relx = 0.05, rely = 0.78)
+        
+        self.monto = ctk.CTkLabel(self.frame_datos, text = f"Monto acordado: -", font = self.font)
+        self.monto.place(relx = 0.05, rely = 0.84)
+        
+        self.fecha_junta= ctk.CTkLabel(self.frame_datos, text = f"Fecha del acuerdo: -", font = self.font)
+        self.fecha_junta.place(relx = 0.05, rely = 0.9)
+        
+
+        self.frame_autorizado = ctk.CTkFrame(self.scroll, height = 300, fg_color = "white")
+        self.frame_autorizado.pack(fill = "x", expand = True, padx = 5, pady = 5)
+
+        self.autorizado = ctk.CTkLabel(self.frame_autorizado, text = f"Aut.firmar factura:{datos[0][15]}", font = self.font)
+        self.autorizado.place(relx = 0.05, rely = 0.04)
+        
+        self.autorizado_button = ctk.CTkButton(self.frame_autorizado, text = "+", font = self.font)
+        self.autorizado_button.place(relx = 0.85, rely = 0.04, relwidth = 0.1, relheight = 0.08)
+
+        self.autorizado_scroll = ctk.CTkScrollableFrame(self.frame_autorizado)
+        self.autorizado_scroll.place(relx = 0.05, rely = 0.15, relwidth = 0.9, relheight =  0.75)
+
 
 
         # servicios 
@@ -344,11 +383,6 @@ class Datos(ctk.CTkToplevel):
                 cursor.execute(instruccion)
                 self.area.configure(text = f"Área: {frame.entry.get()}")
 
-            elif frame.text == "Objeto":           
-                instruccion = f"UPDATE Contratos SET objeto='{frame.entry.get()}' WHERE  proveedor='{self.titulo}'"
-                cursor.execute(instruccion)
-                self.objeto.configure(text = f"Objeto: {frame.entry.get()}")
-            
             elif frame.text == "Fecha del contrato":           
                 instruccion = f"UPDATE Contratos SET fecha_del_contrato='{frame.day.get()}/{frame.month.get()}/{frame.year.get()}' WHERE  proveedor='{self.titulo}'"
                 cursor.execute(instruccion)
@@ -416,7 +450,7 @@ class FrameServicios(ctk.CTkFrame):
 
         self.master = master
 
-        self.place(relx = 0.55, rely = 0.15, relwidth = 0.4, relheight = 0.7)
+        self.place(relx = 0.55, rely = 0.15, relwidth = 0.4, relheight = 0.72)
 
 
 

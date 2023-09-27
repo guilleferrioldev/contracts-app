@@ -167,6 +167,7 @@ class Frames(ctk.CTkFrame):
     def delete_service(self):
         self.master.master.master.servicios_menu.set(str(int(self.master.master.master.servicios_menu.get())-1))
         self.destroy()
+        self.change_importe()
         
     
     def new_service(self):

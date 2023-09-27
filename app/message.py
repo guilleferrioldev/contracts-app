@@ -1,7 +1,6 @@
 import customtkinter as ctk 
 from service import Frames
 
-
 class Message(ctk.CTkFrame):
     def __init__(self, master, start_pos, end_pos, text):
         super().__init__(master = master,
@@ -64,7 +63,7 @@ class Actualizar(ctk.CTkFrame):
         self.font = ctk.CTkFont("Helvetica", 15)
         self.frames = []
 
-        self.values = ["Proveedor","Área", "Objeto", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular", "Aut.firmar factura"]
+        self.values = ["Proveedor","Área", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular", "Aut.firmar factura"]
         self.options_menu = ctk.CTkOptionMenu(self, font = self.font, values = self.values, command = self.options)
         self.options_menu.place(relx = 0.3, rely = 0.1, relwidth = 0.4)
         
@@ -85,7 +84,7 @@ class Actualizar(ctk.CTkFrame):
                 if child.widgetName == "frame":
                     child.destroy()
             self.frames = []
-            self.values = ["Proveedor","Área", "Objeto", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular", "Aut.firmar factura"]
+            self.values = ["Proveedor","Área", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular", "Aut.firmar factura"]
             self.options_menu.configure(values = self.values)
             self.options_menu.set(self.values[0])
 

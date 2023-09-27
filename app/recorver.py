@@ -322,11 +322,6 @@ class RecorverData(ctk.CTkToplevel):
                 cursor.execute(instruccion)
                 self.area.configure(text = f"Área: {frame.entry.get()}")
 
-            elif frame.text == "Objeto":           
-                instruccion = f"UPDATE Recuperar_Contratos SET objeto='{frame.entry.get()}' WHERE  proveedor='{self.titulo}'"
-                cursor.execute(instruccion)
-                self.objeto.configure(text = f"Objeto: {frame.entry.get()}")
-
             elif frame.text == "Fecha del contrato":           
                 instruccion = f"UPDATE Recuperar_Contratos SET fecha_del_contrato='{frame.day.get()}/{frame.month.get()}/{frame.year.get()}' WHERE  proveedor='{self.titulo}'"
                 cursor.execute(instruccion)
