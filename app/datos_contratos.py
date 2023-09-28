@@ -185,13 +185,13 @@ class Datos(ctk.CTkToplevel):
         self.aceptar = ctk.CTkButton(self.deletemessage, text = "Si", font = self.font, command = self.eliminar, hover_color = "red")
         self.aceptar.place(relx = 0.7, rely = 0.8, relwidth = 0.2)
         
-        self.denegar = ctk.CTkButton(self.deletemessage, text = "No", font = self.font, command = self.deletemessage.animate, hover_color= "green")
+        self.denegar = ctk.CTkButton(self.deletemessage, text = "No", font = self.font, command = self.delete_enable, hover_color= "green")
         self.denegar.place(relx = 0.4, rely = 0.8, relwidth = 0.2)
 
 
-        self.eliminar = ctk.CTkButton(self, text = "Eliminar", font = self.font, command = self.deletemessage.animate, hover_color = "red")  
+        self.eliminar = ctk.CTkButton(self, text = "Eliminar", font = self.font, command = self.delete_disable, hover_color = "red")  
         self.eliminar.place(relx = 0.85, rely = 0.05, relwidth = 0.1)
-    
+
     def create_objects(self):
         splitting = self.datos[0][5].split(",")
         data = [i.strip() for i in splitting]
@@ -205,25 +205,38 @@ class Datos(ctk.CTkToplevel):
         if data != [""]:
             for i in data:
                 self.autorizado_in = FrameObjetos(self.autorizado_scroll, i)
-    
-    def actualizar_animate(self):
-        self.actualizar_frame.animate()
+
+    def disabled(self):
         self.eliminar.configure(state = "disabled")
         self.actualizar.configure(state = "disabled")
         self.ver_pdf.configure(state = "disabled")
         self.cancel_button.configure(state = "disabled")
-
-    def cancel_pdf_animate(self):
-        self.pdfmessage.animate()
+    
+    def enabled(self):
         self.eliminar.configure(state = "normal")
         self.actualizar.configure(state = "normal")
         self.ver_pdf.configure(state = "normal")
         self.cancel_button.configure(state = "normal")
 
+    def delete_disable(self):
+        self.deletemessage.animate()
+        self.disabled()
+    
+    def delete_enable(self):
+        self.deletemessage.animate()
+        self.enabled()
+
+    def actualizar_animate(self):
+        self.actualizar_frame.animate()
+        self.disabled()
+    
+    def cancel_pdf_animate(self):
+        self.pdfmessage.animate()
+        self.enabled()
+
     def pdf_animate(self):
         self.pdfmessage.animate()
         self.pdf_panel.copy_pdf()
-        
 
     def junta(self):
         if self.datos_junta != []:
