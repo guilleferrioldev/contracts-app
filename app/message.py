@@ -1,5 +1,4 @@
 import customtkinter as ctk 
-from service import Frames
 
 class Message(ctk.CTkFrame):
     def __init__(self, master, start_pos, end_pos, text):
@@ -184,10 +183,11 @@ class UpdateFechaLabel(ctk.CTkFrame):
         self.destroy()
 
 class Junta(ctk.CTkFrame):
-    def __init__(self, master, start_pos, end_pos, monto):
+    def __init__(self, master, start_pos, end_pos, monto, text):
         super().__init__(master = master,
                          border_width = 3) 
         self.master = master 
+        self.text = text
 
         # general attributtes 
         self.start_pos = start_pos + 0.01
@@ -226,24 +226,34 @@ class Junta(ctk.CTkFrame):
     
     def atras(self):
         i = 0
-        while i < len(self.master.service.frames):
-            self.master.service.frames[i].valor_entry.configure(state = "normal")    
-            i +=1
-        
+        if self.text == "contracts":
+            while i < len(self.master.service.frames):
+                self.master.service.frames[i].valor_entry.configure(state = "normal")    
+                i +=1
+        elif self.text == "anadir":
+            for child in self.master.servicios_scroll.winfo_children():
+                if child.text == "anadir":
+                    child.valor_entry.configure(state = "normal")
+
         self.animate()
 
-    def delete_numbers(self, number):
-        i = 0
-        while i < len(self.master.service.frames):
-            if len(self.master.service.frames[i].valor_entry.get()) > number:
-                self.master.service.frames[i].valor_entry.delete(number, "end")
-            self.master.service.frames[i].valor_entry.configure(state = "disabled")
-            i +=1
-    
+    def disabled_frames(self):
+
+        if self.text == "contracts":
+            i = 0
+            while i < len(self.master.service.frames):
+                self.master.service.frames[i].valor_entry.configure(state = "disabled")
+                i +=1
+        
+        elif self.text == "anadir":
+            for child in self.master.servicios_scroll.winfo_children():
+                if child.text == "anadir":
+                    child.valor_entry.configure(state = "disabled")
+
     def animate(self):
         if self.in_start_pos:
             self.animate_fordward()
-            self.delete_numbers(6)
+            self.disabled_frames()
         else:
             self.animate_backwards()
 

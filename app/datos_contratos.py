@@ -134,7 +134,7 @@ class Datos(ctk.CTkToplevel):
         self.servicios_scroll = ScrollFrame(self.frame_servicios)
 
         self.importe_label = ctk.CTkLabel(self.frame_servicios, text = f"Importe: 0.00 cup", font = ctk.CTkFont("Helvetica", 15, "bold"))
-        self.importe_label.place(relx = 0.53, rely = 0.93)
+        self.importe_label.place(relx = 0.56, rely = 0.93)
 
         self.cantidad_label = ctk.CTkLabel(self.frame_servicios, text = f"Cantidad: 0", font = ctk.CTkFont("Helvetica", 15, "bold"))
         self.cantidad_label.place(relx = 0.1, rely = 0.93)
@@ -302,10 +302,6 @@ class Datos(ctk.CTkToplevel):
         conn = sqlite3.connect("contratos.db") 
         cursor = conn.cursor()
         
-        instruccion_importe = f"SELECT sum(valor) FROM Servicios WHERE proveedor = '{self.titulo}'"
-        cursor.execute(instruccion_importe)
-        importe = cursor.fetchall()
-        
         instruccion_serv = f"SELECT * FROM Servicios WHERE proveedor = '{self.titulo}'"
         cursor.execute(instruccion_serv)
         datos_serv = cursor.fetchall()
@@ -330,25 +326,50 @@ class Datos(ctk.CTkToplevel):
                            valor = datos_serv[i][-1])
             self.frames.append(frames)    
             i+=1
- 
-        if importe[0][0] == None:
-            show_importe = "0.00"
-        elif len(str(importe[0][0])) < 4:
-            show_importe = importe[0][0]
-        elif len(str(importe[0][0])) == 4:
-            show_importe = str(importe[0][0])[0] + " " + str(importe[0][0])[1:] 
-        elif len(str(importe[0][0])) == 5:
-            show_importe = str(importe[0][0])[0:2] + " " + str(importe[0][0])[2:] 
-        elif len(str(importe[0][0])) == 6:
-            show_importe = str(importe[0][0])[0:3] + " " + str(importe[0][0])[3:] 
-        elif len(str(importe[0][0])) == 7:
-            show_importe = str(importe[0][0])[0] + " " + str(importe[0][0])[1:4] + " " + str(importe[0][0])[4:]
-        else:    
-            show_importe = str(importe[0][0])[0:2] + " " + str(importe[0][0])[2:5] + " " + str(importe[0][0])[5:]
-       
-    
-        self.importe_label.configure(text = f"Importe: {show_importe} CUP")
+
         self.cantidad_label.configure(text = f"Cantidad: {datos_count[0][0]}")
+        self.suma()
+    
+    def suma(self):
+        conn = sqlite3.connect("contratos.db") 
+        cursor = conn.cursor()
+        
+        instruccion_importe = f"SELECT sum(valor) FROM Servicios WHERE proveedor = '{self.titulo}'"
+        cursor.execute(instruccion_importe)
+        importe = cursor.fetchall()
+        
+        conn.commit()
+        conn.close()
+        
+        valores = []
+        for child in self.servicios_scroll.winfo_children():
+            if child.text == "anadir":
+                valores.append(child.valor_entry.get())
+
+        value = sum([int(i) for i in valores if i != ""])
+        
+        if importe[0][0] != None:
+            importe = importe[0][0] + value
+        else:
+            importe = 0
+        
+            
+        if len(str(importe)) < 4:
+            show_importe = importe
+        elif len(str(importe)) == 4:
+            show_importe = str(importe)[0] + " " + str(importe)[1:] 
+        elif len(str(importe)) == 5:
+            show_importe = str(importe)[0:2] + " " + str(importe)[2:] 
+        elif len(str(importe)) == 6:
+            show_importe = str(importe)[0:3] + " " + str(importe)[3:] 
+        elif len(str(importe)) == 7:
+            show_importe = str(importe)[0] + " " + str(importe)[1:4] + " " + str(importe)[4:]
+        else:    
+            show_importe = str(importe)[0:2] + " " + str(importe)[2:5] + " " + str(importe)[5:]
+        
+                    
+        self.importe_label.configure(text = f"Importe: {show_importe} CUP")
+
     
     def atras(self):
         for child in self.master.master.winfo_children():

@@ -258,12 +258,6 @@ class SlidePanel(ctk.CTkFrame):
             frames = Frames(self.service.scroll_frame, "contracts")
             self.service.frames.append(frames)
         
-        i = 0
-        while i < len(self.service.frames):
-            self.service.frames[i].valor_entry.bind("<KeyRelease>", lambda event: self.suma())
-            i +=1
-
-
     def suma(self):
         i = 0
         importe = 0

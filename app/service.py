@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from message import Junta
 import sqlite3
 
 class Service(ctk.CTkFrame):
@@ -113,9 +114,12 @@ class Frames(ctk.CTkFrame):
 
 
         if self.text == "contracts":
+            self.valor_entry.bind("<KeyRelease>", lambda event: self.change_importe())
+            
             self.cancel_button = ctk.CTkButton(self, text = "Cancelar", command = self.delete_contracts, hover_color = "red")
             self.cancel_button.place(relx = 0.35, rely = 0.82)
         elif self.text == "anadir":
+
             self.valor_entry.bind("<KeyRelease>", lambda event: self.change_importe())
             
             self.cancel_button = ctk.CTkButton(self, text = "Cancelar", command = self.delete_service, hover_color = "red")
@@ -129,18 +133,29 @@ class Frames(ctk.CTkFrame):
     def change_importe(self):
         values = []
         importe = 0
-        for child in self.master.winfo_children():
-            if child.widgetName == "frame":
-                if child.text == "anadir":
-                    if child.valor_entry.get() == "":
-                        values.append(0)
-                    else:
-                        values.append(int(child.valor_entry.get()))
-                elif child.text == "datos_servicios":
-                   importe += child.importe 
+        if self.text == "contracts":
+            i = 0
+            while i < len(self.master.master.master.service.frames):
+                values.append(self.master.master.master.service.frames[i].valor_entry.get())
+                i+=1
         
-        for i in values:
-            importe += i
+            for val in values:
+                if val != "":
+                    importe += int(val)
+
+        elif self.text == "anadir":
+            for child in self.master.winfo_children():
+                if child.widgetName == "frame":
+                    if child.text == "anadir":
+                        if child.valor_entry.get() == "":
+                            values.append(0)
+                        else:
+                            values.append(int(child.valor_entry.get()))
+                    elif child.text == "datos_servicios":
+                        importe += child.importe 
+        
+            for i in values:
+                importe += i
         
         if len(str(importe)) < 4:
             show_importe = importe
@@ -154,19 +169,39 @@ class Frames(ctk.CTkFrame):
             show_importe = str(importe)[0] + " " + str(importe)[1:4] + " " + str(importe)[4:]
         else:    
             show_importe = str(importe)[0:2] + " " + str(importe)[2:5] + " " + str(importe)[5:]
-       
-        if self.master.master.master.datos_junta == []:
-            if importe < 1000000:
-                self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
+        
+
+        if self.text == "contracts":
+            if self.master.master.master.junta_button.get() == "off":
+                if importe < 1000000:
+                    self.master.master.master.service.importe_label.configure(text = f"Importe: {show_importe} CUP")
+                else:
+                    self.valor_entry.delete(0, "end")
+                    self.master.master.master.suma()
+                    self.junta_message = Junta(self.master.master.master, 1.0, 0.7, 1000000, "contracts").animate()
             else:
-                self.valor_entry.configure(state = "disabled")
-                print("No se puede")
-        else:
-            if importe < int(self.master.master.master.datos_junta[0][2]):
-                self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
+                if importe < int(self.master.master.master.monto_junta_entry.get()):
+                    self.master.master.master.service.importe_label.configure(text = f"Importe: {show_importe} CUP")
+                else:
+                    self.valor_entry.delete(0, "end")
+                    self.master.master.master.suma()
+                    self.junta_message = Junta(self.master.master.master, 1.0, 0.7, self.master.master.master.monto_junta_entry.get()).animate()
+
+        elif self.text == "anadir":
+            if self.master.master.master.datos_junta == []:
+                if importe < 1000000:
+                    self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
+                else:
+                    self.valor_entry.delete(0, "end")
+                    self.master.master.master.suma()
+                    self.junta_message = Junta(self.master.master.master, 1.0, 0.7, 1000000, "anadir").animate()
             else:
-                print("No se puede")
-                
+                if importe < int(self.master.master.master.datos_junta[0][2]):
+                    self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
+                else:
+                    self.valor_entry.delete(0, "end")
+                    self.master.master.master.suma()
+                    self.junta_message = Junta(self.master.master.master, 1.0, 0.7, self.master.master.master.datos_junta[0][2], "anadir").animate()
 
 
     def delete_contracts(self):
