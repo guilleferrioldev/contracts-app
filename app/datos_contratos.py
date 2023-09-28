@@ -24,6 +24,7 @@ class Datos(ctk.CTkToplevel):
         self.font = ctk.CTkFont("Helvetica", 15)
         self.titulo = title
         self.parent = parent
+        self.font = ctk.CTkFont("Helvetica", 15)
 
         
         # database
@@ -156,6 +157,14 @@ class Datos(ctk.CTkToplevel):
         self.cancel_button.place(relx = 0.43, rely = 0.9)
         
         # Pdf button
+        self.pdfmessage = Message(self, 1.0,0.7,"Insertar PDF")
+        
+        self.aceptar_pdf = ctk.CTkButton(self.pdfmessage, text = "Si", font = self.font,command = self.pdf_animate, hover_color = "green")
+        self.aceptar_pdf.place(relx = 0.7, rely = 0.8, relwidth = 0.2)
+        
+        self.denegar_pdf = ctk.CTkButton(self.pdfmessage, text = "No", font = self.font, command = self.cancel_pdf_animate, hover_color= "red")
+        self.denegar_pdf.place(relx = 0.4, rely = 0.8, relwidth = 0.2)
+
         self.pdf_panel = PanelPDFViewer(self, 1.0, 0.7, "PDF", f"{self.titulo}")
 
         self.ver_pdf = ctk.CTkButton(self, text = "Ver PDF", font = self.font, command = self.read_pdf)  
@@ -171,7 +180,6 @@ class Datos(ctk.CTkToplevel):
         self.actualizar.place(relx = 0.74, rely = 0.05, relwidth = 0.1)
     
         # Delete message
-        self.font = ctk.CTkFont("Helvetica", 15)
         self.deletemessage = Message(self, 1.0,0.7,"Eliminar")
         
         self.aceptar = ctk.CTkButton(self.deletemessage, text = "Si", font = self.font, command = self.eliminar, hover_color = "red")
@@ -204,6 +212,18 @@ class Datos(ctk.CTkToplevel):
         self.actualizar.configure(state = "disabled")
         self.ver_pdf.configure(state = "disabled")
         self.cancel_button.configure(state = "disabled")
+
+    def cancel_pdf_animate(self):
+        self.pdfmessage.animate()
+        self.eliminar.configure(state = "normal")
+        self.actualizar.configure(state = "normal")
+        self.ver_pdf.configure(state = "normal")
+        self.cancel_button.configure(state = "normal")
+
+    def pdf_animate(self):
+        self.pdfmessage.animate()
+        self.pdf_panel.copy_pdf()
+        
 
     def junta(self):
         if self.datos_junta != []:
@@ -305,12 +325,16 @@ class Datos(ctk.CTkToplevel):
 
     def read_pdf(self):
         self.cancel_button.configure(state = "disabled")
-        
+        self.eliminar.configure(state = "disabled")
+        self.actualizar.configure(state = "disabled")
+        self.ver_pdf.configure(state = "disabled")
+ 
         if os.path.isfile(f"./pdfs/{self.titulo}.pdf"):
             self.pdf_panel.animate()
             pdf = CTkPDFViewer(self.pdf_panel.frame, file = f"{self.titulo}")
         else:
-            self.pdf_panel.copy_pdf()
+            self.pdfmessage.animate()
+
 
     def servicios(self):
         conn = sqlite3.connect("contratos.db") 

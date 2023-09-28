@@ -146,6 +146,10 @@ class PanelPDFViewer(ctk.CTkFrame):
                 child.destroy()
         if self.text == "PDF":
             self.master.cancel_button.configure(state = "normal")
+            self.master.eliminar.configure(state = "normal")
+            self.master.actualizar.configure(state = "normal")
+            self.master.ver_pdf.configure(state = "normal")
+
         self.animate()
 
     def copy_pdf(self):
@@ -159,6 +163,10 @@ class PanelPDFViewer(ctk.CTkFrame):
             pdf = CTkPDFViewer(self.frame, file = f"{self.title}")
         else:
             self.master.cancel_button.configure(state = "normal")
+            self.master.eliminar.configure(state = "normal")
+            self.master.actualizar.configure(state = "normal")
+            self.master.ver_pdf.configure(state = "normal")
+
 
     def change_pdf(self):
         filename = filedialog.askopenfilename(title = "Cambiar pdf", initialdir = "~")
