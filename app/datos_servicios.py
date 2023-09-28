@@ -38,8 +38,14 @@ class DatosServicios(ctk.CTkFrame):
         self.nombre_servicio_label = ctk.CTkLabel(self, text = f"Nombre: {self.nombre}", font = self.font)
         self.nombre_servicio_label.place(relx = 0.05, rely =0.05)
 
-        self.desc_servicio_label = ctk.CTkLabel(self, text = f"Descripción: {self.descripcion}", font = self.font)
+                
+        self.desc_servicio_label = ctk.CTkLabel(self, text = f"Descripción:", font = self.font)
         self.desc_servicio_label.place(relx = 0.05, rely =0.17)
+        
+        self.desc_servicio_info = ctk.CTkScrollableFrame(self)
+        self.desc_servicio_info.place(relx = 0.28, rely =0.17, relwidth = 0.7, relheight=0.3)
+        
+        self.create_descripcion()
         
         self.factura_label = ctk.CTkLabel(self, text = f"No. Factura: {self.factura}", font = self.font)
         self.factura_label.place(relx = 0.05, rely =0.46)
@@ -69,6 +75,13 @@ class DatosServicios(ctk.CTkFrame):
         self.eliminar.place(relx = 0.7, rely = 0.8, relwidth = 0.25, relheight = 0.11)
         
         self.pack(expand = "True", fill = "x", padx = 5, pady = 5)
+    
+    def create_descripcion(self):
+        start = 0
+        while start < len(self.descripcion):
+            label = ctk.CTkLabel(self.desc_servicio_info, text = f"{self.descripcion[start:start + 44]}", fg_color = "white", anchor = "w")
+            label.pack(expand = True, fill = "x",padx = 2, pady = 0)
+            start += 44
 
     def delete(self):
         conn = sqlite3.connect("contratos.db")
