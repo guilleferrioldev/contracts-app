@@ -277,6 +277,8 @@ class RecorverData(ctk.CTkToplevel):
         self.recuperar_button.place(relx = 0.55, rely = 0.9)
 
         # Pdf button        
+        self.path_adding_pdf = 0 
+
         self.add_pdf = ctk.CTkButton(self, text = "Añadir PDF", font = self.font, command = self.copy_pdf)  
         self.add_pdf.place(relx = 0.63, rely = 0.05, relwidth = 0.1)
         
@@ -380,7 +382,7 @@ class RecorverData(ctk.CTkToplevel):
 
         conn.commit()
         conn.close()
-
+        
         if self.path_adding_pdf:
             shutil.copy(self.path, f"./pdfs/{self.titulo}.pdf")
         
