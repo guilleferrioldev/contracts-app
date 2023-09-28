@@ -191,7 +191,7 @@ class SlidePanel(ctk.CTkFrame):
         self.fecha_junta_year.place(relx = 0.41, rely = 0.85,relwidth = 0.07, relheight = 0.043)
         
 
-        # servicios 
+        # servicios
         self.service = Service(self, relx = 0.55, rely = 0.05, relwidth = 0.4, relheight = 0.79)
 
         self.add_pdf = ctk.CTkButton(self, text = "Añadir PDF", command = self.copy_pdf)
@@ -275,7 +275,7 @@ class SlidePanel(ctk.CTkFrame):
         for val in values:
             if val != "":
                 importe += int(val)
-
+        
         if len(str(importe)) < 4:
             show_importe = importe
         elif len(str(importe)) == 4:
@@ -299,6 +299,7 @@ class SlidePanel(ctk.CTkFrame):
                 self.service.importe_label.configure(text = f"Importe: {show_importe} CUP")
             else:
                 self.junta_message = Junta(self, 1.0, 0.7, self.monto_junta_entry.get()).animate()
+
 
     def animate(self):
         if self.in_start_pos:

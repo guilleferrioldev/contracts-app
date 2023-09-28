@@ -171,7 +171,7 @@ class UpdateFechaLabel(ctk.CTkFrame):
                                     width = 110)
         self.month.place(relx = 0.19, rely = 0.3)
 
-        self.year = ctk.CTkOptionMenu(self, values = [str(i) for i in range(2020, 2024)], width = 70)
+        self.year = ctk.CTkOptionMenu(self, values = [str(i) for i in range(2020, 2031)], width = 70)
         self.year.place(relx = 0.47, rely = 0.3)    
 
         self.button = ctk.CTkButton(self, font = self.font, text = "cancelar",command = self.cancel, hover_color= "red")
@@ -198,7 +198,6 @@ class Junta(ctk.CTkFrame):
         self.pos = self.start_pos
         self.in_start_pos = True
 
-       
         if len(str(monto)) < 7:
             self.show_monto = monto 
         elif len(str(monto)) == 7:
@@ -207,7 +206,7 @@ class Junta(ctk.CTkFrame):
             self.show_monto = str(monto)[0:2] + " " + str(monto)[2:5] + " " + str(monto)[5:] 
 
 
-        self.atras_button = ctk.CTkButton(self, text = "OK", command = self.animate)
+        self.atras_button = ctk.CTkButton(self, text = "OK", command = self.atras)
         self.atras_button.place(relx = 0.4, rely = 0.85, relheight = 0.1, relwidth = 0.2)
         
         self.advertencia_label = ctk.CTkLabel(self, 
@@ -224,20 +223,29 @@ class Junta(ctk.CTkFrame):
 
         # layout 
         self.place(relx = self.start_pos, rely = 0.25, relwidth = self.width, relheight = 0.4)
+    
+    def atras(self):
+        i = 0
+        while i < len(self.master.service.frames):
+            self.master.service.frames[i].valor_entry.configure(state = "normal")    
+            i +=1
+        
+        self.animate()
 
+    def delete_numbers(self, number):
+        i = 0
+        while i < len(self.master.service.frames):
+            if len(self.master.service.frames[i].valor_entry.get()) > number:
+                self.master.service.frames[i].valor_entry.delete(number, "end")
+            self.master.service.frames[i].valor_entry.configure(state = "disabled")
+            i +=1
+    
     def animate(self):
         if self.in_start_pos:
             self.animate_fordward()
-            i = 0
-            while i < len(self.master.service.frames):
-                self.master.service.frames[i].valor_entry.configure(state = "disabled")
-                i +=1
+            self.delete_numbers(6)
         else:
             self.animate_backwards()
-            i = 0
-            while i < len(self.master.service.frames):
-                self.master.service.frames[i].valor_entry.configure(state = "normal")
-                i +=1
 
 
     def animate_fordward(self):

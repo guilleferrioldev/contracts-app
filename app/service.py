@@ -159,6 +159,7 @@ class Frames(ctk.CTkFrame):
             if importe < 1000000:
                 self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
             else:
+                self.valor_entry.configure(state = "disabled")
                 print("No se puede")
         else:
             if importe < int(self.master.master.master.datos_junta[0][2]):
