@@ -1,6 +1,11 @@
 import customtkinter as ctk 
 import sqlite3
-from message import Actualizar, Message
+from tkinter import filedialog
+from message import Actualizar, Message, Junta
+from service import Frames
+import sys, os
+from pathlib import Path
+import shutil
 
 class Frame(ctk.CTkFrame):
     def __init__(self, master, proveedor, objeto):
@@ -137,9 +142,12 @@ class RecorverData(ctk.CTkToplevel):
         
         self.title(title)
         self.transient(master)
-        self.width = int(self.winfo_screenwidth()/1.5)
-        self.height = int(self.winfo_screenheight()/1.5)
-        self.geometry(f"{self.width}x{self.height}")
+        self.width = self.master.master.master.master.master.master.master.master.master.winfo_width()
+        self.height = self.master.master.master.master.master.master.master.master.master.winfo_height()
+        self.x = self.master.master.master.master.master.master.master.master.master.winfo_x()
+        self.y = self.master.master.master.master.master.master.master.master.master.winfo_y()
+        self.geometry(f"{self.width}x{self.height}+{self.x}+{self.y}")
+
         self.resizable(True, True)
         self.titulo = title
 
@@ -149,7 +157,7 @@ class RecorverData(ctk.CTkToplevel):
                
         instruccion = f"SELECT * FROM Recuperar_Contratos WHERE proveedor = '{self.titulo}'"
         cursor.execute(instruccion)
-        datos = cursor.fetchall()
+        self.datos = cursor.fetchall()
         
         conn.commit()
         conn.close()
@@ -158,52 +166,104 @@ class RecorverData(ctk.CTkToplevel):
         self.font = ctk.CTkFont("Helvetica", 15)
 
         self.proveedor = ctk.CTkLabel(self, text = title, font = ctk.CTkFont("Helvetica", 25, "bold"))
-        self.proveedor.place(relx = 0.05, rely = 0.05)
+        self.proveedor.place(relx = 0.03, rely = 0.05)
 
-        self.area = ctk.CTkLabel(self, text = f"Área: {datos[0][1]}", font = self.font)
-        self.area.place(relx = 0.05, rely = 0.10)
+        self.area = ctk.CTkLabel(self, text = f"Área: {self.datos[0][1]}", font = self.font)
+        self.area.place(relx = 0.03, rely = 0.10)
 
-        self.objeto = ctk.CTkLabel(self, text = f"Objeto: {datos[0][4]}", font = self.font)
-        self.objeto.place(relx = 0.05, rely = 0.15)
+        self.scroll = ctk.CTkScrollableFrame(self)
+        self.scroll.place(relx = 0.03, rely = 0.15, relheight = 0.72, relwidth = 0.51)
+
+        self.frame_objeto = ctk.CTkFrame(self.scroll, height = 300, fg_color = "white")
+        self.frame_objeto.pack(fill = "x", expand = True, padx = 5, pady = 5)
+
+        self.objeto = ctk.CTkLabel(self.frame_objeto, text = "Objetos", font = self.font)
+        self.objeto.place(relx = 0.05, rely = 0.04)
+
+        self.objeto_scroll = ctk.CTkScrollableFrame(self.frame_objeto)
+        self.objeto_scroll.place(relx = 0.05, rely = 0.15, relwidth = 0.9, relheight =  0.75)
         
-        self.fecha = ctk.CTkLabel(self, text = f"Fecha del contrato: No existe", font = self.font)
-        self.fecha.place(relx = 0.05, rely = 0.23)
-
-        self.fecha_vencimiento = ctk.CTkLabel(self, text = f"Fecha de vencimiento: No existe", font = self.font)
-        self.fecha_vencimiento.place(relx = 0.05, rely = 0.28)
-
-        self.direccion = ctk.CTkLabel(self, text = f"Dirección: {datos[0][5]}", font = self.font)
-        self.direccion.place(relx = 0.05, rely = 0.33)
-
-        self.codigo_nit = ctk.CTkLabel(self, text = f"Código NIT: {datos[0][6]}", font = self.font)
-        self.codigo_nit.place(relx = 0.05, rely = 0.38)
+        self.create_objects()
         
-        self.codigo_reup = ctk.CTkLabel(self, text = f"Código REUP: {datos[0][7]}", font = self.font)
-        self.codigo_reup.place(relx = 0.05, rely = 0.43)
+        self.frame_datos = ctk.CTkFrame(self.scroll, height = 500, fg_color = "white")
+        self.frame_datos.pack(fill = "x", expand = True, padx = 5, pady = 5)
 
-        self.codigo_versat = ctk.CTkLabel(self, text = f"Código VERSAT: {datos[0][8]}", font = self.font)
-        self.codigo_versat.place(relx = 0.05, rely = 0.48)
+        self.fecha = ctk.CTkLabel(self.frame_datos, text = f"Fecha del contrato: No existe", font = self.font)
+        self.fecha.place(relx = 0.05, rely = 0.03)
 
-        self.banco = ctk.CTkLabel(self, text = f"Banco: {datos[0][9]}", font = self.font)
-        self.banco.place(relx = 0.05, rely = 0.53)
+        self.fecha_vencimiento = ctk.CTkLabel(self.frame_datos, text = f"Fecha de vencimiento: No existe", font = self.font)
+        self.fecha_vencimiento.place(relx = 0.05, rely = 0.09)
 
-        self.sucursal = ctk.CTkLabel(self, text = f"Sucursal bancaria: {datos[0][10]}", font = self.font)
-        self.sucursal.place(relx = 0.05, rely = 0.58)
+        self.direccion = ctk.CTkLabel(self.frame_datos, text = f"Dirección: {self.datos[0][5]}", font = self.font)
+        self.direccion.place(relx = 0.05, rely = 0.15)
+
+        self.codigo_nit = ctk.CTkLabel(self.frame_datos, text = f"Código NIT: {self.datos[0][6]}", font = self.font)
+        self.codigo_nit.place(relx = 0.05, rely = 0.21)
         
-        self.cuenta = ctk.CTkLabel(self, text = f"Cuenta bancaria: {datos[0][11]}", font = self.font)
-        self.cuenta.place(relx = 0.05, rely = 0.63)
-        
-        self.titular = ctk.CTkLabel(self, text = f"Titular de la cuenta: {datos[0][12]}", font = self.font)
-        self.titular.place(relx = 0.05, rely = 0.68)
-        
-        self.telefono = ctk.CTkLabel(self, text = f"Teléfono del titular: {datos[0][13]}", font = self.font)
-        self.telefono.place(relx = 0.05, rely = 0.73)
+        self.codigo_reup = ctk.CTkLabel(self.frame_datos, text = f"Código REUP: {self.datos[0][7]}", font = self.font)
+        self.codigo_reup.place(relx = 0.05, rely = 0.27)
 
-        self.autorizado = ctk.CTkLabel(self, text = f"Aut.firmar factura: {datos[0][14]}", font = self.font)
-        self.autorizado.place(relx = 0.05, rely = 0.78)
+        self.codigo_versat = ctk.CTkLabel(self.frame_datos, text = f"Código VERSAT: {self.datos[0][8]}", font = self.font)
+        self.codigo_versat.place(relx = 0.05, rely = 0.33)
+
+        self.banco = ctk.CTkLabel(self.frame_datos, text = f"Banco: {self.datos[0][9]}", font = self.font)
+        self.banco.place(relx = 0.05, rely = 0.39)
+
+        self.sucursal = ctk.CTkLabel(self.frame_datos, text = f"Sucursal bancaria: {self.datos[0][10]}", font = self.font)
+        self.sucursal.place(relx = 0.05, rely = 0.45)
+        
+        self.cuenta = ctk.CTkLabel(self.frame_datos, text = f"Cuenta bancaria: {self.datos[0][11]}", font = self.font)
+        self.cuenta.place(relx = 0.05, rely = 0.51)
+        
+        self.titular = ctk.CTkLabel(self.frame_datos, text = f"Titular de la cuenta: {self.datos[0][12]}", font = self.font)
+        self.titular.place(relx = 0.05, rely = 0.57)
+        
+        self.telefono = ctk.CTkLabel(self.frame_datos, text = f"Teléfono del titular: {self.datos[0][13]}", font = self.font)
+        self.telefono.place(relx = 0.05, rely = 0.63)
+
+        self.autorizo_junta = ctk.CTkLabel(self.frame_datos, text = f"Autorizo de la CCD/JDN: No", font = self.font)
+        self.autorizo_junta.place(relx = 0.05, rely = 0.72)
+        
+        self.acuerdo = ctk.CTkLabel(self.frame_datos, text = f"Acuerdo: -", font = self.font)
+        self.acuerdo.place(relx = 0.05, rely = 0.78)
+        
+        self.monto = ctk.CTkLabel(self.frame_datos, text = f"Monto acordado: -", font = self.font)
+        self.monto.place(relx = 0.05, rely = 0.84)
+        
+        self.fecha_junta= ctk.CTkLabel(self.frame_datos, text = f"Fecha del acuerdo: -", font = self.font)
+        self.fecha_junta.place(relx = 0.05, rely = 0.9)
+
+        self.frame_autorizado = ctk.CTkFrame(self.scroll, height = 300, fg_color = "white") 
+        self.frame_autorizado.pack(fill = "x", expand = True, padx = 5, pady = 5)
+
+        self.autorizado = ctk.CTkLabel(self.frame_autorizado, text = "Aut.firmar factura", font = self.font)
+        self.autorizado.place(relx = 0.05, rely = 0.04)
+        
+        self.autorizado_scroll = ctk.CTkScrollableFrame(self.frame_autorizado)
+        self.autorizado_scroll.place(relx = 0.05, rely = 0.15, relwidth = 0.9, relheight =  0.75)
+        
+        self.create_autorizados()
+
+        # servicios 
+        self.frame_servicios = FrameServicios(self)
+
+        self.servicios_scroll = ScrollFrame(self.frame_servicios)
+
+        self.importe_label = ctk.CTkLabel(self.frame_servicios, text = f"Importe: 0.00 cup", font = ctk.CTkFont("Helvetica", 15, "bold"))
+        self.importe_label.place(relx = 0.56, rely = 0.93)
+
+        self.cantidad_label = ctk.CTkLabel(self.frame_servicios, text = f"Cantidad: 0", font = ctk.CTkFont("Helvetica", 15, "bold"))
+        self.cantidad_label.place(relx = 0.1, rely = 0.93)
 
         self.atras_button = ctk.CTkButton(self, text = "Atrás",font = self.font, command =  self.atras, hover_color= "red")
         self.atras_button.place(relx = 0.3, rely = 0.9)
+
+        # Añadir servicios
+        self.servicios_menu = ctk.CTkOptionMenu(self.frame_servicios, values = [str(i) for i in range(11)], command = self.add_service)
+        self.servicios_menu.place(relx = 0.82, rely = 0.05, relwidth = 0.13)
+        
+        self.servicios_label = ctk.CTkLabel(self.frame_servicios, text = "Servicios", font = ctk.CTkFont("Helvetica",20, "bold"))
+        self.servicios_label.place(relx = 0.1, rely = 0.05)
         
         self.message_recuperar = Message(self, 1.0, 0.7, "Recuperar")
 
@@ -215,6 +275,10 @@ class RecorverData(ctk.CTkToplevel):
 
         self.recuperar_button = ctk.CTkButton(self, text = "Recuperar",font = self.font, command = self.message_recuperar.animate, hover_color = "green")
         self.recuperar_button.place(relx = 0.55, rely = 0.9)
+
+        # Pdf button        
+        self.add_pdf = ctk.CTkButton(self, text = "Añadir PDF", font = self.font, command = self.copy_pdf)  
+        self.add_pdf.place(relx = 0.63, rely = 0.05, relwidth = 0.1)
         
         self.message_eliminar = Message(self, 1.0, 0.7, "Eliminar")
 
@@ -225,17 +289,38 @@ class RecorverData(ctk.CTkToplevel):
         self.denegar.place(relx = 0.4, rely = 0.8, relwidth = 0.2)
 
         self.eliminar_button = ctk.CTkButton(self, text = "Eliminar",font = self.font, command = self.message_eliminar.animate, hover_color = "red")
-        self.eliminar_button.place(relx = 0.8, rely = 0.05)
+        self.eliminar_button.place(relx = 0.85, rely = 0.05, relwidth = 0.1)
         
         self.actualizar_frame = Actualizar(self, 1.0, 0.35, "recuperar")
 
         self.actualizar_button = ctk.CTkButton(self, text = "Actualizar", font = self.font, command = self.actualizar_frame.animate)
-        self.actualizar_button.place(relx = 0.65, rely = 0.05)
+        self.actualizar_button.place(relx = 0.74, rely = 0.05, relwidth = 0.1)
         
         self.guardar_button = ctk.CTkButton(self.actualizar_frame, text = "Guardar", font = self.font, command = self.actualizar, hover_color= "green")
         self.guardar_button.place(relx = 0.55, rely = 0.85, relheight = 0.1, relwidth = 0.2)
     
 
+    def create_objects(self):
+        splitting = self.datos[0][4].split(",")
+        data = [i.strip() for i in splitting]
+        if data != [""]:
+            for i in data:
+                self.object_in = FrameObjetos(self.objeto_scroll, i)
+
+    def create_autorizados(self):
+        splitting = self.datos[0][14].split(",")
+        data = [i.strip() for i in splitting]
+        if data != [""]:
+            for i in data:
+                self.autorizado_in = FrameObjetos(self.autorizado_scroll, i)
+
+    def copy_pdf(self):
+        filename = filedialog.askopenfilename(title = "Copiar pdf", initialdir = "~")
+        if filename:
+            self.path = Path(filename)
+            self.path_adding_pdf = 1
+
+    
     def eliminar(self):
         conn = sqlite3.connect("contratos.db")
         cursor = conn.cursor()
@@ -295,6 +380,9 @@ class RecorverData(ctk.CTkToplevel):
 
         conn.commit()
         conn.close()
+
+        if self.path_adding_pdf:
+            shutil.copy(self.path, f"./pdfs/{self.titulo}.pdf")
         
         for child in self.master.master.winfo_children():
             if child.widgetName == "frame":
@@ -303,6 +391,17 @@ class RecorverData(ctk.CTkToplevel):
         self.master.master.master.master.master.master.create_frames() 
         self.master.master.master.master.master.master.animate()
         self.master.master.master.master.master.master.master.animate()
+
+
+    def add_service(self, choice):
+        for child in self.servicios_scroll.winfo_children():
+            if child.widgetName == "frame":
+                child.destroy()
+
+        i = 0 
+        while i < int(choice):
+            self.anadir = Frames(self.servicios_scroll, "recorver", f"{self.titulo}")
+            i +=1
 
 
     def actualizar(self):
@@ -383,7 +482,35 @@ class RecorverData(ctk.CTkToplevel):
 
         self.actualizar_frame.animate()
 
+class FrameServicios(ctk.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master = master)
 
+        self.master = master
+
+        self.place(relx = 0.55, rely = 0.15, relwidth = 0.4, relheight = 0.72)
+
+class ScrollFrame(ctk.CTkScrollableFrame):
+    def __init__(self, master):
+        super().__init__(master = master)
+
+        self.master = master
+
+        self.place(relx = 0.05, rely = 0.13, relwidth = 0.9, relheight = 0.8)
+
+class FrameObjetos(ctk.CTkFrame):
+    def __init__(self, master, text):
+        super().__init__(master = master,
+                         height = 50, 
+                         fg_color = "white")
+        
+        self.text = text
+        self.font = ctk.CTkFont("Helvetica", 15)
+        
+        self.label = ctk.CTkLabel(self, text = self.text, anchor = "w", font = self.font)
+        self.label.place(relx = 0.03, rely = 0.3, relheight =0.4, relwidth = 0.92)
+        
+        self.pack(expand = True, fill = "x", padx = 5, pady = 5)
 
 
 
