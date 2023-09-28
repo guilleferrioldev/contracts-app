@@ -15,13 +15,16 @@ class Datos(ctk.CTkToplevel):
         
         self.title(title)
         self.transient(master)
-        self.width = int(self.winfo_screenwidth()/1.5)
-        self.height = int(self.winfo_screenheight()/1.5)
-        self.geometry(f"{self.width}x{self.height}")
+        self.width = self.master.master.master.master.master.master.winfo_width()
+        self.height = self.master.master.master.master.master.master.winfo_height()
+        self.x = self.master.master.master.master.master.master.winfo_x()
+        self.y = self.master.master.master.master.master.master.winfo_y()
+        self.geometry(f"{self.width}x{self.height}+{self.x}+{self.y}")
         self.resizable(True, True)
         self.font = ctk.CTkFont("Helvetica", 15)
         self.titulo = title
         self.parent = parent
+
         
         # database
         conn = sqlite3.connect("contratos.db") 
