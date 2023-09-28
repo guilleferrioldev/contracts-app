@@ -162,12 +162,12 @@ class Datos(ctk.CTkToplevel):
         self.ver_pdf.place(relx = 0.63, rely = 0.05, relwidth = 0.1)
         
         # Actualizar frame
-        self.actualizar_frame = Actualizar(self, 1.0, 0.35)
+        self.actualizar_frame = Actualizar(self, 1.0, 0.35, "datos")
 
         self.guardar_button = ctk.CTkButton(self.actualizar_frame, text = "Guardar", font = self.font, command = self.guardar, hover_color = "green")
         self.guardar_button.place(relx = 0.55, rely = 0.85, relheight = 0.1, relwidth = 0.2)
 
-        self.actualizar = ctk.CTkButton(self, text = "Actualizar", font = self.font, command = self.actualizar_frame.animate, hover_color = "orange")  
+        self.actualizar = ctk.CTkButton(self, text = "Actualizar", font = self.font, command = self.actualizar_animate, hover_color = "orange")  
         self.actualizar.place(relx = 0.74, rely = 0.05, relwidth = 0.1)
     
         # Delete message
@@ -198,6 +198,13 @@ class Datos(ctk.CTkToplevel):
             for i in data:
                 self.autorizado_in = FrameObjetos(self.autorizado_scroll, i)
     
+    def actualizar_animate(self):
+        self.actualizar_frame.animate()
+        self.eliminar.configure(state = "disabled")
+        self.actualizar.configure(state = "disabled")
+        self.ver_pdf.configure(state = "disabled")
+        self.cancel_button.configure(state = "disabled")
+
     def junta(self):
         if self.datos_junta != []:
             importe = self.datos_junta[0][2]
@@ -297,10 +304,14 @@ class Datos(ctk.CTkToplevel):
         self.servicios()
 
     def read_pdf(self):
-        self.pdf_panel.animate()
+        self.cancel_button.configure(state = "disabled")
+        
         if os.path.isfile(f"./pdfs/{self.titulo}.pdf"):
-            CTkPDFViewer(self.pdf_panel.frame, file = f"{self.titulo}")
-    
+            self.pdf_panel.animate()
+            pdf = CTkPDFViewer(self.pdf_panel.frame, file = f"{self.titulo}")
+        else:
+            self.pdf_panel.copy_pdf()
+
     def servicios(self):
         conn = sqlite3.connect("contratos.db") 
         cursor = conn.cursor()
@@ -523,7 +534,7 @@ class Datos(ctk.CTkToplevel):
 
         conn.commit()
         conn.close()
-
+        
         self.actualizar_frame.animate()
 
 

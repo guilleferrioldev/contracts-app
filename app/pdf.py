@@ -133,13 +133,6 @@ class PanelPDFViewer(ctk.CTkFrame):
                 
                 self.add_pdf = ctk.CTkButton(self, text = "Cambiar PDF", command = self.change_pdf)
                 self.add_pdf.place(relx = 0.45, rely = 0.035, relwidth = 0.2, relheight = 0.04)
-            else:
-                self.add_pdf = ctk.CTkButton(self, text = "Añadir PDF", command = self.copy_pdf)
-                self.add_pdf.place(relx = 0.7, rely = 0.035, relwidth = 0.2, relheight = 0.04)
-
-                self.there_is_no_pdf = ctk.CTkLabel(self.frame, text = "No existe el PDF", font = ctk.CTkFont("Helvetica", 20, "bold"))
-                self.there_is_no_pdf.place(relx = 0.35, rely = 0.43)
-
 
         self.atras_button = ctk.CTkButton(self, text = "Atrás", command = self.back, hover_color = "red")
         self.atras_button.place(relx = 0.4, rely = 0.93, relwidth = 0.2, relheight = 0.04)
@@ -151,6 +144,8 @@ class PanelPDFViewer(ctk.CTkFrame):
         for child in self.frame.winfo_children():
             if child.widgetName == "frame":
                 child.destroy()
+        if self.text == "PDF":
+            self.master.cancel_button.configure(state = "normal")
         self.animate()
 
     def copy_pdf(self):
@@ -158,8 +153,12 @@ class PanelPDFViewer(ctk.CTkFrame):
         if filename:
             self.path = Path(filename)
             shutil.copy(self.path, f"./pdfs/{self.title}.pdf")
-            if os.path.isfile(f"./pdfs/{self.title}.pdf"):
-                CTkPDFViewer(self.frame, file = f"{self.title}")
+        
+        if os.path.isfile(f"./pdfs/{self.title}.pdf"):
+            self.animate()    
+            pdf = CTkPDFViewer(self.frame, file = f"{self.title}")
+        else:
+            self.master.cancel_button.configure(state = "normal")
 
     def change_pdf(self):
         filename = filedialog.askopenfilename(title = "Cambiar pdf", initialdir = "~")
@@ -180,6 +179,7 @@ class PanelPDFViewer(ctk.CTkFrame):
         else:
             self.tkraise()
             self.animate_backwards()
+            
 
     def animate_fordward(self):
         if self.pos > self.end_pos:

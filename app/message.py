@@ -47,7 +47,7 @@ class Message(ctk.CTkFrame):
 
 
 class Actualizar(ctk.CTkFrame):
-    def __init__(self, master, start_pos, end_pos, text = "datos"):
+    def __init__(self, master, start_pos, end_pos, text):
         super().__init__(master = master,
                          border_width = 3) 
         
@@ -98,6 +98,11 @@ class Actualizar(ctk.CTkFrame):
 
         else:
             self.animate_backwards()
+            if self.text == "datos":
+                self.master.actualizar.configure(state = "normal")
+                self.master.eliminar.configure(state = "normal")
+                self.master.ver_pdf.configure(state = "normal")
+                self.master.cancel_button.configure(state = "normal")
             
 
     def options(self, choice):

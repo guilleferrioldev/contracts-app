@@ -16,7 +16,7 @@ class App(ctk.CTk):
         self.width = int(self.winfo_screenwidth()/1.5)
         self.height = int(self.winfo_screenheight()/1.5)
         self.geometry(f"{self.width}x{self.height}") 
-        #self.geometry("1920x1080")
+        #self.geometry("1920x1080") 
         self.minsize(self.width,self.height)
         self.maxsize(self.winfo_screenwidth(), self.winfo_screenheight())
         self.resizable(True, True)
