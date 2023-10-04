@@ -8,21 +8,24 @@ from pathlib import Path
 import shutil
 
 class Frame(ctk.CTkFrame):
-    def __init__(self, master, proveedor, objeto):
+    def __init__(self, master, proveedor, objeto, area):
         super().__init__(master = master,
                          width = 200,
                          fg_color = "white")
 
         self.proveedor = proveedor 
         self.objeto = objeto
+        self.area = area
 
         self.proveedor_label = ctk.CTkLabel(self, text = f"{self.proveedor}", font = ctk.CTkFont("Helvetica", 30, "bold"), anchor = "w")
         self.proveedor_label.place(relx = 0.03, rely = 0.2, relwidth = 0.9, relheight = 0.4)
         
-        self.objeto_label = ctk.CTkLabel(self, text = f"{self.objeto}", font = ctk.CTkFont("Helvetica", 15), anchor = "w")
-        self.objeto_label.place(relx = 0.03, rely = 0.55, relwidth = 0.6, relheight = 0.2)
+        self.objeto_label = ctk.CTkLabel(self, text = f"Objetos: {self.objeto}", font = ctk.CTkFont("Helvetica", 15), anchor = "w")
+        self.objeto_label.place(relx = 0.03, rely = 0.55, relwidth = 0.92, relheight = 0.2)
         
-
+        self.area_label = ctk.CTkLabel(self, text = f"Área: {self.area}", font = ctk.CTkFont("Helvetica", 15), anchor = "w")
+        self.area_label.place(relx = 0.03, rely = 0.7, relwidth = 0.92, relheight = 0.2)
+        
         self.bind("<Button>", lambda event: RecorverData(self, self.proveedor))
         self.objeto_label.bind("<Button>", lambda event: RecorverData(self, self.proveedor))
         self.proveedor_label.bind("<Button>", lambda event: RecorverData(self, self.proveedor))
@@ -120,16 +123,16 @@ class Recorver(ctk.CTkFrame):
         conn = sqlite3.connect("contratos.db")
         cursor = conn.cursor()
 
-        instruccion = "SELECT proveedor, objeto FROM Recuperar_Contratos ORDER BY proveedor"
+        instruccion = "SELECT proveedor, objeto, area FROM Recuperar_Contratos ORDER BY proveedor"
         cursor.execute(instruccion)
         datos = cursor.fetchall()
                 
         conn.commit()
         conn.close()
-        
+
         i = 0 
         while i < len(datos):    
-            Frame(self.scroll, datos[i][0], datos[i][1])
+            Frame(self.scroll, datos[i][0], datos[i][1], datos[i][2])
             i += 1 
 
 
