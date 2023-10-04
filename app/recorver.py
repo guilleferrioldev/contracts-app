@@ -252,9 +252,6 @@ class RecorverData(ctk.CTkToplevel):
         self.importe_label = ctk.CTkLabel(self.frame_servicios, text = f"Importe: 0.00 cup", font = ctk.CTkFont("Helvetica", 15, "bold"))
         self.importe_label.place(relx = 0.56, rely = 0.93)
 
-        self.cantidad_label = ctk.CTkLabel(self.frame_servicios, text = f"Cantidad: 0", font = ctk.CTkFont("Helvetica", 15, "bold"))
-        self.cantidad_label.place(relx = 0.1, rely = 0.93)
-
         self.atras_button = ctk.CTkButton(self, text = "Atrás",font = self.font, command =  self.atras, hover_color= "red")
         self.atras_button.place(relx = 0.3, rely = 0.9)
 
@@ -321,6 +318,29 @@ class RecorverData(ctk.CTkToplevel):
         if filename:
             self.path = Path(filename)
             self.path_adding_pdf = 1
+    
+    def suma(self):
+        valors = []
+        for child in self.servicios_scroll.winfo_children():
+            valors.append(child.valor_entry.get())
+                
+        importe = sum([int(i) for i in valors if i != ""])
+        
+        if len(str(importe)) < 4:
+            show_importe = importe
+        elif len(str(importe)) == 4:
+            show_importe = str(importe)[0] + " " + str(importe)[1:] 
+        elif len(str(importe)) == 5:
+            show_importe = str(importe)[0:2] + " " + str(importe)[2:] 
+        elif len(str(importe)) == 6:
+            show_importe = str(importe)[0:3] + " " + str(importe)[3:] 
+        elif len(str(importe)) == 7:
+            show_importe = str(importe)[0] + " " + str(importe)[1:4] + " " + str(importe)[4:]
+        else:    
+            show_importe = str(importe)[0:2] + " " + str(importe)[2:5] + " " + str(importe)[5:]
+
+
+        self.importe_label.configure(text = f"Importe: {show_importe} CUP")
 
     
     def eliminar(self):

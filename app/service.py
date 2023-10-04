@@ -112,21 +112,19 @@ class Frames(ctk.CTkFrame):
         self.valor_entry = ctk.CTkEntry(self)
         self.valor_entry.place(relx = 0.35, rely =0.68, relwidth = 0.6)
 
+        self.valor_entry.bind("<KeyRelease>", lambda event: self.change_importe())
 
         if self.text == "anadir":
-            self.valor_entry.bind("<KeyRelease>", lambda event: self.change_importe())
-            
             self.cancel_button = ctk.CTkButton(self, text = "Cancelar", command = self.delete_service, hover_color = "red")
             self.cancel_button.place(relx = 0.25, rely = 0.82, relwidth = 0.2, relheight = 0.12)
             
             self.anadir_button = ctk.CTkButton(self, text = "Añadir", hover_color = "green", command = self.new_service)
             self.anadir_button.place(relx = 0.55, rely = 0.82, relwidth = 0.2, relheight = 0.12)
-        else :
-            self.valor_entry.bind("<KeyRelease>", lambda event: self.change_importe())
-            
+        
+        else:
             self.cancel_button = ctk.CTkButton(self, text = "Cancelar", command = self.delete_contracts, hover_color = "red")
             self.cancel_button.place(relx = 0.35, rely = 0.82)
-
+        
         self.pack(expand = "True", fill = "x", padx = 5, pady = 5)
 
     def change_importe(self):
@@ -161,7 +159,6 @@ class Frames(ctk.CTkFrame):
                 valors.append(child.valor_entry.get())
                 
             importe = sum([int(i) for i in valors if i != ""])
-            print(importe)
         
         if len(str(importe)) < 4:
             show_importe = importe
@@ -206,7 +203,7 @@ class Frames(ctk.CTkFrame):
                     self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
                 else:
                     self.valor_entry.delete(0, "end")
-                    self.master.master.master.suma()
+                    self.master.master.master.importe_label.configure(text = f)
                     self.junta_message = Junta(self.master.master.master, 1.0, 0.7, self.master.master.master.datos_junta[0][2], "anadir").animate()
         
         elif self.text == "recorver":
@@ -214,7 +211,10 @@ class Frames(ctk.CTkFrame):
                 self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
             else:
                 self.valor_entry.delete(0, "end")
-                self.junta_message = Junta(self.master.master.master, 1.0, 0.7, 1000000, "anadir").animate()
+                for child in self.master.winfo_children():
+                    child.valor_entry.configure(state = "disabled")
+                self.master.master.master.suma()
+                self.junta_message = Junta(self.master.master.master, 1.0, 0.7, 1000000, "recorver").animate()
 
 
 
@@ -225,7 +225,9 @@ class Frames(ctk.CTkFrame):
             self.master.master.master.menu.set(str(int(self.master.master.master.menu.get())-1))
             self.master.master.master.suma()
         else:
+            self.master.master.master.servicios_menu.set(str(int(self.master.master.master.servicios_menu.get())-1))
             self.destroy()
+            self.master.master.master.suma()
 
     def delete_service(self):
         self.master.master.master.servicios_menu.set(str(int(self.master.master.master.servicios_menu.get())-1))

@@ -239,11 +239,13 @@ class Junta(ctk.CTkFrame):
             for child in self.master.servicios_scroll.winfo_children():
                 if child.text == "anadir":
                     child.valor_entry.configure(state = "normal")
+        else:
+            for child in self.master.servicios_scroll.winfo_children():
+                child.valor_entry.configure(state = "normal")
 
         self.animate()
 
     def disabled_frames(self):
-
         if self.text == "contracts":
             i = 0
             while i < len(self.master.service.frames):
