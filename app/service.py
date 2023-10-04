@@ -46,6 +46,7 @@ class Frames(ctk.CTkFrame):
                 if child.widgetName == "frame":
                     if child.check_var.get() == "on":
                         self.values.append(child.text)
+        
         elif self.text == "anadir":
             conn = sqlite3.connect("contratos.db")
             cursor = conn.cursor()
@@ -57,7 +58,7 @@ class Frames(ctk.CTkFrame):
             splitting = datos[0][0].split(",")
             
             objects = [i.strip() for i in splitting]
-
+            
             i = 0 
             while i < len(objects):
                 self.values.append(objects[i])
@@ -66,6 +67,26 @@ class Frames(ctk.CTkFrame):
             conn.commit()
             conn.close()
         
+        elif self.text == "recorver":
+            conn = sqlite3.connect("contratos.db")
+            cursor = conn.cursor()
+
+            instruction = f"Select objeto FROM Recuperar_Contratos WHERE proveedor = '{self.proveedor}'"
+            cursor.execute(instruction)
+            datos = cursor.fetchall()
+            
+            splitting = datos[0][0].split(",")
+            
+            objects = [i.strip() for i in splitting]
+            
+            i = 0 
+            while i < len(objects):
+                self.values.append(objects[i])
+                i += 1
+
+            conn.commit()
+            conn.close()
+
         self.nombre_servicio_label = ctk.CTkLabel(self, text = "Servicio")
         self.nombre_servicio_label.place(relx = 0.05, rely =0.03)
     

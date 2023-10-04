@@ -149,7 +149,12 @@ class UpdateArea(ctk.CTkFrame):
         
         self.connect_database()
 
-        self.entry = ctk.CTkOptionMenu(self, font = self.font, values = self.datos)
+        self.entry = ctk.CTkOptionMenu(self, font = self.font, values = self.options)
+
+        if self.master.master.master.master.text == "datos":
+            self.entry.set(self.master.master.master.master.master.datos[0][2])
+        elif self.master.master.master.master.text == "recuperar":
+            self.entry.set(self.master.master.master.master.master.datos[0][1])
         self.entry.place(relx = 0.04, rely = 0.3, relwidth = 0.91)
         
         self.button = ctk.CTkButton(self, font = self.font, text = "cancelar",command = self.cancel, hover_color = "red")
@@ -168,10 +173,15 @@ class UpdateArea(ctk.CTkFrame):
 
         instruccion = f"SELECT * FROM Area_que_Tramita"
         cursor.execute(instruccion)
-        self.datos = cursor.fetchall()
+        datos = cursor.fetchall()
         
+        self.options = []
+        for i in datos:
+            self.options.append(i[0])
+
         conn.commit()
         conn.close()
+
 
 
 class UpdateLabel(ctk.CTkFrame):
