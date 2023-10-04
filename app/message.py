@@ -1,4 +1,5 @@
 import customtkinter as ctk 
+import sqlite3
 
 class Message(ctk.CTkFrame):
     def __init__(self, master, start_pos, end_pos, text):
@@ -110,6 +111,9 @@ class Actualizar(ctk.CTkFrame):
         if choice == "Fecha del contrato" or choice == "Fecha de vencimiento" or choice == "Fecha del acuerdo":
             frame = UpdateFechaLabel(self.scroll_frames, text = choice)
             self.frames.append(frame)
+        elif choice == "Área":
+            frame = UpdateArea(self.scroll_frames, text = choice)
+            self.frames.append(frame)
         else:
             frame = UpdateLabel(self.scroll_frames, text = choice)
             self.frames.append(frame)
@@ -131,6 +135,44 @@ class Actualizar(ctk.CTkFrame):
             self.after(10, self.animate_backwards)
          else:
             self.in_start_pos = True
+
+class UpdateArea(ctk.CTkFrame):
+    def __init__(self, master, text):
+        super().__init__(master = master, 
+                         fg_color = "white",
+                         height = 100)
+        self.text = text
+        self.font = ctk.CTkFont("Helvetica", 15)
+
+        self.label = ctk.CTkLabel(self, text = self.text, anchor = "w", font = self.font)
+        self.label.place(relx = 0.05, rely = 0.05)
+        
+        self.connect_database()
+
+        self.entry = ctk.CTkOptionMenu(self, font = self.font, values = self.datos)
+        self.entry.place(relx = 0.04, rely = 0.3, relwidth = 0.91)
+        
+        self.button = ctk.CTkButton(self, font = self.font, text = "cancelar",command = self.cancel, hover_color = "red")
+        self.button.place(relx = 0.375, rely = 0.65, relwidth = 0.25)
+
+        self.pack(fill = "x", expand = True, pady = 0.5, padx = 0.5)
+
+    def cancel(self):
+        self.master.master.master.master.frames = [i for i in self.master.master.master.master.frames if i != self]
+        self.master.master.master.master.values.append(self.text)
+        self.destroy()
+
+    def connect_database(self):
+        conn = sqlite3.connect("contratos.db")
+        cursor = conn.cursor()
+
+        instruccion = f"SELECT * FROM Area_que_Tramita"
+        cursor.execute(instruccion)
+        self.datos = cursor.fetchall()
+        
+        conn.commit()
+        conn.close()
+
 
 class UpdateLabel(ctk.CTkFrame):
     def __init__(self, master, text):
