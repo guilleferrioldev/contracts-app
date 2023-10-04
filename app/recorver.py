@@ -497,11 +497,6 @@ class RecorverData(ctk.CTkToplevel):
                 cursor.execute(instruccion)
                 self.telefono.configure(text = f"Teléfono del titular: {frame.entry.get()}")
 
-            elif frame.text == "Aut.firmar factura":           
-                instruccion = f"UPDATE Recuperar_Contratos SET autorizado_por='{frame.entry.get()}' WHERE  proveedor='{self.titulo}'"
-                cursor.execute(instruccion)
-                self.autorizado.configure(text = f"Aut.firmar factura: {frame.entry.get()}")
-
         conn.commit()
         conn.close()
 

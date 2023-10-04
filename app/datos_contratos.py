@@ -548,11 +548,6 @@ class Datos(ctk.CTkToplevel):
                 instruccion = f"UPDATE Contratos SET telefono='{frame.entry.get()}' WHERE  proveedor='{self.titulo}'"
                 cursor.execute(instruccion)
                 self.telefono.configure(text = f"Teléfono del titular: {frame.entry.get()}")
-
-            elif frame.text == "Aut.firmar factura":           
-                instruccion = f"UPDATE Contratos SET autorizado_por='{frame.entry.get()}' WHERE  proveedor='{self.titulo}'"
-                cursor.execute(instruccion)
-                self.autorizado.configure(text = f"Aut.firmar factura: {frame.entry.get()}")
             
             elif frame.text == "Acuerdo":           
                 instruccion = f"UPDATE Autorizo_Junta SET acuerdo_junta='{frame.entry.get()}' WHERE  proveedor='{self.titulo}'"

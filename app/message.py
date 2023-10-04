@@ -66,7 +66,7 @@ class Actualizar(ctk.CTkFrame):
         self.font = ctk.CTkFont("Helvetica", 15)
         self.frames = []
         
-        self.values = ["Proveedor","Área", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular", "Aut.firmar factura"]
+        self.values = ["Proveedor","Área", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular"]
         if self.text == "datos":
             if self.master.datos_junta != []:
                 self.values += ["Acuerdo","Monto acordado","Fecha del acuerdo"]
@@ -90,7 +90,7 @@ class Actualizar(ctk.CTkFrame):
                 if child.widgetName == "frame":
                     child.destroy()
             self.frames = []
-            self.values = ["Proveedor","Área", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular", "Aut.firmar factura"]
+            self.values = ["Proveedor","Área", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular"]
             if self.text =="datos":    
                 if self.master.datos_junta != []:
                     self.values += ["Acuerdo","Monto acordado","Fecha del acuerdo"]
