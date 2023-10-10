@@ -66,10 +66,7 @@ class Actualizar(ctk.CTkFrame):
         self.font = ctk.CTkFont("Helvetica", 15)
         self.frames = []
         
-        self.values = ["Proveedor","Área", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular"]
-        if self.text == "datos":
-            if self.master.datos_junta != []:
-                self.values += ["Acuerdo","Monto acordado","Fecha del acuerdo"]
+        self.values = ["Proveedor","Área", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular", "Autorizo de la CCD/JDN"]
         self.options_menu = ctk.CTkOptionMenu(self, font = self.font, values = self.values, command = self.options)
         self.options_menu.place(relx = 0.3, rely = 0.1, relwidth = 0.4)
         
@@ -90,10 +87,7 @@ class Actualizar(ctk.CTkFrame):
                 if child.widgetName == "frame":
                     child.destroy()
             self.frames = []
-            self.values = ["Proveedor","Área", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular"]
-            if self.text =="datos":    
-                if self.master.datos_junta != []:
-                    self.values += ["Acuerdo","Monto acordado","Fecha del acuerdo"]
+            self.values = ["Proveedor","Área", "Fecha del contrato", "Fecha de vencimiento", "Dirección", "Código NIT", "Código REUP", "Código VERSAT", "Banco", "Sucursal bancaria", "Cuenta bancaria", "Titular de la cuenta", "Teléfono del titular", "Autorizo de la CCD/JDN"]
             self.options_menu.configure(values = self.values)
             self.options_menu.set(self.values[0])
 
@@ -113,6 +107,9 @@ class Actualizar(ctk.CTkFrame):
             self.frames.append(frame)
         elif choice == "Área":
             frame = UpdateArea(self.scroll_frames, text = choice)
+            self.frames.append(frame)
+        elif choice == "Autorizo de la CCD/JDN":
+            frame = UpdateAutorizadoLabel(self.scroll_frames, text = choice)
             self.frames.append(frame)
         else:
             frame = UpdateLabel(self.scroll_frames, text = choice)
@@ -183,7 +180,6 @@ class UpdateArea(ctk.CTkFrame):
         conn.close()
 
 
-
 class UpdateLabel(ctk.CTkFrame):
     def __init__(self, master, text):
         super().__init__(master = master, 
@@ -207,6 +203,54 @@ class UpdateLabel(ctk.CTkFrame):
         self.master.master.master.master.frames = [i for i in self.master.master.master.master.frames if i != self]
         self.master.master.master.master.values.append(self.text)
         self.destroy()
+
+class UpdateAutorizadoLabel(ctk.CTkFrame):
+    def __init__(self, master, text):
+        super().__init__(master = master, 
+                         fg_color = "white",
+                         height = 200)
+        self.text = text
+        self.font = ctk.CTkFont("Helvetica", 15)
+
+        self.label = ctk.CTkLabel(self, text = self.text, anchor = "w", font = self.font)
+        self.label.place(relx = 0.05, rely = 0.05)
+        
+        self.acuerdo_label = ctk.CTkLabel(self, text = "Acuerdo", anchor = "w", font = self.font)
+        self.acuerdo_label.place(relx = 0.05, rely = 0.24)
+
+        self.acuerdo_entry = ctk.CTkEntry(self, font = self.font)
+        self.acuerdo_entry.place(relx = 0.26, rely = 0.24, relwidth = 0.7)
+        
+        self.monto_label = ctk.CTkLabel(self, text = "Monto", anchor = "w", font = self.font)
+        self.monto_label.place(relx = 0.05, rely = 0.43)
+
+        self.monto_entry = ctk.CTkEntry(self, font = self.font)
+        self.monto_entry.place(relx = 0.26, rely = 0.43, relwidth = 0.7)
+
+        self.fecha_label = ctk.CTkLabel(self, text = "Fecha", anchor = "w", font = self.font)
+        self.fecha_label.place(relx = 0.05, rely = 0.62)
+        
+        self.day = ctk.CTkOptionMenu(self, values = [str(i) for i in range(1, 32)], width = 55)
+        self.day.place(relx = 0.26, rely = 0.62)
+        
+        self.month = ctk.CTkOptionMenu(self, 
+                                    values = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                                    width = 110)
+        self.month.place(relx = 0.40, rely = 0.62)
+
+        self.year = ctk.CTkOptionMenu(self, values = [str(i) for i in range(2020, 2031)], width = 70)
+        self.year.place(relx = 0.68, rely = 0.62)    
+
+        self.button = ctk.CTkButton(self, font = self.font, text = "cancelar", command= self.cancel, hover_color = "red")
+        self.button.place(relx = 0.375, rely = 0.8, relwidth = 0.25)
+
+        self.pack(fill = "x", expand = True, pady = 0.5, padx = 0.5)
+        
+    def cancel(self):
+        self.master.master.master.master.frames = [i for i in self.master.master.master.master.frames if i != self]
+        self.master.master.master.master.values.append(self.text)
+        self.destroy()
+
 
 class UpdateFechaLabel(ctk.CTkFrame):
     def __init__(self, master, text):

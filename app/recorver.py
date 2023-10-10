@@ -352,10 +352,13 @@ class RecorverData(ctk.CTkToplevel):
 
         instruccion = f"DELETE FROM Recuperar_Contratos WHERE proveedor = '{self.titulo}'"
         cursor.execute(instruccion)
+        
+        instruccion = f"DELETE FROM Autorizo_Junta WHERE proveedor = '{self.titulo}'"
+        cursor.execute(instruccion)
 
         conn.commit()
         conn.close()
-
+       
         for child in self.master.master.winfo_children():
             if child.widgetName == "frame":
                 child.destroy()
@@ -364,6 +367,15 @@ class RecorverData(ctk.CTkToplevel):
 
 
     def atras(self):
+        conn = sqlite3.connect("contratos.db")
+        cursor = conn.cursor()
+
+        instruccion = f"DELETE FROM Autorizo_Junta WHERE proveedor = '{self.titulo}'"
+        cursor.execute(instruccion)
+
+        conn.commit()
+        conn.close()
+
         for child in self.master.master.winfo_children():
             if child.widgetName == "frame":
                 child.destroy()
@@ -496,6 +508,34 @@ class RecorverData(ctk.CTkToplevel):
                 instruccion = f"UPDATE Recuperar_Contratos SET telefono='{frame.entry.get()}' WHERE  proveedor='{self.titulo}'"
                 cursor.execute(instruccion)
                 self.telefono.configure(text = f"Teléfono del titular: {frame.entry.get()}")
+
+            elif frame.text == "Autorizo de la CCD/JDN":
+                self.autorizo_junta.configure(text = f"Autorizo de la CCD/JDN: Si")
+                
+                acuerdo = frame.acuerdo_entry.get()
+                monto = frame.monto_entry.get()
+                fecha_junta = f"{frame.day.get()}/{frame.month.get()}/{frame.year.get()}"
+
+                data_insert_query_junta = ''' INSERT INTO Autorizo_Junta 
+                            (proveedor,
+                            acuerdo_junta,
+                            monto_junta,
+                            fecha_de_autorizo)
+                            VALUES (?,?,?,?)
+                            '''
+
+                data_insert_tuple_junta = (self.titulo,
+                            acuerdo,
+                            monto,
+                            fecha_junta)
+
+
+                cursor.execute(data_insert_query_junta, data_insert_tuple_junta)
+
+                self.acuerdo.configure(text = f"Acuerdo: {frame.acuerdo_entry.get()}") 
+                self.monto.configure(text = f"Monto acordado: {frame.monto_entry.get()} CUP")
+                self.fecha_junta.configure(text = f"Fecha del acuerdo: {frame.day.get()}/{frame.month.get()}/{frame.year.get()}")
+
 
         conn.commit()
         conn.close()
