@@ -224,18 +224,37 @@ class Frames(ctk.CTkFrame):
                     self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
                 else:
                     self.valor_entry.delete(0, "end")
-                    self.master.master.master.importe_label.configure(text = f)
                     self.junta_message = Junta(self.master.master.master, 1.0, 0.7, self.master.master.master.datos_junta[0][2], "anadir").animate()
         
         elif self.text == "recorver":
-            if importe < 1000000:
-                self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
+            conn = sqlite3.connect("contratos.db")
+            cursor = conn.cursor()
+        
+            instruccion = f"SELECT * FROM Autorizo_Junta WHERE proveedor = '{self.master.master.master.titulo}'"
+            cursor.execute(instruccion)
+            datos = cursor.fetchall()
+
+            conn.commit()
+            conn.close()
+            
+            if datos == []:
+                if importe < 1000000:
+                    self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
+                else:
+                    self.valor_entry.delete(0, "end")
+                    for child in self.master.winfo_children():
+                        child.valor_entry.configure(state = "disabled")
+                    self.master.master.master.suma()
+                    self.junta_message = Junta(self.master.master.master, 1.0, 0.7, 1000000, "recorver").animate()
             else:
-                self.valor_entry.delete(0, "end")
-                for child in self.master.winfo_children():
-                    child.valor_entry.configure(state = "disabled")
-                self.master.master.master.suma()
-                self.junta_message = Junta(self.master.master.master, 1.0, 0.7, 1000000, "recorver").animate()
+                if importe < int(datos[0][2]):
+                    self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
+                else:
+                    self.valor_entry.delete(0, "end")
+                    for child in self.master.winfo_children():
+                        child.valor_entry.configure(state = "disabled")
+                    self.master.master.master.suma()
+                    self.junta_message = Junta(self.master.master.master, 1.0, 0.7, datos[0][2], "recorver").animate()
 
 
 
