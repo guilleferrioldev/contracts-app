@@ -190,11 +190,11 @@ class RecorverData(ctk.CTkToplevel):
         
         self.frame_datos = ctk.CTkFrame(self.scroll, height = 500, fg_color = "white")
         self.frame_datos.pack(fill = "x", expand = True, padx = 5, pady = 5)
-
-        self.fecha = ctk.CTkLabel(self.frame_datos, text = f"Fecha del contrato: No existe", font = self.font)
+        
+        self.fecha = ctk.CTkLabel(self.frame_datos, text = f"Fecha del contrato: {self.datos[0][2]}", font = self.font)
         self.fecha.place(relx = 0.05, rely = 0.03)
 
-        self.fecha_vencimiento = ctk.CTkLabel(self.frame_datos, text = f"Fecha de vencimiento: No existe", font = self.font)
+        self.fecha_vencimiento = ctk.CTkLabel(self.frame_datos, text = f"Fecha de vencimiento: {self.datos[0][3]}", font = self.font)
         self.fecha_vencimiento.place(relx = 0.05, rely = 0.09)
 
         self.direccion = ctk.CTkLabel(self.frame_datos, text = f"Dirección: {self.datos[0][5]}", font = self.font)
@@ -267,7 +267,7 @@ class RecorverData(ctk.CTkToplevel):
         
         self.message_recuperar = Message(self, 1.0, 0.7, "Recuperar")
 
-        self.aceptar = ctk.CTkButton(self.message_recuperar, text = "Si", font = self.font, command = self.recuperar, hover_color= "green")
+        self.aceptar = ctk.CTkButton(self.message_recuperar, text = "Si", font = self.font, command = self.comp_recuperar, hover_color= "green")
         self.aceptar.place(relx = 0.7, rely = 0.8, relwidth = 0.2)
     
         self.denegar = ctk.CTkButton(self.message_recuperar, text = "No", font = self.font, command = self.message_recuperar.animate, hover_color = "red")
@@ -382,7 +382,24 @@ class RecorverData(ctk.CTkToplevel):
         
         self.master.master.master.master.master.master.create_frames()
 
+    
+    def comp_recuperar(self): 
+        conn = sqlite3.connect("contratos.db") 
+        cursor = conn.cursor()
+               
+        instruccion = f"SELECT * FROM Recuperar_Contratos WHERE proveedor = '{self.titulo}'"
+        cursor.execute(instruccion)
+        datos = cursor.fetchall()
         
+        conn.commit()
+        conn.close()
+        
+        if datos[0][2] == "" or datos[0][3] == "":
+            self.message_recuperar.animate()
+            print(datos)
+        else:    
+            self.recuperar()
+
     def recuperar(self):
         conn = sqlite3.connect("contratos.db")
         cursor = conn.cursor()
