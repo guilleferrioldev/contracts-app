@@ -261,7 +261,7 @@ class RecorverData(ctk.CTkToplevel):
         # Añadir servicios
         self.servicios_menu = ctk.CTkOptionMenu(self.frame_servicios, values = [str(i) for i in range(11)], command = self.add_service)
         self.servicios_menu.place(relx = 0.82, rely = 0.05, relwidth = 0.13)
-        
+
         self.servicios_label = ctk.CTkLabel(self.frame_servicios, text = "Servicios", font = ctk.CTkFont("Helvetica",20, "bold"))
         self.servicios_label.place(relx = 0.1, rely = 0.05)
         
@@ -411,7 +411,38 @@ class RecorverData(ctk.CTkToplevel):
 
         data_insert_tuple = datos[0]
         cursor.execute(data_insert_query, data_insert_tuple)
-        
+
+        i = 0 
+        while i < int(self.servicios_menu.get()):
+            nombre_del_servicio = self.frames[i].nombre_servicio_entry.get() if self.servicios_menu.get() != "0" else "" 
+            descripcion = self.frames[i].desc_servicio_entry.get() if self.servicios_menu.get() != "0" else "" 
+            no_factura = self.frames[i].factura_entry.get() if self.servicios_menu.get() != "0" else "" 
+            fecha_servicio = f"{self.frames[i].fecha_serv_day.get()}/{self.frames[i].fecha_serv_mes.get()}/{self.frames[i].fecha_serv_year.get()}" if self.servicios_menu.get() != "0" else "" 
+            pagado = self.frames[i].pagado_entry.get() if self.servicios_menu.get() != "0" else "" 
+            valor = self.frames[i].valor_entry.get() if self.servicios_menu.get() != "0" else 0.0 
+                
+            data_insert_query_service = '''INSERT INTO Servicios
+                                        (proveedor,
+                                        nombre_del_servicio,
+                                        descripcion, 
+                                        no_factura,
+                                        fecha_servicio,
+                                        pagado,
+                                        valor )
+                                        VALUES (?,?,?,?,?,?,?)'''
+
+            data_insert_tuple_service = (self.titulo,
+                                        nombre_del_servicio,
+                                        descripcion, 
+                                        no_factura,
+                                        fecha_servicio,
+                                        pagado,
+                                        valor)
+ 
+            cursor.execute(data_insert_query_service, data_insert_tuple_service)
+            
+            i += 1
+
         instruccion = f"DELETE FROM Recuperar_Contratos WHERE proveedor = '{self.titulo}'"
         cursor.execute(instruccion)
 
@@ -425,19 +456,23 @@ class RecorverData(ctk.CTkToplevel):
             if child.widgetName == "frame":
                 child.destroy()
         
+        
         self.master.master.master.master.master.master.create_frames() 
         self.master.master.master.master.master.master.animate()
         self.master.master.master.master.master.master.master.animate()
 
 
     def add_service(self, choice):
+        self.frames = []
+
         for child in self.servicios_scroll.winfo_children():
             if child.widgetName == "frame":
                 child.destroy()
 
         i = 0 
         while i < int(choice):
-            self.anadir = Frames(self.servicios_scroll, "recorver", f"{self.titulo}")
+            frame = Frames(self.servicios_scroll, "recorver", f"{self.titulo}")
+            self.frames.append(frame)
             i +=1
 
 
