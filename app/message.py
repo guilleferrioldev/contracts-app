@@ -45,6 +45,77 @@ class Message(ctk.CTkFrame):
          else:
             self.in_start_pos = True
 
+class Confirmation(ctk.CTkFrame):
+    def __init__(self, master, start_pos, end_pos, text):
+        super().__init__(master = master,
+                         border_width = 3) 
+        # general attributtes 
+        self.start_pos = start_pos + 0.01
+        self.end_pos = end_pos 
+        self.width = abs(start_pos - end_pos)
+        self.text = text
+        self.font = ctk.CTkFont("Helvetica", 15)
+        
+        # animation logic
+        self.pos = self.start_pos
+        self.in_start_pos = True
+        
+        self.label = ctk.CTkLabel(self, text = self.text, anchor = "w", font = ctk.CTkFont("Helvetica", 23, "bold"))
+        self.label.place(relx = 0.07, rely = 0.07)
+        
+        self.debes_label = ctk.CTkLabel(self, text = "Debes llenar/actualizar:", anchor = "w", font = self.font)
+        self.debes_label.place(relx = 0.07, rely = 0.15)
+
+        self.scroll = ctk.CTkScrollableFrame(self)
+        self.scroll.place(relx = 0.07, rely = 0.22, relwidth = 0.85, relheight = 0.65)
+        
+        self.ok = ctk.CTkButton(self, text = "OK", font = self.font, command = self.button_ok, hover_color = "green")
+        self.ok.place(relx = 0.4, rely = 0.9, relwidth = 0.2)
+
+        # layout 
+        self.place(relx = self.start_pos, rely = 0.2, relwidth = self.width, relheight = 0.6)
+    
+    def button_ok(self):
+        for child in self.scroll.winfo_children():
+            child.destroy()
+        self.animate()
+
+    def animate(self):
+        if self.in_start_pos:
+            self.animate_fordward()
+        else:
+            self.animate_backwards()
+
+    def animate_fordward(self):
+        if self.pos > self.end_pos:
+            self.pos -= 0.7 
+            self.place(relx = self.pos, rely = 0.2, relwidth = self.width, relheight = 0.6)
+            self.after(10, self.animate_fordward)
+        else:
+            self.in_start_pos = False 
+
+    def animate_backwards(self):
+         if self.pos < self.start_pos:
+            self.pos += 0.7 
+            self.place(relx = self.pos, rely = 0.2, relwidth = self.width, relheight = 0.6)
+            self.after(10, self.animate_backwards)
+         else:
+            self.in_start_pos = True
+
+class ConfirmationFrame(ctk.CTkFrame):
+    def __init__(self, master, text):
+        super().__init__(master = master,
+                         height = 50,
+                         fg_color = "white")
+
+        self.text = text
+        self.font = ctk.CTkFont("Helvetica", 15)
+
+        self.label = ctk.CTkLabel(self, text = self.text, font = self.font)
+        self.label.place(relx = 0.05, rely = 0.25)
+
+        self.pack(fill = "x", expand = True, padx = 5, pady = 5)
+
 
 
 class Actualizar(ctk.CTkFrame):

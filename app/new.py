@@ -2,7 +2,7 @@ import customtkinter as ctk
 from tkinter import filedialog
 from tkinter import scrolledtext
 from service import Service, Frames
-from message import Message, Junta
+from message import Message, Junta, Confirmation, ConfirmationFrame
 from recorver import Recorver
 from objeto import Object
 import sqlite3
@@ -202,6 +202,9 @@ class SlidePanel(ctk.CTkFrame):
         
         self.path_adding_pdf = 0
 
+        # Confirmation Message 
+        self.confirmation = Confirmation(self, 1.0, 0.7, "Para Guardar")
+
         #Message box
         self.cancelmessage = Message(self, 1.0,0.7,"Cancelar")
         
@@ -211,6 +214,13 @@ class SlidePanel(ctk.CTkFrame):
         self.denegar = ctk.CTkButton(self.cancelmessage, text = "No", font = font, command = self.cancelmessage.animate, hover_color = "green")
         self.denegar.place(relx = 0.4, rely = 0.8, relwidth = 0.2, relheight = 0.1)
         
+        self.savemessage = Message(self, 1.0,0.7,"Guardar") 
+
+        self.aceptar = ctk.CTkButton(self.savemessage, text = "Si",font = font,command = self.insert_database, hover_color = "green")
+        self.aceptar.place(relx = 0.7, rely = 0.8, relwidth = 0.2)
+        
+        self.denegar = ctk.CTkButton(self.savemessage, text = "No",font = font, command = self.savemessage.animate, hover_color = "red")
+        self.denegar.place(relx = 0.4, rely = 0.8, relwidth = 0.2)
 
         # Setting buttons
         self.cancel_button = ctk.CTkButton(self, text = "Cancelar", font = font, command = self.cancelmessage.animate, hover_color = "red")
@@ -388,6 +398,45 @@ class SlidePanel(ctk.CTkFrame):
             self.fecha_junta_day.configure(state = "disabled") 
             self.fecha_junta_mes.configure(state = "disabled") 
             self.fecha_junta_year.configure(state = "disabled") 
+    
+    def confirmar(self):
+        if self.proveedor_entry.get() == "":
+            ConfirmationFrame(self.confirmation.scroll, text = "Proveedor")
+        
+        area = 0
+        for child in self.area_frame.scroll.winfo_children():
+            if child.widgetName == "frame":
+                if child.check_var.get() == "on":
+                    area = 1
+        
+        if area == 0:
+            ConfirmationFrame(self.confirmation.scroll, text = "Área que tramita")
+
+        objeto = 0
+        for child in self.objeto_frame.scroll.winfo_children():
+            if child.widgetName == "frame":
+                if child.check_var.get() == "on":
+                    objeto = 1
+        
+        if objeto == 0:
+            ConfirmationFrame(self.confirmation.scroll, text = "Objetos")
+
+        autorizado = 0
+        for child in self.autorizado_frame.scroll.winfo_children():
+            if child.widgetName == "frame":
+                if child.check_var.get() == "on":
+                    autorizado = 1
+
+        if autorizado == 0:
+            ConfirmationFrame(self.confirmation.scroll, text = "Aut.firmar factura")
+        
+        
+        if all([self.proveedor_entry.get(), area, objeto, autorizado]):
+            self.savemessage.animate()
+        else:
+            self.confirmation.animate()
+
+
 
     def insert_database(self):
         # Contract data
@@ -509,5 +558,8 @@ class SlidePanel(ctk.CTkFrame):
         if self.path_adding_pdf:
             shutil.copy(self.path, f"./pdfs/{proveedor}.pdf")
         
+    
+        self.savemessage.animate()
+        self.master.master.buscar()
         self.animate()
         

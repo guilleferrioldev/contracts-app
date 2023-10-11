@@ -65,15 +65,8 @@ class App(ctk.CTk):
                     sticky = "e",
                     command = self.animate_new)
 
-        self.savemessage = Message(self.slide, 1.0,0.7,"Guardar") 
 
-        self.aceptar = ctk.CTkButton(self.savemessage, text = "Si",font = font, command = self.save, hover_color = "green")
-        self.aceptar.place(relx = 0.7, rely = 0.8, relwidth = 0.2)
-        
-        self.denegar = ctk.CTkButton(self.savemessage, text = "No",font = font, command = self.savemessage.animate, hover_color = "red")
-        self.denegar.place(relx = 0.4, rely = 0.8, relwidth = 0.2)
-
-        self.guardar_button = ctk.CTkButton(self.slide, text = "Guardar",font = font, command = self.savemessage.animate, hover_color = "green")
+        self.guardar_button = ctk.CTkButton(self.slide, text = "Guardar",font = font, command = self.save, hover_color = "green")
         self.guardar_button.place(relx = 0.42, rely = 0.94, relwidth=0.11, relheight = 0.043) 
         
         self.option_type = ctk.CTkSegmentedButton(self.main_frame, values=["Contratos","Calendario"], command = self.switch_frame)
@@ -98,9 +91,9 @@ class App(ctk.CTk):
         self.slide.animate()
 
     def save(self):  
-        self.slide.insert_database()
-        self.savemessage.animate()
-        self.buscar()
+        self.slide.confirmar()
+        #self.slide.insert_database()
+        #self.buscar()
  
     def create_search(self):
         self.search = ctk.CTkEntry(master = self.main_frame, placeholder_text = "Buscar", width = 250)

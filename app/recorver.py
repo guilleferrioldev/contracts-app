@@ -1,7 +1,7 @@
 import customtkinter as ctk 
 import sqlite3
 from tkinter import filedialog
-from message import Actualizar, Message, Junta
+from message import Actualizar, Message, Junta, Confirmation, ConfirmationFrame
 from service import Frames
 import sys, os
 from pathlib import Path
@@ -265,15 +265,9 @@ class RecorverData(ctk.CTkToplevel):
         self.servicios_label = ctk.CTkLabel(self.frame_servicios, text = "Servicios", font = ctk.CTkFont("Helvetica",20, "bold"))
         self.servicios_label.place(relx = 0.1, rely = 0.05)
         
-        self.message_recuperar = Message(self, 1.0, 0.7, "Recuperar")
-
-        self.aceptar = ctk.CTkButton(self.message_recuperar, text = "Si", font = self.font, command = self.comp_recuperar, hover_color= "green")
-        self.aceptar.place(relx = 0.7, rely = 0.8, relwidth = 0.2)
-    
-        self.denegar = ctk.CTkButton(self.message_recuperar, text = "No", font = self.font, command = self.message_recuperar.animate, hover_color = "red")
-        self.denegar.place(relx = 0.4, rely = 0.8, relwidth = 0.2)
-
-        self.recuperar_button = ctk.CTkButton(self, text = "Recuperar",font = self.font, command = self.message_recuperar.animate, hover_color = "green")
+        self.confirmation = Confirmation(self, 1.0, 0.7, "Para Recuperar")
+        
+        self.recuperar_button = ctk.CTkButton(self, text = "Recuperar",font = self.font, command = self.comp_recuperar, hover_color = "green")
         self.recuperar_button.place(relx = 0.55, rely = 0.9)
 
         # Pdf button        
@@ -394,10 +388,15 @@ class RecorverData(ctk.CTkToplevel):
         conn.commit()
         conn.close()
         
-        if datos[0][2] == "" or datos[0][3] == "":
-            self.message_recuperar.animate()
-            print(datos)
-        else:    
+        if datos[0][2] == "":
+            ConfirmationFrame(self.confirmation.scroll, text = "Fecha del contrato")
+            self.confirmation.animate()
+        
+        if datos[0][3] == "":
+            ConfirmationFrame(self.confirmation.scroll, text = "Fecha de vencimiento")
+            self.confirmation.animate()
+        
+        if datos[0][2] != "" and datos[0][3] != "":
             self.recuperar()
 
     def recuperar(self):
