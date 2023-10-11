@@ -9,6 +9,7 @@ import sqlite3
 import sys
 from pathlib import Path
 import shutil
+import datetime
 
 class NewButton(ctk.CTkButton):
     def __init__(self, master, text, width,row, column, padx, pady, sticky, command):
@@ -428,13 +429,56 @@ class SlidePanel(ctk.CTkFrame):
                     autorizado = 1
 
         if autorizado == 0:
-            ConfirmationFrame(self.confirmation.scroll, text = "Aut.firmar factura")
-        
-        
-        if all([self.proveedor_entry.get(), area, objeto, autorizado]):
+            ConfirmationFrame(self.confirmation.scroll, text = "Aut.firmar factura")        
+
+        fecha_de_vencimiento = self.convert(f"{self.fecha_venc_day.get()}/{self.fecha_venc_mes.get()}/{self.fecha_venc_year.get()}")
+
+        if fecha_de_vencimiento.date() < datetime.datetime.now().date():
+            fecha = 0
+            ConfirmationFrame(self.confirmation.scroll, text = "Fecha de Vencimiento")    
+        else:
+            fecha = 1 
+
+        if all([self.proveedor_entry.get(), area, objeto, autorizado, fecha]):
             self.savemessage.animate()
         else:
             self.confirmation.animate()
+    
+    def convert(self, date_time):
+        date = date_time.split("/")
+        
+        if date[1] == "Enero":
+            month = "Jan"
+        elif date[1] == "Febrero":
+            month = "Feb"
+        elif date[1] == "Marzo":
+            month = "Mar"
+        elif date[1] == "Abril":
+            month = "Apr"
+        elif date[1] == "Mayo":
+            month = "May"
+        elif date[1] == "Junio":
+            month = "Jun"
+        elif date[1] == "Julio":
+            month = "Jul"
+        elif date[1] == "Agosto":
+            month = "Aug"
+        elif date[1] == "Septiembre":
+            month = "Sep"
+        elif date[1] == "Octubre":
+            month = "Oct"
+        elif date[1] == "Noviembre":
+            month = "Nov"
+        elif date[1] == "Diciembre":
+            month = "Dec"
+        
+        date[1] =  month 
+        res = "/".join(date)
+        
+        format = '%d/%b/%Y'
+        datetime_str = datetime.datetime.strptime(res, format)
+ 
+        return datetime_str
 
 
 

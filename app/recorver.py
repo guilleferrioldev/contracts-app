@@ -6,6 +6,7 @@ from service import Frames
 import sys, os
 from pathlib import Path
 import shutil
+import datetime
 
 class Frame(ctk.CTkFrame):
     def __init__(self, master, proveedor, objeto, area):
@@ -390,14 +391,54 @@ class RecorverData(ctk.CTkToplevel):
         
         if datos[0][2] == "":
             ConfirmationFrame(self.confirmation.scroll, text = "Fecha del contrato")
-            self.confirmation.animate()
         
-        if datos[0][3] == "":
+        if datos[0][3] == "" or self.convert(datos[0][3]).date() < datetime.datetime.now().date():
             ConfirmationFrame(self.confirmation.scroll, text = "Fecha de vencimiento")
-            self.confirmation.animate()
-        
-        if datos[0][2] != "" and datos[0][3] != "":
+            fecha = 0
+        else:
+            fecha = 1 
+
+        if all([datos[0][2], fecha]):
             self.recuperar()
+        else:
+            self.confirmation.animate()
+    
+    def convert(self, date_time):
+        date = date_time.split("/")
+        
+        if date[1] == "Enero":
+            month = "Jan"
+        elif date[1] == "Febrero":
+            month = "Feb"
+        elif date[1] == "Marzo":
+            month = "Mar"
+        elif date[1] == "Abril":
+            month = "Apr"
+        elif date[1] == "Mayo":
+            month = "May"
+        elif date[1] == "Junio":
+            month = "Jun"
+        elif date[1] == "Julio":
+            month = "Jul"
+        elif date[1] == "Agosto":
+            month = "Aug"
+        elif date[1] == "Septiembre":
+            month = "Sep"
+        elif date[1] == "Octubre":
+            month = "Oct"
+        elif date[1] == "Noviembre":
+            month = "Nov"
+        elif date[1] == "Diciembre":
+            month = "Dec"
+        
+        date[1] =  month 
+        res = "/".join(date)
+        
+        format = '%d/%b/%Y'
+        datetime_str = datetime.datetime.strptime(res, format)
+ 
+        return datetime_str
+
 
     def recuperar(self):
         conn = sqlite3.connect("contratos.db")
