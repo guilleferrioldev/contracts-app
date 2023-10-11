@@ -15,11 +15,18 @@ class Datos(ctk.CTkToplevel):
         
         self.title(title)
         self.transient(master)
-        self.width = self.master.master.master.master.master.master.winfo_width()
-        self.height = self.master.master.master.master.master.master.winfo_height()
-        self.x = self.master.master.master.master.master.master.winfo_x()
-        self.y = self.master.master.master.master.master.master.winfo_y()
-        self.geometry(f"{self.width}x{self.height}+{self.x}+{self.y}")
+        if parent == "contracts":
+            self.width = self.master.master.master.master.master.master.winfo_width()
+            self.height = self.master.master.master.master.master.master.winfo_height()
+            self.x = self.master.master.master.master.master.master.winfo_x()
+            self.y = self.master.master.master.master.master.master.winfo_y()
+            self.geometry(f"{self.width}x{self.height}+{self.x}+{self.y}")
+        else:
+            self.width = self.master.master.master.master.master.master.master.master.winfo_width()
+            self.height = self.master.master.master.master.master.master.master.master.winfo_height()
+            self.x = self.master.master.master.master.master.master.master.master.winfo_x()
+            self.y = self.master.master.master.master.master.master.master.master.winfo_y()
+            self.geometry(f"{self.width}x{self.height}+{self.x}+{self.y}")
         self.resizable(True, True)
         self.font = ctk.CTkFont("Helvetica", 15)
         self.titulo = title

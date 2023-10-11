@@ -3,6 +3,8 @@ from datos_contratos import Datos
 from message import Message
 import sqlite3
 import os
+import datetime
+
 
 class Contracts(ctk.CTkScrollableFrame):
     def __init__(self, master, row, column, columnspan, padx, pady, sticky):
@@ -58,13 +60,60 @@ class Contracts(ctk.CTkScrollableFrame):
         conn = sqlite3.connect("contratos.db")
         cursor = conn.cursor()
         
-        instruccion = f"SELECT proveedor, area, fecha_del_contrato, fecha_de_vencimiento, objeto, autorizado_por, (SELECT sum(valor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS valor, (SELECT count(proveedor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS count FROM Contratos WHERE proveedor like '%{searching}%' ORDER BY {field}"
-        cursor.execute(instruccion)
-        datos = cursor.fetchall()
+        if field != "fecha_del_contrato" and field != "fecha_de_vencimiento":
+            instruccion = f"SELECT proveedor, area, fecha_del_contrato, fecha_de_vencimiento, objeto, autorizado_por, (SELECT sum(valor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS valor, (SELECT count(proveedor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS count FROM Contratos WHERE proveedor like '%{searching}%' ORDER BY {field}"
+            cursor.execute(instruccion)
+            datos = cursor.fetchall()
+
+        elif field == "fecha_del_contrato":
+            instruccion = f"SELECT proveedor, area, fecha_del_contrato, fecha_de_vencimiento, objeto, autorizado_por, (SELECT sum(valor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS valor, (SELECT count(proveedor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS count FROM Contratos WHERE proveedor like '%{searching}%'"
+            cursor.execute(instruccion)
+            datos = cursor.fetchall()
+            
+            reserva = []
+            i = 0 
+            while i < len(datos):
+                reserva.append(list(datos[i]))
+                i += 1
+                        
+            i = 0 
+            while i < len(reserva):
+                reserva[i][2] = self.convert(reserva[i][2])
+                i += 1
+
+            datos = sorted(reserva, key=lambda x: datetime.datetime.strptime(x[2],'%d/%b/%Y'))
+            
+            i = 0 
+            while i < len(datos):
+                datos[i][2] = self.unconvert(datos[i][2])
+                i += 1
+        
+        elif field == "fecha_de_vencimiento":
+            instruccion = f"SELECT proveedor, area, fecha_del_contrato, fecha_de_vencimiento, objeto, autorizado_por, (SELECT sum(valor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS valor, (SELECT count(proveedor) FROM Servicios WHERE Servicios.proveedor=Contratos.proveedor) AS count FROM Contratos WHERE proveedor like '%{searching}%'"
+            cursor.execute(instruccion)
+            datos = cursor.fetchall()
+            
+            reserva = []
+            i = 0 
+            while i < len(datos):
+                reserva.append(list(datos[i]))
+                i += 1
+                        
+            i = 0 
+            while i < len(reserva):
+                reserva[i][3] = self.convert(reserva[i][3])
+                i += 1
+
+            datos = sorted(reserva, key=lambda x: datetime.datetime.strptime(x[3],'%d/%b/%Y'))
+            
+            i = 0 
+            while i < len(datos):
+                datos[i][3] = self.unconvert(datos[i][3])
+                i += 1
 
         conn.commit()
         conn.close()
-        
+    
         i = 0 
         while i < len(datos):
             ContractsFrames(self, 
@@ -77,6 +126,73 @@ class Contracts(ctk.CTkScrollableFrame):
                         fecha = datos[i][2],
                         vencimiento = datos[i][3])
             i +=1
+    
+    def convert(self, date_time):
+        date = date_time.split("/")
+        
+        if date[1] == "Enero":
+            month = "Jan"
+        elif date[1] == "Febrero":
+            month = "Feb"
+        elif date[1] == "Marzo":
+            month = "Mar"
+        elif date[1] == "Abril":
+            month = "Apr"
+        elif date[1] == "Mayo":
+            month = "May"
+        elif date[1] == "Junio":
+            month = "Jun"
+        elif date[1] == "Julio":
+            month = "Jul"
+        elif date[1] == "Agosto":
+            month = "Aug"
+        elif date[1] == "Septiembre":
+            month = "Sep"
+        elif date[1] == "Octubre":
+            month = "Oct"
+        elif date[1] == "Noviembre":
+            month = "Nov"
+        elif date[1] == "Diciembre":
+            month = "Dec"
+        
+        date[1] =  month 
+        res = "/".join(date)
+        
+        return res
+    
+    def unconvert(self, date_time):
+        date = date_time.split("/")
+        
+        if date[1] == "Jan":
+            month = "Enero"
+        elif date[1] == "Feb":
+            month = "Febrero"
+        elif date[1] == "Mar":
+            month = "Marzo"
+        elif date[1] == "Apr":
+            month = "Abril"
+        elif date[1] == "May":
+            month = "Mayo"
+        elif date[1] == "Jun":
+            month = "Junio"
+        elif date[1] == "Jul":
+            month = "Julio"
+        elif date[1] == "Aug":
+            month = "Agosto"
+        elif date[1] == "Sep":
+            month = "Septiembre"
+        elif date[1] == "Oct":
+            month = "Octubre"
+        elif date[1] == "Nov":
+            month = "Noviembre"
+        elif date[1] == "Dec":
+            month = "Diciembre"
+        
+        date[1] =  month 
+        res = "/".join(date)
+        
+        return res
+
 
                    
 class ContractsFrames(ctk.CTkFrame):
