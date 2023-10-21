@@ -25,7 +25,7 @@ class DatosServicios(ctk.CTkFrame):
         self.pagado = pagado
         self.importe = valor 
         self.text = text
-        print(datetime.datetime.now().date())
+        
         if len(str(self.importe)) < 4:
             self.show_importe = self.importe
         elif len(str(self.importe)) == 4:
@@ -99,6 +99,56 @@ class DatosServicios(ctk.CTkFrame):
         conn.close()
 
         return datos
+    
+    def change_date(self):
+        date = str(datetime.datetime.now().date()).split("-")
+        date[0], date[2] = date[2], date[0]
+            
+        if date[0] == "01":
+            date[0] = "1"
+        elif date[0] == "02":
+            date[0] = "2"
+        elif date[0] == "03":
+            date[0] = "3"
+        elif date[0] == "04":
+            date[0] = "4"
+        elif date[0] == "05":
+            date[0] = "5"
+        elif date[0] == "06":
+            date[0] = "6"
+        elif date[0] == "07":
+            date[0] = "7"
+        elif date[0] == "08":
+            date[0] = "8"
+        elif date[0] == "09":
+            date[0] = "9"
+                           
+        if date[1] == "01":
+            date[1] = "Enero"
+        elif date[1] == "02":
+            date[1] = "Febrero"
+        elif date[1] == "03":
+            date[1] = "Marzo"
+        elif date[1] == "04":
+            date[1] = "Abril"
+        elif date[1] == "05":
+            date[1] = "Mayo"
+        elif date[1] == "06":
+            date[1] = "Junio"
+        elif date[1] == "07":
+            date[1] = "Julio"
+        elif date[1] == "08":
+            date[1] = "Agosto"
+        elif date[1] == "09":
+            date[1] = "Septiembre"
+        elif date[1] == "10":
+            date[1] = "Octubre"
+        elif date[1] == "11":
+            date[1]= "Noviembre"
+        elif date[1] == "12":
+            date[1] = "Diciembre"
+
+        return date
 
     def generate_PDF(self):
         datos = self.extract_from_database_to_generate_pdf()
@@ -132,7 +182,8 @@ class DatosServicios(ctk.CTkFrame):
             pos += 1 
             y_pos -= 25 
         
-        fecha = self.fecha.split("/")
+
+        fecha = self.change_date()
         pos = 0
         x_pos = 390
         for i in range(len(fecha)):
