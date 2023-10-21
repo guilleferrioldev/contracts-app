@@ -3,6 +3,12 @@ import sqlite3
 from pylatex import Document, Section, Subsection, Command, TextBlock
 from pylatex.utils import NoEscape
 from pylatex.package import Package
+import customtkinter as ctk
+
+class ButtonPdf(ctk.CTkButton):
+    def __init__(self, master):
+        super().__init__(master = master)
+
 
 def database():
     conn = sqlite3.connect(os.path.join("..", "contratos.db"))
