@@ -6,6 +6,7 @@ from pylatex.utils import NoEscape
 from pylatex.package import Package
 import sqlite3
 import os
+import datetime
 
 class DatosServicios(ctk.CTkFrame):
     def __init__(self, master, proveedor, nombre, descripcion, factura, fecha, pagado, valor, text = "datos_servicios"):
@@ -24,7 +25,7 @@ class DatosServicios(ctk.CTkFrame):
         self.pagado = pagado
         self.importe = valor 
         self.text = text
-
+        print(datetime.datetime.now().date())
         if len(str(self.importe)) < 4:
             self.show_importe = self.importe
         elif len(str(self.importe)) == 4:
@@ -85,7 +86,6 @@ class DatosServicios(ctk.CTkFrame):
         self.generate_PDF()
         path = os.path.join("temporal.pdf")
         self.pdf_viewer = CTkPDFViewer(self.pdf_factura.frame, path = path ,file = f"temporal.pdf")
-        self.delete_pdf_extras()
 
     def extract_from_database_to_generate_pdf(self):
         conn = sqlite3.connect(os.path.join("contratos.db"))
@@ -102,11 +102,21 @@ class DatosServicios(ctk.CTkFrame):
 
     def generate_PDF(self):
         datos = self.extract_from_database_to_generate_pdf()
-        print(datos)
-
+        descripcion = self.descripcion.split()
+        res = []
+        s = ""
+        i = 0
+        while i < len(descripcion):
+            if len(s) > 80:
+                res.append(s)
+                s = ""
+            s = s + " " + descripcion[i]
+            i += 1        
+        res.append(s)
+        
         with open("solicitud.tex") as file:
             tex = file.readlines()
-
+        
         tex.insert(33, r"\put(160,-87.09998){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{self.proveedor}" +"}\n")
         tex.insert(36, r"\put(115,-135.46){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{datos[0][8]}" +"}\n")
         tex.insert(38,  r"\put(420,-135.46){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{datos[0][9]}" +"}\n")
@@ -115,22 +125,31 @@ class DatosServicios(ctk.CTkFrame):
         tex.insert(161, r"\put(90,-288.73){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{datos[0][10]}" +"}\n")
         tex.insert(212, r"\put(100,-327.13){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{self.show_importe}" +"}\n")
 
+        pos = 0
+        y_pos = -400.13
+        while pos < len(res):
+            tex.insert(292 + pos, f"\put(30,{y_pos})" + r"{\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{res[pos]}" +"}\n")
+            pos += 1 
+            y_pos -= 25 
+        
+        fecha = self.fecha.split("/")
+        pos = 0
+        x_pos = 390
+        for i in range(len(fecha)):
+            tex.insert(374 + pos, f"\put({x_pos},-560.46)" + r"{\fontsize{12}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{fecha[i]}" +"}\n")
+            pos += 1
+            if i == 0:
+                x_pos += 20
+            elif i == 1:
+                x_pos += 80
+            
         doc = Document('temporal', font_size=None)
 
         doc.preamble.append(NoEscape("".join(tex)))
         
-        doc.generate_tex()
+        #doc.generate_tex()
         doc.generate_pdf(clean_tex=False)
     
-    def delete_pdf_extras(self):
-        os.system("rm temporal.aux")
-        os.system("rm temporal.log")
-        #os.system("rm temporal.tex")
-
-        os.system("rm temporal.fls")
-        os.system("rm temporal.synctex.gz")
-        os.system("rm temporal.fdb_latexmk")
-
     def create_descripcion(self):
         start = 0
         while start < len(self.descripcion):
