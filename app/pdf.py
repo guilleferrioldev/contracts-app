@@ -135,6 +135,10 @@ class PanelPDFViewer(ctk.CTkFrame):
                 
                 self.add_pdf = ctk.CTkButton(self, text = "Cambiar PDF", command = self.change_pdf)
                 self.add_pdf.place(relx = 0.45, rely = 0.035, relwidth = 0.2, relheight = 0.04)
+        
+        if self.text == "Solicitud de Pago":
+            self.printer = ctk.CTkButton(self, text = "Imprimir")
+            self.printer.place(relx = 0.7, rely = 0.035, relwidth = 0.2, relheight = 0.04)
 
         self.atras_button = ctk.CTkButton(self, text = "Atrás", command = self.back, hover_color = "red")
         self.atras_button.place(relx = 0.4, rely = 0.93, relwidth = 0.2, relheight = 0.04)
@@ -153,12 +157,12 @@ class PanelPDFViewer(ctk.CTkFrame):
             self.master.ver_pdf.configure(state = "normal")
         
         else:
-            os.system("rm temporal.aux")
-            os.system("rm temporal.log")
-            #os.system("rm temporal.tex")
-            os.system("rm temporal.fls")
-            os.system("rm temporal.synctex.gz")
-            os.system("rm temporal.fdb_latexmk")
+            #os.system("rm temporal.aux")
+            #os.system("rm temporal.log")
+            os.system("rm temporal.tex")
+            #os.system("rm temporal.fls")
+            #os.system("rm temporal.synctex.gz")
+            #os.system("rm temporal.fdb_latexmk")
  
         self.animate()
 

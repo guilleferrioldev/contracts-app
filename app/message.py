@@ -26,8 +26,11 @@ class Message(ctk.CTkFrame):
     def animate(self):
         if self.in_start_pos:
             self.animate_fordward()
+            self.tkraise()
         else:
             self.animate_backwards()
+            self.tkraise()
+
 
     def animate_fordward(self):
         if self.pos > self.end_pos:
