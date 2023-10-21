@@ -1,6 +1,9 @@
 import customtkinter as ctk 
 from message import EliminarServicio
 from pdf import PanelPDFViewer, CTkPDFViewer
+from pylatex import Document
+from pylatex.utils import NoEscape
+from pylatex.package import Package
 import sqlite3
 import os
 
@@ -79,8 +82,50 @@ class DatosServicios(ctk.CTkFrame):
     
     def sol_factura(self):
         self.pdf_factura.animate()
-        path = os.path.join("solicitud", "temporal.pdf")
-        CTkPDFViewer(self.pdf_factura.frame, path = path ,file = f"temporal.pdf")
+        self.generate_PDF()
+        path = os.path.join("temporal.pdf")
+        self.pdf_viewer = CTkPDFViewer(self.pdf_factura.frame, path = path ,file = f"temporal.pdf")
+
+    def extract_from_database_to_generate_pdf(self):
+        conn = sqlite3.connect(os.path.join("contratos.db"))
+        cursor = conn.cursor()
+
+        instruccion = f"SELECT * FROM Contratos WHERE proveedor = '{self.proveedor}'"
+        cursor.execute(instruccion)
+        datos = cursor.fetchall()
+
+        conn.commit()
+        conn.close()
+
+        return datos
+
+    def generate_PDF(self):
+        datos = self.extract_from_database_to_generate_pdf()
+        print(datos)
+
+        with open("solicitud.tex") as file:
+            tex = file.readlines()
+
+        tex.insert(33, r"\put(160,-87.09998){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{self.proveedor}" +"}\n")
+        tex.insert(36, r"\put(115,-135.46){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{datos[0][8]}" +"}\n")
+        tex.insert(38,  r"\put(420,-135.46){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{datos[0][9]}" +"}\n")
+        tex.insert(42, r"\put(160,-187.66){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{datos[0][13]}" +"}\n" )
+        tex.insert(109,  r"\put(120,-250.33){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{datos[0][12]}" +"}\n")
+        tex.insert(161, r"\put(90,-288.73){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{datos[0][10]}" +"}\n")
+        tex.insert(212, r"\put(100,-327.13){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{self.show_importe}" +"}\n")
+
+        doc = Document('temporal', font_size=None)
+
+        doc.preamble.append(NoEscape("".join(tex)))
+        
+        doc.generate_tex()
+        doc.generate_pdf(clean_tex=False)
+
+        os.system("rm temporal.aux")
+        os.system("rm temporal.log")
+        #os.system("rm temporal.tex")
+        os.system("rm temporal.fls")
+        os.system("rm temporal.fdb_latexmk")
 
     def create_descripcion(self):
         start = 0
@@ -102,6 +147,7 @@ class DatosServicios(ctk.CTkFrame):
         for child in self.master.winfo_children():
             if child.widgetName == "frame":
                 child.destroy()
-
+        
+        #self.factura.destroy()
         self.master.master.master.servicios()
 

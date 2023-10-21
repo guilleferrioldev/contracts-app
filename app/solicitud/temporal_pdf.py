@@ -5,10 +5,6 @@ from pylatex.utils import NoEscape
 from pylatex.package import Package
 import customtkinter as ctk
 
-class ButtonPdf(ctk.CTkButton):
-    def __init__(self, master):
-        super().__init__(master = master)
-
 
 def database():
     conn = sqlite3.connect(os.path.join("..", "contratos.db"))
@@ -20,8 +16,9 @@ def database():
 
     conn.commit()
     conn.close()
-
+        
     print(datos)
+        
 
 
 def generate_PDF():
