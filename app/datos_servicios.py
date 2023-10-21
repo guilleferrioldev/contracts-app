@@ -82,6 +82,7 @@ class DatosServicios(ctk.CTkFrame):
         self.pack(expand = "True", fill = "x", padx = 5, pady = 5)
     
     def sol_factura(self):
+        self.solicitud.configure(state = "disabled")
         self.pdf_factura.animate()
         self.generate_PDF()
         path = os.path.join("temporal.pdf")
@@ -173,7 +174,7 @@ class DatosServicios(ctk.CTkFrame):
         tex.insert(42, r"\put(160,-187.66){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{datos[0][13]}" +"}\n" )
         tex.insert(109,  r"\put(120,-250.33){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{datos[0][12]}" +"}\n")
         tex.insert(161, r"\put(90,-288.73){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{datos[0][10]}" +"}\n")
-        tex.insert(212, r"\put(100,-327.13){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{self.show_importe}" +"}\n")
+        tex.insert(212, r"\put(100,-327.13){\fontsize{14.04}{1}\usefont{T1}{cmr}{m}{n}\selectfont\color{color_29791}" + f"{self.show_importe} CUP" +"}\n")
 
         pos = 0
         y_pos = -400.13

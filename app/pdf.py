@@ -201,7 +201,11 @@ class PanelPDFViewer(ctk.CTkFrame):
             self.animate_fordward()
         else:
             self.tkraise()
-            self.animate_backwards()
+            self.animate_backwards() 
+            if self.text == "Solicitud de Pago":
+                for child in self.master.servicios_scroll.winfo_children():
+                    if child.text == "datos_servicios":
+                        child.solicitud.configure(state = "normal")
             
 
     def animate_fordward(self):
