@@ -85,6 +85,7 @@ class DatosServicios(ctk.CTkFrame):
         self.generate_PDF()
         path = os.path.join("temporal.pdf")
         self.pdf_viewer = CTkPDFViewer(self.pdf_factura.frame, path = path ,file = f"temporal.pdf")
+        self.delete_pdf_extras()
 
     def extract_from_database_to_generate_pdf(self):
         conn = sqlite3.connect(os.path.join("contratos.db"))
@@ -120,11 +121,14 @@ class DatosServicios(ctk.CTkFrame):
         
         doc.generate_tex()
         doc.generate_pdf(clean_tex=False)
-
+    
+    def delete_pdf_extras(self):
         os.system("rm temporal.aux")
         os.system("rm temporal.log")
         #os.system("rm temporal.tex")
+
         os.system("rm temporal.fls")
+        os.system("rm temporal.synctex.gz")
         os.system("rm temporal.fdb_latexmk")
 
     def create_descripcion(self):

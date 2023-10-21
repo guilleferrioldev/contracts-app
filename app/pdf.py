@@ -151,7 +151,15 @@ class PanelPDFViewer(ctk.CTkFrame):
             self.master.eliminar.configure(state = "normal")
             self.master.actualizar.configure(state = "normal")
             self.master.ver_pdf.configure(state = "normal")
-
+        
+        else:
+            os.system("rm temporal.aux")
+            os.system("rm temporal.log")
+            #os.system("rm temporal.tex")
+            os.system("rm temporal.fls")
+            os.system("rm temporal.synctex.gz")
+            os.system("rm temporal.fdb_latexmk")
+ 
         self.animate()
 
     def copy_pdf(self):
