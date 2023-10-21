@@ -14,6 +14,7 @@ class CTkPDFViewer(ctk.CTkScrollableFrame):
 
     def __init__(self,
                  master: any,
+                 path: str,
                  file: str,
                  page_width: int = 600,
                  page_height: int = 700,
@@ -27,6 +28,7 @@ class CTkPDFViewer(ctk.CTkScrollableFrame):
         self.separation = page_separation_height
         self.pdf_images = []
         self.labels = []
+        self.path = path
         self.file = file
 
         self.percentage_view = 0
@@ -49,7 +51,7 @@ class CTkPDFViewer(ctk.CTkScrollableFrame):
     def add_pages(self):
         """ add images and labels """
         self.percentage_bar = 0
-        with open(f"./pdfs/{self.file}.pdf") as file: 
+        with open(self.path) as file: 
             open_pdf = fitz.open(file)
         
         for page in open_pdf:
@@ -160,7 +162,8 @@ class PanelPDFViewer(ctk.CTkFrame):
         
         if os.path.isfile(f"./pdfs/{self.title}.pdf"):
             self.animate()    
-            pdf = CTkPDFViewer(self.frame, file = f"{self.title}")
+            path = os.path.join("pdfs", f"{self.title}.pdf")
+            pdf = CTkPDFViewer(self.frame, path = f"{path}" , file = f"{self.title}")
         else:
             self.master.cancel_button.configure(state = "normal")
             self.master.eliminar.configure(state = "normal")

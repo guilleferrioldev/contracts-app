@@ -344,14 +344,15 @@ class Datos(ctk.CTkToplevel):
         self.servicios()
 
     def read_pdf(self):
+        path = os.path.join("pdfs", f"{self.titulo}.pdf")
         self.cancel_button.configure(state = "disabled")
         self.eliminar.configure(state = "disabled")
         self.actualizar.configure(state = "disabled")
         self.ver_pdf.configure(state = "disabled")
  
-        if os.path.isfile(f"./pdfs/{self.titulo}.pdf"):
+        if os.path.isfile(path):
             self.pdf_panel.animate()
-            pdf = CTkPDFViewer(self.pdf_panel.frame, file = f"{self.titulo}")
+            pdf = CTkPDFViewer(self.pdf_panel.frame, path = path, file = f"{self.titulo}")
         else:
             self.pdfmessage.animate()
 

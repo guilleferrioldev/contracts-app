@@ -1,7 +1,8 @@
 import customtkinter as ctk 
 from message import EliminarServicio
-from pdf import PanelPDFViewer
+from pdf import PanelPDFViewer, CTkPDFViewer
 import sqlite3
+import os
 
 class DatosServicios(ctk.CTkFrame):
     def __init__(self, master, proveedor, nombre, descripcion, factura, fecha, pagado, valor, text = "datos_servicios"):
@@ -67,15 +68,20 @@ class DatosServicios(ctk.CTkFrame):
         self.denegar = ctk.CTkButton(self.message, text = "No", font = self.font, command = self.message.animate, hover_color = "green")
         self.denegar.place(relx = 0.2, rely = 0.65, relwidth = 0.25)
         
-        #self.pdf_factura = PanelPDFViewer(self.master.master.master, 1.0, 0.7, "Solicitud de pago", f"{self.proveedor}")
-        #self.factura = ctk.CTkButton(self, text = "Sol. pago", font = self.font,command=  self.pdf_factura.animate)
-        #self.factura.place(relx = 0.7, rely = 0.6, relwidth = 0.25, relheight = 0.11)       
+        self.pdf_factura = PanelPDFViewer(self.master.master.master, 1.0, 0.7, "Solicitud de Pago", f"{self.proveedor}")
+        self.factura = ctk.CTkButton(self, text = "Sol. pago", font = self.font, command = self.sol_factura)
+        self.factura.place(relx = 0.7, rely = 0.6, relwidth = 0.25, relheight = 0.11)       
 
         self.eliminar = ctk.CTkButton(self, text = "Eliminar", font = self.font, command = self.message.animate, hover_color = "red")
         self.eliminar.place(relx = 0.7, rely = 0.8, relwidth = 0.25, relheight = 0.11)
         
         self.pack(expand = "True", fill = "x", padx = 5, pady = 5)
     
+    def sol_factura(self):
+        self.pdf_factura.animate()
+        path = os.path.join("solicitud", "temporal.pdf")
+        CTkPDFViewer(self.pdf_factura.frame, path = path ,file = f"temporal.pdf")
+
     def create_descripcion(self):
         start = 0
         while start < len(self.descripcion):
