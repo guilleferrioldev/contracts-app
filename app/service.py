@@ -206,14 +206,14 @@ class Frames(ctk.CTkFrame):
 
         if self.text == "contracts":
             if self.master.master.master.junta_button.get() == "off":
-                if importe < 1000000:
+                if importe <= 1000000:
                     self.master.master.master.service.importe_label.configure(text = f"Importe: {show_importe} CUP")
                 else:
                     self.valor_entry.delete(0, "end")
                     self.master.master.master.suma()
                     self.junta_message = Junta(self.master.master.master, 1.0, 0.7, 1000000, "contracts").animate()
             else:
-                if importe < int(self.master.master.master.monto_junta_entry.get()):
+                if importe <= int(self.master.master.master.monto_junta_entry.get()):
                     self.master.master.master.service.importe_label.configure(text = f"Importe: {show_importe} CUP")
                 else:
                     self.valor_entry.delete(0, "end")
@@ -222,14 +222,14 @@ class Frames(ctk.CTkFrame):
 
         elif self.text == "anadir":
             if self.master.master.master.datos_junta == []:
-                if importe < 1000000:
+                if importe <= 1000000:
                     self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
                 else:
                     self.valor_entry.delete(0, "end")
                     self.master.master.master.suma()
                     self.junta_message = Junta(self.master.master.master, 1.0, 0.7, 1000000, "anadir").animate()
             else:
-                if importe < int(self.master.master.master.datos_junta[0][2]):
+                if importe <= int(self.master.master.master.datos_junta[0][2]):
                     self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
                 else:
                     self.valor_entry.delete(0, "end")
@@ -247,7 +247,7 @@ class Frames(ctk.CTkFrame):
             conn.close()
             
             if datos == []:
-                if importe < 1000000:
+                if importe <= 1000000:
                     self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
                 else:
                     self.valor_entry.delete(0, "end")
@@ -256,7 +256,7 @@ class Frames(ctk.CTkFrame):
                     self.master.master.master.suma()
                     self.junta_message = Junta(self.master.master.master, 1.0, 0.7, 1000000, "recorver").animate()
             else:
-                if importe < int(datos[0][2]):
+                if importe <= int(datos[0][2]):
                     self.master.master.master.importe_label.configure(text = f"Importe: {show_importe} CUP")
                 else:
                     self.valor_entry.delete(0, "end")

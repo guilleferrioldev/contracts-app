@@ -600,6 +600,12 @@ class Datos(ctk.CTkToplevel):
                 self.monto.configure(text = f"Monto acordado: {frame.monto_entry.get()} CUP")
                 self.fecha_junta.configure(text = f"Fecha del acuerdo: {frame.day.get()}/{frame.month.get()}/{frame.year.get()}")
 
+                self.datos_junta[0] = list(self.datos_junta[0])
+                self.datos_junta[0][1] = frame.acuerdo_entry.get()
+                self.datos_junta[0][2] = frame.monto_entry.get()
+                self.datos_junta[0][3] = f"{frame.day.get()}/{frame.month.get()}/{frame.year.get()}"
+                self.datos_junta[0] = tuple(self.datos_junta[0])
+        
         conn.commit()
         conn.close()
         
