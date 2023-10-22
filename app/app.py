@@ -5,6 +5,7 @@ from new import NewButton, SlidePanel
 from sorting import Sort
 from message import Message
 import sqlite3
+from datetime import datetime 
 
 class App(ctk.CTk):
     def __init__(self):
@@ -36,6 +37,7 @@ class App(ctk.CTk):
 
         # layout
         self.create_search()
+        self.check_contracts()
         
         # Sort Option Menu
         self.sort_var = ctk.StringVar(value = "Proveedor")
@@ -240,6 +242,8 @@ class App(ctk.CTk):
         conn.commit()
         conn.close()
 
+    def check_contracts(self):
+        print(datetime.now().date())
    
 
 if __name__ == "__main__":    
