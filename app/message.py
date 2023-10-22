@@ -228,6 +228,7 @@ class Actualizar(ctk.CTkFrame):
                 for child in self.master.servicios_scroll.winfo_children():
                     child.destroy()
                 self.master.servicios()
+                self.master.servicios_menu.set("0")
 
     def options(self, choice):
         self.values = [i for i in self.values if i != choice]
