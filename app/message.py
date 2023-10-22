@@ -48,6 +48,59 @@ class Message(ctk.CTkFrame):
          else:
             self.in_start_pos = True
 
+class OnlyNumbers(ctk.CTkFrame):
+    def __init__(self, master, start_pos, end_pos):
+        super().__init__(master = master,
+                         border_width = 3) 
+        # general attributtes 
+        self.start_pos = start_pos + 0.01
+        self.end_pos = end_pos 
+        self.width = abs(start_pos - end_pos)
+        
+        # animation logic
+        self.pos = self.start_pos
+        self.in_start_pos = True
+        
+        self.advertencia_label = ctk.CTkLabel(self, 
+                                              text = f"Sólo pueden ser números", 
+                                              anchor = "e",
+                                              font = ctk.CTkFont("Helvetica", 20, "bold"))
+        self.advertencia_label.place(relx = 0.1, rely = 0.4)
+
+        self.button = ctk.CTkButton(self, text = "Atrás", command = self.animate)
+        self.button.place(relx = 0.4, rely = 0.8, relheight = 0.1, relwidth = 0.2)
+
+        # layout 
+        self.place(relx = self.start_pos, rely = 0.25, relwidth = self.width, relheight = 0.4)
+
+    def animate(self):
+        if self.in_start_pos:
+            self.animate_fordward()
+            self.tkraise()
+        else:
+            self.animate_backwards()
+            self.tkraise()
+
+
+    def animate_fordward(self):
+        if self.pos > self.end_pos:
+            self.pos -= 0.7 
+            self.place(relx = self.pos, rely = 0.25, relwidth = self.width, relheight = 0.4)
+            self.after(10, self.animate_fordward)
+        else:
+            self.in_start_pos = False 
+
+    def animate_backwards(self):
+         if self.pos < self.start_pos:
+            self.pos += 0.7 
+            self.place(relx = self.pos, rely = 0.25, relwidth = self.width, relheight = 0.4)
+            self.after(10, self.animate_backwards)
+         else:
+            self.in_start_pos = True
+
+
+
+
 class Confirmation(ctk.CTkFrame):
     def __init__(self, master, start_pos, end_pos, text):
         super().__init__(master = master,

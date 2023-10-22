@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from message import Junta
+from message import Junta, OnlyNumbers
 import sqlite3
 
 class Service(ctk.CTkFrame):
@@ -127,13 +127,15 @@ class Frames(ctk.CTkFrame):
         self.pagado_entry = ctk.CTkEntry(self)
         self.pagado_entry.place(relx = 0.35, rely =0.55, relwidth = 0.6)
         
+        self.onlynumbers = OnlyNumbers(self.master.master.master, 1.0, 0.7)
+
         self.valor_label = ctk.CTkLabel(self, text = "Valor")
         self.valor_label.place(relx = 0.05, rely =0.68)
-
+        
         self.valor_entry = ctk.CTkEntry(self)
         self.valor_entry.place(relx = 0.35, rely =0.68, relwidth = 0.6)
 
-        self.valor_entry.bind("<KeyRelease>", lambda event: self.change_importe())
+        self.valor_entry.bind("<KeyRelease>", lambda event: self.comp_change())
 
         if self.text == "anadir":
             self.cancel_button = ctk.CTkButton(self, text = "Cancelar", command = self.delete_service, hover_color = "red")
@@ -147,6 +149,13 @@ class Frames(ctk.CTkFrame):
             self.cancel_button.place(relx = 0.35, rely = 0.82)
         
         self.pack(expand = "True", fill = "x", padx = 5, pady = 5)
+
+    def comp_change(self):
+        if self.valor_entry.get().isdigit():
+            self.change_importe()
+        else:
+            self.valor_entry.delete(0, "end")
+            self.onlynumbers.animate()
 
     def change_importe(self):
         values = []
