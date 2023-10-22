@@ -153,7 +153,7 @@ class Frames(ctk.CTkFrame):
     def comp_change(self):
         if self.valor_entry.get().isdigit():
             self.change_importe()
-        else:
+        elif not self.valor_entry.get().isdigit() and len(self.valor_entry.get()) != 0:
             self.valor_entry.delete(0, "end")
             self.onlynumbers.animate()
 

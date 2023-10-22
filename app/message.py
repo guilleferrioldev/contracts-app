@@ -225,7 +225,9 @@ class Actualizar(ctk.CTkFrame):
                 self.master.eliminar.configure(state = "normal")
                 self.master.ver_pdf.configure(state = "normal")
                 self.master.cancel_button.configure(state = "normal")
-            
+                for child in self.master.servicios_scroll.winfo_children():
+                    child.destroy()
+                self.master.servicios()
 
     def options(self, choice):
         self.values = [i for i in self.values if i != choice]
