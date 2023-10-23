@@ -15,7 +15,7 @@ class Datos(ctk.CTkToplevel):
         
         self.title(title)
         self.transient(master)
-        if parent == "contracts":
+        if parent == "contracts" or parent == "warning":
             self.width = self.master.master.master.master.master.master.winfo_width()
             self.height = self.master.master.master.master.master.master.winfo_height()
             self.x = self.master.master.master.master.master.master.winfo_x()
@@ -438,6 +438,8 @@ class Datos(ctk.CTkToplevel):
         if self.parent == "contracts":
             self.master.master.create_frames()
             self.master.master.master.master.master.master.sort.set("Proveedor")
+        elif self.parent == "warning":
+            self.master.master.master.master.master.comprobation()
         else:
             self.master.master.master.master.master.master.insert_frames()
             self.master.master.master.master.master.master.master.master.switch_frame("Calendario")   

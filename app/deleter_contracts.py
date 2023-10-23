@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from datetime import datetime, timedelta
+from datos_contratos import Datos
 import os
 import sqlite3
 
@@ -141,37 +142,20 @@ class Label(ctk.CTkFrame):
         super().__init__(master = master, fg_color = "white", height = 50)
         self.font = ctk.CTkFont("Helvetica", 15)
         
-        self.date = str(abs(int(str(date).split()[0])))
+        self.text = text
+        self.date = str(date).split()[0] + " días"
 
-        self.text_label = ctk.CTkLabel(self, text = text, anchor = "w", font = self.font)
+        self.text_label = ctk.CTkLabel(self, text = self.text, anchor = "w", font = self.font)
         self.text_label.place(relx = 0.05, rely = 0.25, relwidth = 0.8)
         
-        self.date_label = ctk.CTkLabel(self, text = self.date + " días", anchor = "w", font = self.font)
+        self.date_label = ctk.CTkLabel(self, text = self.date , anchor = "w", font = self.font)
         self.date_label.place(relx = 0.85, rely = 0.25, relwidth = 0.2)
 
+        self.bind("<Button>", lambda event: Datos(self, self.text, "warning"))
+        self.text_label.bind("<Button>", lambda event: Datos(self, self.text, "warning"))
+        self.date_label.bind("<Button>", lambda event: Datos(self, self.text, "warning"))
+
         self.pack(expand = True, fill = "x", pady = 5, padx = 5)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
