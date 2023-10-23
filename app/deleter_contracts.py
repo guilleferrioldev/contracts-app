@@ -18,10 +18,6 @@ class MessageDeleter(ctk.CTkFrame):
         self.in_start_pos = True
         
         self.today = datetime.now().date()
-        self.a_day = timedelta(days=1)
-        self.a_week = timedelta(days=7)
-        self.two_weeks = timedelta(days=15)
-        self.a_month = timedelta(days=30)
 
         # layout
         self.font = ctk.CTkFont("Helvetica", 15)
@@ -43,7 +39,8 @@ class MessageDeleter(ctk.CTkFrame):
     
     def comprobation(self):
         dicc = self.convert_dict()
-        correct_values = {key:(value-self.today) for key, value in sorted(dicc.items(), key= lambda x: x[1]) if (value - self.today) < timedelta(days=30)}
+        dates = {timedelta(days=1), timedelta(days=7), timedelta(days=15), timedelta(days=30)}
+        correct_values = {key:(value-self.today) for key, value in sorted(dicc.items(), key= lambda x: x[1]) if (value - self.today) in dates}
         
         for key, value in correct_values.items():
             Label(self.scroll, key, value)
@@ -143,7 +140,7 @@ class Label(ctk.CTkFrame):
         self.font = ctk.CTkFont("Helvetica", 15)
         
         self.text = text
-        self.date = str(date).split()[0] + " días"
+        self.date = str(date).split()[0] + " días" if int(str(date).split()[0]) != 1 else str(date).split()[0] + " día"
 
         self.text_label = ctk.CTkLabel(self, text = self.text, anchor = "w", font = self.font)
         self.text_label.place(relx = 0.05, rely = 0.25, relwidth = 0.8)
