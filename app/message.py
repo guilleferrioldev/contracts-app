@@ -67,7 +67,7 @@ class OnlyNumbers(ctk.CTkFrame):
                                               font = ctk.CTkFont("Helvetica", 20, "bold"))
         self.advertencia_label.place(relx = 0.1, rely = 0.4)
 
-        self.button = ctk.CTkButton(self, text = "Atrás", command = self.animate)
+        self.button = ctk.CTkButton(self, text = "OK", command = self.animate)
         self.button.place(relx = 0.4, rely = 0.8, relheight = 0.1, relwidth = 0.2)
 
         # layout 

@@ -326,6 +326,13 @@ class Datos(ctk.CTkToplevel):
                     child.destroy()
         
             self.master.master.create_frames()
+
+        elif self.parent == "warning":
+            for child in self.master.master.winfo_children():
+                if child.widgetName == "frame":
+                    child.destroy()
+
+            self.master.master.master.master.master.comprobation()
         else:
             self.master.master.master.master.master.master.insert_frames()
             self.master.master.master.master.master.master.master.master.switch_frame("Calendario")   
@@ -499,6 +506,8 @@ class Datos(ctk.CTkToplevel):
                 cursor.execute(instruccion)
                 instruccion = f"UPDATE Servicios SET proveedor='{prov}' WHERE  proveedor='{self.titulo}'"
                 cursor.execute(instruccion)
+                instruccion = f"UPDATE Autorizo_Junta SET proveedor='{prov}' WHERE  proveedor='{self.titulo}'"
+                cursor.execute(instruccion)
                 if os.path.isfile(f"./pdfs/{self.titulo}.pdf"):
                     os.rename(f"./pdfs/{self.titulo}.pdf", f"./pdfs/{prov}.pdf")
                 self.titulo = prov
@@ -601,12 +610,13 @@ class Datos(ctk.CTkToplevel):
                 self.acuerdo.configure(text = f"Acuerdo: {frame.acuerdo_entry.get()}") 
                 self.monto.configure(text = f"Monto acordado: {frame.monto_entry.get()} CUP")
                 self.fecha_junta.configure(text = f"Fecha del acuerdo: {frame.day.get()}/{frame.month.get()}/{frame.year.get()}")
-
-                self.datos_junta[0] = list(self.datos_junta[0])
-                self.datos_junta[0][1] = frame.acuerdo_entry.get()
-                self.datos_junta[0][2] = frame.monto_entry.get()
-                self.datos_junta[0][3] = f"{frame.day.get()}/{frame.month.get()}/{frame.year.get()}"
-                self.datos_junta[0] = tuple(self.datos_junta[0])
+                
+                if self.datos_junta != []:
+                    self.datos_junta[0] = list(self.datos_junta[0])
+                    self.datos_junta[0][1] = frame.acuerdo_entry.get()
+                    self.datos_junta[0][2] = frame.monto_entry.get()
+                    self.datos_junta[0][3] = f"{frame.day.get()}/{frame.month.get()}/{frame.year.get()}"
+                    self.datos_junta[0] = tuple(self.datos_junta[0])
         
         conn.commit()
         conn.close()
