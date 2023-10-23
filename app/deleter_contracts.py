@@ -10,7 +10,7 @@ class MessageDeleter(ctk.CTkFrame):
         # general attributtes 
         self.start_pos = start_pos + 0.01
         self.end_pos = end_pos 
-        self.width = abs(start_pos - end_pos)
+        #self.width = abs(start_pos - end_pos)
         
         # animation logic
         self.pos = self.start_pos
@@ -32,19 +32,23 @@ class MessageDeleter(ctk.CTkFrame):
         self.scroll.place(relx = 0.05, rely = 0.15, relwidth = 0.9, relheight = 0.7)
 
         self.button = ctk.CTkButton(self, text = "OK", command = self.animate)
-        self.button.place(relx = 0.4, rely = 0.86, relwidth = 0.2, relheight = 0.1)
+        self.button.place(relx = 0.45, rely = 0.86, relwidth = 0.1, relheight = 0.1)
         
+        self.comp = 0
         self.comprobation()
         
         # layout 
-        self.place(relx = self.start_pos, rely = 0.25, relwidth = self.width, relheight = 0.4)
+        self.place(relx = self.start_pos, rely = 0.25, relwidth = 0.6, relheight = 0.4)
     
     def comprobation(self):
         dicc = self.convert_dict()
         correct_values = {key:(value-self.today) for key, value in sorted(dicc.items(), key= lambda x: x[1]) if (value - self.today) < timedelta(days=30)}
         
-
-        return correct_values
+        for key, value in correct_values.items():
+            Label(self.scroll, key, value)
+        
+        if len(correct_values):
+            self.comp = 1
         
         
     def convert_dict(self):
@@ -118,7 +122,7 @@ class MessageDeleter(ctk.CTkFrame):
     def animate_fordward(self):
         if self.pos > self.end_pos:
             self.pos -= 0.7 
-            self.place(relx = self.pos, rely = 0.25, relwidth = self.width, relheight = 0.4)
+            self.place(relx = 0.2, rely = 0.25, relwidth = 0.6, relheight = 0.4)
             self.after(10, self.animate_fordward)
         else:
             self.in_start_pos = False 
@@ -126,13 +130,26 @@ class MessageDeleter(ctk.CTkFrame):
     def animate_backwards(self):
          if self.pos < self.start_pos:
             self.pos += 0.7 
-            self.place(relx = self.pos, rely = 0.25, relwidth = self.width, relheight = 0.4)
+            self.place(relx = self.pos, rely = 0.25, relwidth = 0.6, relheight = 0.4)
             self.after(10, self.animate_backwards)
          else:
             self.in_start_pos = True
 
 
+class Label(ctk.CTkFrame):
+    def __init__(self, master, text, date):
+        super().__init__(master = master, fg_color = "white", height = 50)
+        self.font = ctk.CTkFont("Helvetica", 15)
+        
+        self.date = str(abs(int(str(date).split()[0])))
 
+        self.text_label = ctk.CTkLabel(self, text = text, anchor = "w", font = self.font)
+        self.text_label.place(relx = 0.05, rely = 0.25, relwidth = 0.8)
+        
+        self.date_label = ctk.CTkLabel(self, text = self.date + " días", anchor = "w", font = self.font)
+        self.date_label.place(relx = 0.85, rely = 0.25, relwidth = 0.2)
+
+        self.pack(expand = True, fill = "x", pady = 5, padx = 5)
 
 
 

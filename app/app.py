@@ -38,7 +38,7 @@ class App(ctk.CTk):
 
         # layout
         self.comprobation = MessageDeleter(self, 1.0, 0.7)
-        if self.comprobation.comprobation():
+        if self.comprobation.comp:
             self.comprobation.animate()
         
         self.create_search()
