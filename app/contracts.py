@@ -236,7 +236,7 @@ class ContractsProveedor(ctk.CTkLabel):
                          anchor = "w")
         
         self.text = text
-        self.place(relx = 0.03, rely = 0.1,relwidth = 0.85, relheight= 0.4)
+        self.place(relx = 0.03, rely = 0.1,relwidth = 0.7, relheight= 0.4)
 
 
 class ContractsObjeto(ctk.CTkLabel):

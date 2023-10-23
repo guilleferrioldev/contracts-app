@@ -4,6 +4,7 @@ from calendario import Calendario
 from new import NewButton, SlidePanel
 from sorting import Sort
 from message import Message
+from deleter_contracts import MessageDeleter
 import sqlite3
 from datetime import datetime 
 
@@ -36,8 +37,11 @@ class App(ctk.CTk):
         font = ctk.CTkFont("Helvetica", 15)
 
         # layout
+        self.comprobation = MessageDeleter(self, 1.0, 0.7)
+        if self.comprobation.comprobation():
+            self.comprobation.animate()
+        
         self.create_search()
-        self.check_contracts()
         
         # Sort Option Menu
         self.sort_var = ctk.StringVar(value = "Proveedor")
@@ -242,9 +246,6 @@ class App(ctk.CTk):
         conn.commit()
         conn.close()
 
-    def check_contracts(self):
-        print(datetime.now().date())
-   
 
 if __name__ == "__main__":    
     App()
