@@ -9,7 +9,6 @@ import math
 import io
 import os
 from time import sleep
-import subprocess
 
 class CTkPDFViewer(ctk.CTkScrollableFrame):
 
@@ -168,12 +167,7 @@ class PanelPDFViewer(ctk.CTkFrame):
         self.animate()
 
     def check_printer(self):
-        #conn = cups.Connection()
-        #printers = conn.getPrinters()
-        if len(printers) > 0:
-            print("Hay una impresora conectada.")
-        else:
-            print("No hay impresora conectada.")
+        pass
 
 
     def copy_pdf(self):
