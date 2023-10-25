@@ -9,6 +9,7 @@ import math
 import io
 import os
 from time import sleep
+import cups, subprocess
 
 class CTkPDFViewer(ctk.CTkScrollableFrame):
 
@@ -137,7 +138,7 @@ class PanelPDFViewer(ctk.CTkFrame):
                 self.add_pdf.place(relx = 0.45, rely = 0.035, relwidth = 0.2, relheight = 0.04)
         
         if self.text == "Solicitud de Pago":
-            self.printer = ctk.CTkButton(self, text = "Imprimir")
+            self.printer = ctk.CTkButton(self, text = "Imprimir", command = self.check_printer)
             self.printer.place(relx = 0.7, rely = 0.035, relwidth = 0.2, relheight = 0.04)
 
         self.atras_button = ctk.CTkButton(self, text = "Atrás", command = self.back, hover_color = "red")
@@ -165,6 +166,15 @@ class PanelPDFViewer(ctk.CTkFrame):
             #os.system("rm temporal.fdb_latexmk")
  
         self.animate()
+
+    def check_printer(self):
+        conn = cups.Connection()
+        printers = conn.getPrinters()
+        if len(printers) > 0:
+            print("Hay una impresora conectada.")
+        else:
+            print("No hay impresora conectada.")
+
 
     def copy_pdf(self):
         filename = filedialog.askopenfilename(title = "Copiar pdf", initialdir = "~")

@@ -14,7 +14,7 @@ class App(ctk.CTk):
 
         # setup
         ctk.set_appearance_mode("System")
-        self.title("Bufete app")
+        self.title("GECON")
         self.width = int(self.winfo_screenwidth()/1.5)
         self.height = int(self.winfo_screenheight()/1.5)
         self.geometry(f"{self.width}x{self.height}") 
@@ -30,7 +30,7 @@ class App(ctk.CTk):
         self.main_frame.rowconfigure(2, weight=1)
         self.font = ctk.ThemeManager.theme["CTkFont"]["family"]
          
-        self.label = ctk.CTkLabel(master=self.main_frame, text="Bufete App", font=(self.font,25,"bold"))
+        self.label = ctk.CTkLabel(master=self.main_frame, text="GECON", font=(self.font,25,"bold"))
         self.label.grid(row=0, column=0, padx=20, pady=10)
         
         self.create_database()

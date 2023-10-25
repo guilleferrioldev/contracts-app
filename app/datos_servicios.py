@@ -199,7 +199,6 @@ class DatosServicios(ctk.CTkFrame):
 
         doc.preamble.append(NoEscape("".join(tex)))
         
-        #doc.generate_tex()
         doc.generate_pdf(clean_tex=False)
     
     def create_descripcion(self):
