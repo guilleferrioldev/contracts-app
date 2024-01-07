@@ -130,14 +130,14 @@ class PanelPDFViewer(ctk.CTkFrame):
         
         if self.text == "PDF":
             if os.path.isfile(f"./pdfs/{self.title}.pdf"):
-                self.printer = ctk.CTkButton(self, text = "Imprimir")
+                self.printer = ctk.CTkButton(self, text = "Exportar")
                 self.printer.place(relx = 0.7, rely = 0.035, relwidth = 0.2, relheight = 0.04)
                 
                 self.add_pdf = ctk.CTkButton(self, text = "Cambiar PDF", command = self.change_pdf)
                 self.add_pdf.place(relx = 0.45, rely = 0.035, relwidth = 0.2, relheight = 0.04)
         
         if self.text == "Solicitud de Pago":
-            self.printer = ctk.CTkButton(self, text = "Imprimir", command = self.check_printer)
+            self.printer = ctk.CTkButton(self, text = "Exportar", command = self.check_printer)
             self.printer.place(relx = 0.7, rely = 0.035, relwidth = 0.2, relheight = 0.04)
 
         self.atras_button = ctk.CTkButton(self, text = "Atrás", command = self.back, hover_color = "red")
@@ -167,11 +167,27 @@ class PanelPDFViewer(ctk.CTkFrame):
         self.animate()
 
     def check_printer(self):
-        path = os.path.join("temporal.pdf")
-        export = os.path.expanduser('~/Documents')
-        if path:
-            shutil.copy(path, os.path.join(export, f"Solicitud de Pago de {self.title}.pdf"))
+        path = "temporal.pdf" 
+        export_es = os.path.expanduser('~/Documentos')
+        export_en = os.path.expanduser('~/Documents')
+        name = f"Solicitud de Pago de {self.title}.pdf"
+    
+        if os.path.exists(path):
+            if os.path.exists(export_es):
+                target_file_path_es = self.get_unique_filename(os.path.join(export_es, name))
+                shutil.copy(path, target_file_path_es)
+            elif os.path.exists(export_en):
+                target_file_path_en = self.get_unique_filename(os.path.join(export_en, name))
+                shutil.copy(path, target_file_path_en)
 
+    def get_unique_filename(self, file_path):
+        base, ext = os.path.splitext(file_path)
+        counter = 1
+        while os.path.exists(file_path):
+            file_path = f"{base}_{counter}{ext}"
+            counter += 1
+        return file_path
+                
     def copy_pdf(self):
         filename = filedialog.askopenfilename(title = "Copiar pdf", initialdir = "~")
         if filename:

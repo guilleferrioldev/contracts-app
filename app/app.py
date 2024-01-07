@@ -6,7 +6,7 @@ from sorting import Sort
 from message import Message
 from deleter_contracts import MessageDeleter
 import sqlite3
-from datetime import datetime 
+import datetime 
 
 class App(ctk.CTk):
     def __init__(self):
@@ -34,6 +34,7 @@ class App(ctk.CTk):
         self.label.grid(row=0, column=0, padx=20, pady=10)
         
         self.create_database()
+        self.delete_date_contracts()
         font = ctk.CTkFont("Helvetica", 15)
 
         # layout
@@ -245,7 +246,113 @@ class App(ctk.CTk):
 
         conn.commit()
         conn.close()
+        
+    def delete_date_contracts(self):
+        def get_date():
+            date = str(datetime.datetime.now().date()).split("-")
+            date[0], date[2] = date[2], date[0]
+            
+            if date[0] == "01":
+                date[0] = "1"
+            elif date[0] == "02":
+                date[0] = "2"
+            elif date[0] == "03":
+                date[0] = "3"
+            elif date[0] == "04":
+                date[0] = "4"
+            elif date[0] == "05":
+                date[0] = "5"
+            elif date[0] == "06":
+                date[0] = "6"
+            elif date[0] == "07":
+                date[0] = "7"
+            elif date[0] == "08":
+                date[0] = "8"
+            elif date[0] == "09":
+                date[0] = "9"
+                           
+            if date[1] == "01":
+                date[1] = "Enero"
+            elif date[1] == "02":
+                date[1] = "Febrero"
+            elif date[1] == "03":
+                date[1] = "Marzo"
+            elif date[1] == "04":
+                date[1] = "Abril"
+            elif date[1] == "05":
+                date[1] = "Mayo"
+            elif date[1] == "06":
+                date[1] = "Junio"
+            elif date[1] == "07":
+                date[1] = "Julio"
+            elif date[1] == "08":
+                date[1] = "Agosto"
+            elif date[1] == "09":
+                date[1] = "Septiembre"
+            elif date[1] == "10":
+                date[1] = "Octubre"
+            elif date[1] == "11":
+                date[1]= "Noviembre"
+            elif date[1] == "12":
+                date[1] = "Diciembre"
 
+            date = "/".join(date)
+            
+            return date
+
+        conn = sqlite3.connect("contratos.db")
+        cursor = conn.cursor()
+        instruccion = f"SELECT * FROM Contratos WHERE fecha_de_vencimiento = '{get_date()}'"
+        cursor.execute(instruccion)
+        datos = cursor.fetchall()
+        
+        if not datos:
+            conn.commit()
+            conn.close()
+            return
+        
+        datos_copy = [list(i) for i in datos]
+        
+        data_insert_query = ''' INSERT INTO Recuperar_Contratos 
+                    (proveedor,
+                    area,
+                    fecha_del_contrato, 
+                    fecha_de_vencimiento,
+                    objeto,
+                    direccion,
+                    codigo_nit, 
+                    codigo_reup, 
+                    codigo_versat,
+                    banco, 
+                    sucursal,
+                    cuenta,
+                    titular,
+                    telefono,
+                    autorizado_por) 
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        '''
+        
+        for d in datos_copy:
+            d[3], d[4] = "", ""
+            cursor.execute(data_insert_query, d[1:])
+        
+        names = []
+        for n in datos:
+            names.append(n[1])
+            
+        for c in datos:
+            instruccion = f"Delete FROM Contratos WHERE proveedor = '{c[1]}'"
+            cursor.execute(instruccion)
+        
+            instruccion = f"DELETE FROM Servicios WHERE proveedor = '{c[1]}'"
+            cursor.execute(instruccion)
+
+            instruccion = f"DELETE FROM Autorizo_Junta WHERE proveedor = '{c[1]}'"
+            cursor.execute(instruccion)
+            
+        conn.commit()
+        conn.close()
+        
 
 if __name__ == "__main__":    
     App()
