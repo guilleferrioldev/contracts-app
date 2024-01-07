@@ -170,7 +170,7 @@ class RecorverData(ctk.CTkToplevel):
         self.font = ctk.CTkFont("Helvetica", 15)
 
         self.proveedor = ctk.CTkLabel(self, text = title, font = ctk.CTkFont("Helvetica", 25, "bold"))
-        self.proveedor.place(relx = 0.03, rely = 0.05)
+        self.proveedor.place(relx = 0.03, rely = 0.05, relwidth = 0.55)
 
         self.area = ctk.CTkLabel(self, text = f"Área: {self.datos[0][1]}", font = self.font)
         self.area.place(relx = 0.03, rely = 0.10)

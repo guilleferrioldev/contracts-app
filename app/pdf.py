@@ -106,7 +106,7 @@ class CTkPDFViewer(ctk.CTkScrollableFrame):
 
 
 class PanelPDFViewer(ctk.CTkFrame):
-    def __init__(self, master, start_pos, end_pos, text, title):
+    def __init__(self, master, start_pos, end_pos, text, title, nombre_solicitud = None):
         super().__init__(master = master,
                          border_width = 3) 
         
@@ -167,8 +167,10 @@ class PanelPDFViewer(ctk.CTkFrame):
         self.animate()
 
     def check_printer(self):
-        pass
-
+        path = os.path.join("temporal.pdf")
+        export = os.path.expanduser('~/Documents')
+        if path:
+            shutil.copy(path, os.path.join(export, f"Solicitud de Pago de {self.title}.pdf"))
 
     def copy_pdf(self):
         filename = filedialog.askopenfilename(title = "Copiar pdf", initialdir = "~")
